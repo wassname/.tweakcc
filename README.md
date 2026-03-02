@@ -13,10 +13,13 @@ Minimal system prompts for Claude Code.
 git clone https://github.com/wassname/tweakcc-minimal ~/.tweakcc
 
 # 2. Backup, patch in place, save patched copy
+npm install -g @anthropic-ai/claude-code@2.1.63
 VERSION=$(claude --version | head -1 | cut -d' ' -f1)
 BINARY=~/.local/share/claude/versions/$VERSION
 cp "$BINARY" ~/.tweakcc/native-binary.backup          # unpatched backup
-npx tweakcc --apply                                    # patches $BINARY in place
+
+npx tweakcc --apply  -v -d                           # patches $BINARY in place
+
 cp "$BINARY" ~/.local/share/claude/versions/${VERSION}-min  # save as -min
 cp ~/.tweakcc/native-binary.backup "$BINARY"          # restore stock binary
 
@@ -31,6 +34,36 @@ ln -s $PWD/skills/* ~/.claude/skills
 ```
 
 Now `claude` = stock, `claude-mn` = minimal prompts.
+
+## Troubleshooting
+
+### `tweakcc` patches the wrong Claude install
+
+If `npx tweakcc --apply` says it found Claude under a VS Code / snap path (for example `/home/.../snap/code-insiders/...`) but you want to patch npm's Node install, pin the target in `config.json`:
+
+```json
+{
+	"ccInstallationPath": "/home/wassname/.nvm/versions/node/v22.22.0/lib/node_modules/@anthropic-ai/claude-code/cli.js"
+}
+```
+
+Then re-run `npx tweakcc --apply` and confirm output starts with:
+
+- `Found Claude Code at: /home/.../.nvm/.../@anthropic-ai/claude-code/cli.js`
+
+### One known failing patch on `2.1.63` (Node install)
+
+On some `2.1.63` Node builds, `patches-applied-indication` fails with:
+
+- `patch: patchesAppliedIndication: failed to find Claude Code version pattern`
+
+Everything else can still patch correctly. If you want a fully clean run, apply an explicit allowlist that excludes that patch:
+
+```sh
+npx tweakcc --apply --patches "verbose-property,context-limit,model-customizations,opusplan1m,show-more-items-in-select-menus,fix-lsp-support,thinking-verbs,thinker-format,thinking-visibility,agents-md,session-memory,mcp-non-blocking,user-message-display"
+```
+
+This produces `Customizations applied successfully!` on the Node target above.
 
 ## Re-apply after edits
 
