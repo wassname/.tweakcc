@@ -7,3 +7,6 @@ native-claudejs-patched.js
 systemPromptAppliedHashes.json
 systemPromptOriginalHashes.json
 system-prompts/*.diff.html
+config.json
+.claude/
+docs/
