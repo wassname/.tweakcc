@@ -6,36 +6,76 @@ Minimal system prompts for Claude Code.
 
 23 files changed, -47k chars (~10% of total), targeting the verbose files that override CLAUDE.md. Some tools were converted to stubs and moved to skills
 
+Normally 24.6%     49.2k tokens
+Now      16.5% · 33.1k tokens
+
 ## Quick start
 
 ```sh
 # 1. Clone into ~/.tweakcc
 git clone https://github.com/wassname/tweakcc-minimal ~/.tweakcc
 
-# 2. Backup, patch in place, save patched copy
+# 2. Install Claude Code (npm/global target)
 npm install -g @anthropic-ai/claude-code@2.1.63
-VERSION=$(claude --version | head -1 | cut -d' ' -f1)
-BINARY=~/.local/share/claude/versions/$VERSION
-cp "$BINARY" ~/.tweakcc/native-binary.backup          # unpatched backup
 
-npx tweakcc --apply  -v -d                           # patches $BINARY in place
+# 3. Ensure tweakcc patches the npm/global cli.js
+just set-node-target
 
-cp "$BINARY" ~/.local/share/claude/versions/${VERSION}-min  # save as -min
-cp ~/.tweakcc/native-binary.backup "$BINARY"          # restore stock binary
+# Optional but recommended: force shell `claude` to npm install
+just fix-claude-link
 
-# 3. Create symlinks so both versions coexist
-ln -sf ~/.local/share/claude/versions/${VERSION}-min ~/.local/bin/claude-mn  # patched
-# claude symlink already points to $VERSION (stock, now restored)
+# 4. Patch current install and save local backups in out/<version>/
+just install
 
+# 5. Test patched npm/global claude directly
+just test
 
-# 4.Install skills (optional, some tools converted to stub+skills)
+# 6. Optional: test what your shell resolves as `claude`
+just test-shell
+
+# 7.Install skills (optional, some tools converted to stub+skills)
 mkdir -p ~/.claude/skills
 ln -s $PWD/skills/* ~/.claude/skills
 ```
 
-Now `claude` = stock, `claude-mn` = minimal prompts.
+Backups are local to this repo at `out/<version>/cli.js.orig` and `out/<version>/cli.js.patched`.
 
 ## Troubleshooting
+
+### `claude -p ping` returns `error_during_execution` (for example `EXPLORE_AGENT_VARIANT is not defined` or `GLOB_TOOL_NAME is not defined`)
+
+This usually means one prompt template references a variable that is unavailable in your current runtime.
+
+1. Search for the failing symbol:
+	- `just diag-search-ping-error`
+2. Fix the offending prompt template.
+3. Re-apply patches:
+	- `just apply`
+4. Smoke test npm/global claude:
+	- `just test`
+
+If you are stuck in a restore/apply loop, use the recovery recipe below instead of repeating manual steps.
+
+### Backup loop recovery (`tweakcc` backup is stale or already patched)
+
+`tweakcc` keeps a backup of Claude Code (`cli.js` or native binary). Before applying customizations, it restores that backup to start from a clean base. If that backup is itself already modified, you can get stuck reapplying on top of old patched state.
+
+Typical failure mode:
+
+- You have a tweaked Claude binary.
+- Backup is missing or stale.
+- A new backup gets created from the already-modified binary.
+- Reinstall + reapply still restores the stale modified backup.
+
+Break the loop by forcing a fresh install and fresh backup:
+
+- `just install-fresh`
+
+This removes legacy tweakcc backups, clears local `out/`, reinstalls Claude Code, patches the npm/global `cli.js`, and writes fresh backups to `out/<version>/`.
+
+Use this as a recovery path, not the normal workflow. Normal day-to-day flow should stay:
+
+- `just install`
 
 ### `tweakcc` patches the wrong Claude install
 
@@ -47,9 +87,22 @@ If `npx tweakcc --apply` says it found Claude under a VS Code / snap path (for e
 }
 ```
 
-Then re-run `npx tweakcc --apply` and confirm output starts with:
+Then re-run `just apply` and confirm output starts with:
 
 - `Found Claude Code at: /home/.../.nvm/.../@anthropic-ai/claude-code/cli.js`
+
+If your shell still resolves `claude` to a snap path like:
+
+- `/home/.../snap/code-insiders/.../claude/versions/...`
+
+run:
+
+- `just fix-claude-link`
+
+and verify with:
+
+- `just paths`
+- `just test-shell`
 
 ### One known failing patch on `2.1.63` (Node install)
 
@@ -70,9 +123,9 @@ This produces `Customizations applied successfully!` on the Node target above.
 Edit `.md` files in `system-prompts/`, then:
 
 ```sh
-VERSION=$(claude --version | head -1 | cut -d' ' -f1)
-cp ~/.tweakcc/native-binary.backup ~/.local/share/claude/versions/${VERSION}-min
-npx tweakcc --apply
+just apply
+just backup-patched
+just test
 ```
 
 ## Disable auto-updates
