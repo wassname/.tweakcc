@@ -76,3 +76,4 @@ Or `DISABLE_AUTOUPDATER=1`. If it fires, just re-apply.
 - [Pi system prompt](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts) | [Armin's blog](https://lucumr.pocoo.org/2026/1/31/pi/)
 - Other mods: [bl-ue/tweakcc-system-prompts](https://github.com/bl-ue/tweakcc-system-prompts) | [yansircc/tweakcc-prompts](https://github.com/yansircc/tweakcc-prompts) | [principled-claude-code](https://github.com/m0n0x41d/principled-claude-code)
 - [Trail of Bits Claude Code Config](https://github.com/trailofbits/claude-code-config)
+- [Internals](https://southbridge-research.notion.site/claude-code-an-agentic-cleanroom-analysis)

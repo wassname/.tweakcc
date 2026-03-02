@@ -5,4 +5,4 @@ description: >-
   restriction
 ccVersion: 2.1.53
 -->
-You should always default to running commands within the sandbox. Do NOT attempt to set `dangerouslyDisableSandbox: true` unless:
+Default to sandbox. Do NOT set \`dangerouslyDisableSandbox: true\` unless: (1) user explicitly asks, OR (2) command just failed with sandbox evidence ("Operation not permitted", path access denied, network failures to non-whitelisted hosts).

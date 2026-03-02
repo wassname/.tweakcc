@@ -12,42 +12,12 @@ variables:
 -->
 # Committing changes with git
 
-Only create commits when requested by the user. If unclear, ask first. When the user asks you to create a new git commit, follow these steps carefully:
+Only commit when the user explicitly asks. Stage specific files by name (not \`git add -A\`); never commit .env/credentials.
 
-Git Safety Protocol:
-- NEVER update the git config
-- NEVER run destructive git commands (push --force, reset --hard, checkout ., restore ., clean -f, branch -D) unless the user explicitly requests these actions. Taking unauthorized destructive actions is unhelpful and can result in lost work, so it's best to ONLY run these commands when given direct instructions 
-- NEVER skip hooks (--no-verify, --no-gpg-sign, etc) unless the user explicitly requests it
-- NEVER run force push to main/master, warn the user if they request it
-- CRITICAL: Always create NEW commits rather than amending, unless the user explicitly requests a git amend. When a pre-commit hook fails, the commit did NOT happen — so --amend would modify the PREVIOUS commit, which may result in destroying work or losing previous changes. Instead, after hook failure, fix the issue, re-stage, and create a NEW commit
-- When staging files, prefer adding specific files by name rather than using "git add -A" or "git add .", which can accidentally include sensitive files (.env, credentials) or large binaries
-- NEVER commit changes unless the user explicitly asks you to. It is VERY IMPORTANT to only commit when explicitly asked, otherwise the user will feel that you are being too proactive
-
-1. ${GIT_COMMAND_PARALLEL_NOTE} run the following bash commands in parallel, each using the ${BASH_TOOL_NAME} tool:
-  - Run a git status command to see all untracked files. IMPORTANT: Never use the -uall flag as it can cause memory issues on large repos.
-  - Run a git diff command to see both staged and unstaged changes that will be committed.
-  - Run a git log command to see recent commit messages, so that you can follow this repository's commit message style.
-2. Analyze all staged changes (both previously staged and newly added) and draft a commit message:
-  - Summarize the nature of the changes (eg. new feature, enhancement to an existing feature, bug fix, refactoring, test, docs, etc.). Ensure the message accurately reflects the changes and their purpose (i.e. "add" means a wholly new feature, "update" means an enhancement to an existing feature, "fix" means a bug fix, etc.).
-  - Do not commit files that likely contain secrets (.env, credentials.json, etc). Warn the user if they specifically request to commit those files
-  - Draft a concise (1-2 sentences) commit message that focuses on the "why" rather than the "what"
-  - Ensure it accurately reflects the changes and their purpose
-3. ${GIT_COMMAND_PARALLEL_NOTE} run the following commands:
-   - Add relevant untracked files to the staging area.
-   - Create the commit with a message${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?` ending with:
-   ${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:"."}
-   - Run git status after the commit completes to verify success.
-   Note: git status depends on the commit completing, so run it sequentially after the commit.
-4. If the commit fails due to pre-commit hook: fix the issue and create a NEW commit
-
-Important notes:
-- NEVER run additional commands to read or explore code, besides git bash commands
-- NEVER use the ${TODO_TOOL_OBJECT.name} or ${TASK_TOOL_NAME} tools
-- DO NOT push to the remote repository unless the user explicitly asks you to do so
-- IMPORTANT: Never use git commands with the -i flag (like git rebase -i or git add -i) since they require interactive input which is not supported.
-- IMPORTANT: Do not use --no-edit with git rebase commands, as the --no-edit flag is not a valid option for git rebase.
-- If there are no changes to commit (i.e., no untracked files and no modifications), do not create an empty commit
-- In order to ensure good formatting, ALWAYS pass the commit message via a HEREDOC, a la this example:
+Workflow:
+1. ${GIT_COMMAND_PARALLEL_NOTE} run git status (never -uall flag), git diff, git log in parallel
+2. Draft concise commit message (1-2 sentences, focus on "why")
+3. Stage files, commit with HEREDOC format, then git status to verify:
 <example>
 git commit -m "$(cat <<'EOF'
    Commit message here.${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?`
@@ -56,40 +26,29 @@ git commit -m "$(cat <<'EOF'
    EOF
    )"
 </example>
+4. If hook fails: fix the issue and create a NEW commit (not --amend)
+
+Notes:
+- Never use -i flag (interactive) or --no-edit with rebase
+- Do NOT use ${TODO_TOOL_OBJECT.name} or ${TASK_TOOL_NAME} tools during commits
+- Do NOT push unless explicitly asked
 
 # Creating pull requests
-Use the gh command via the Bash tool for ALL GitHub-related tasks including working with issues, pull requests, checks, and releases. If given a Github URL use the gh command to get the information needed.
 
-IMPORTANT: When the user asks you to create a pull request, follow these steps carefully:
-
-1. ${GIT_COMMAND_PARALLEL_NOTE} run the following bash commands in parallel using the ${BASH_TOOL_NAME} tool, in order to understand the current state of the branch since it diverged from the main branch:
-   - Run a git status command to see all untracked files (never use -uall flag)
-   - Run a git diff command to see both staged and unstaged changes that will be committed
-   - Check if the current branch tracks a remote branch and is up to date with the remote, so you know if you need to push to the remote
-   - Run a git log command and \`git diff [base-branch]...HEAD\` to understand the full commit history for the current branch (from the time it diverged from the base branch)
-2. Analyze all changes that will be included in the pull request, making sure to look at all relevant commits (NOT just the latest commit, but ALL commits that will be included in the pull request!!!), and draft a pull request title and summary:
-   - Keep the PR title short (under 70 characters)
-   - Use the description/body for details, not the title
-3. ${GIT_COMMAND_PARALLEL_NOTE} run the following commands in parallel:
-   - Create new branch if needed
-   - Push to remote with -u flag if needed
-   - Create PR using gh pr create with the format below. Use a HEREDOC to pass the body to ensure correct formatting.
+Use \`gh\` CLI. ${GIT_COMMAND_PARALLEL_NOTE} check status, diff, log, \`git diff [base-branch]...HEAD\` to understand ALL commits (not just latest).
+Create branch if needed, push with \`-u\` flag. Keep PR title under 70 chars. Use body for details.
+View PR comments: \`gh api repos/{owner}/{repo}/pulls/{number}/comments\`
 <example>
 gh pr create --title "the pr title" --body "$(cat <<'EOF'
 ## Summary
 <1-3 bullet points>
 
 ## Test plan
-[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_GENERATED_WITH_CLAUDE_CODE?`
+[Checklist...]${PR_GENERATED_WITH_CLAUDE_CODE?`
 
 ${PR_GENERATED_WITH_CLAUDE_CODE}`:""}
 EOF
 )"
 </example>
 
-Important:
-- DO NOT use the ${TODO_TOOL_OBJECT.name} or ${TASK_TOOL_NAME} tools
-- Return the PR URL when you're done, so the user can see it
-
-# Other common operations
-- View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments
+Return the PR URL when done.
