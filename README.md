@@ -37,7 +37,8 @@ Now `claude` = stock, `claude-mn` = minimal prompts.
 Edit `.md` files in `system-prompts/`, then:
 
 ```sh
-cp ~/.tweakcc/native-binary.backup ~/.local/share/claude/versions/2.1.44-min
+VERSION=$(claude --version | head -1 | cut -d' ' -f1)
+cp ~/.tweakcc/native-binary.backup ~/.local/share/claude/versions/${VERSION}-min
 npx tweakcc --apply
 ```
 

@@ -28,14 +28,11 @@ Heuristic: if removing a line would cause a failure mode you've actually seen, k
 
 ## What gets loaded when (CC 2.1.63)
 
-Source: Southbridge Research reconstructed code (inferred, not decompiled). Treat thresholds as approximate.
-
-**Prompt assembly priority** (lower priority truncated first under context pressure):
-1. Base prompt (~2KB) > 2. Model adaptations > 3. CLAUDE.md (~5-50KB) > 4. Git context (~1-5KB) > 5. Directory > 6. Tools (~10KB+)
+Source: Southbridge Research reconstructed code (inferred, not decompiled). No `loadType` field exists in prompts JSON -- loading category is inferred from ID prefix.
 
 **Always loaded:**
-- `system-prompt-*` core behavioral files
-- `tool-description-*` for available tools (incl. MCP schemas as serialized JSON)
+- `system-prompt-*` -- every turn (~10 are feature-gated by CC settings, e.g. chrome, learning-mode, hooks-config)
+- `tool-description-*` -- always present as part of the tool schema; no event gate exists. Example: `tool-description-bash-git-commit-*` burns ~1KB per turn even when just searching files
 - Monolithic + sub-files both loaded by tweakcc; empty monolithic ones to avoid duplication
 
 **Event-driven (injected per-turn on condition):**
@@ -46,7 +43,9 @@ Source: Southbridge Research reconstructed code (inferred, not decompiled). Trea
 
 **On-demand (loaded at spawn/invocation):**
 - `agent-prompt-*` -- loaded when that agent type spawned
-- `data-*`, `skill-*` -- referenced on demand
+- `data-*`, `skill-*` -- referenced on demand per user/model request
+
+**Within-file conditionals**: `${VAR?trueText:""}` in `pieces[]` are render-time substitutions -- the file is always loaded, only the text fragment varies. NOT file-level load gates.
 
 **Compaction**: triggers at 100k tokens OR 200 messages OR $5 cost. Skipped if <50 messages. Summarizes non-preserved messages via LLM call.
 
@@ -54,8 +53,8 @@ Source: Southbridge Research reconstructed code (inferred, not decompiled). Trea
 
 | Category | Stock words | tweakcc words | Reduction | Loading |
 |----------|-------------|---------------|-----------|---------|
-| System Prompts | ~4.5k | ~3.7k | -18% | Always (Priority 1) |
-| Tool Descriptions | ~6.3k | ~3.8k | -40% | Always (Priority 6) |
+| System Prompts | ~4.5k | ~3.7k | -18% | Always |
+| Tool Descriptions | ~6.3k | ~3.8k | -40% | Always |
 | System Reminders | ~1.7k | ~1.7k | -- | Event-driven |
 | Agent Prompts | ~6.9k | ~6.9k | -- | On-demand (spawn) |
 
