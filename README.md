@@ -1,6 +1,10 @@
 # tweakcc-minimal
 
-Minimal system prompts for Claude Code. 23 files changed, -47k chars (~10% of total), targeting the verbose files that override CLAUDE.md.
+Minimal system prompts for Claude Code. 
+
+**Principle**: System prompts provide tool access and safety rails. CLAUDE.md/AGENTS.md provide workflow and conventions. Inspired by [Pi's context engineering](https://lucumr.pocoo.org/2026/1/31/pi/).
+
+23 files changed, -47k chars (~10% of total), targeting the verbose files that override CLAUDE.md. Some tools were converted to stubs and moved to skills
 
 ## Quick start
 
@@ -8,15 +12,22 @@ Minimal system prompts for Claude Code. 23 files changed, -47k chars (~10% of to
 # 1. Clone into ~/.tweakcc
 git clone https://github.com/wassname/tweakcc-minimal ~/.tweakcc
 
-# 2. Create patched binary (copy original, apply patches)
-cp ~/.local/share/claude/versions/$(claude --version | head -1 | cut -d' ' -f1) \
-   ~/.local/share/claude/versions/$(claude --version | head -1 | cut -d' ' -f1)-min
-ln -sf ~/.local/share/claude/versions/*-min ~/.local/bin/claude
-npx tweakcc --apply
+# 2. Backup, patch in place, save patched copy
+VERSION=$(claude --version | head -1 | cut -d' ' -f1)
+BINARY=~/.local/share/claude/versions/$VERSION
+cp "$BINARY" ~/.tweakcc/native-binary.backup          # unpatched backup
+npx tweakcc --apply                                    # patches $BINARY in place
+cp "$BINARY" ~/.local/share/claude/versions/${VERSION}-min  # save as -min
+cp ~/.tweakcc/native-binary.backup "$BINARY"          # restore stock binary
 
-# 3. Create symlink so both versions coexist
-ln -sf ~/.local/share/claude/versions/*-min ~/.local/bin/claude-mn  # patched
-ln -sf ~/.local/share/claude/versions/2.1.63 ~/.local/bin/claude    # restore stock
+# 3. Create symlinks so both versions coexist
+ln -sf ~/.local/share/claude/versions/${VERSION}-min ~/.local/bin/claude-mn  # patched
+# claude symlink already points to $VERSION (stock, now restored)
+
+
+# 4.Install skills (optional, some tools converted to stub+skills)
+mkdir -p ~/.claude/skills
+ln -s $PWD/skills/* ~/.claude/skills
 ```
 
 Now `claude` = stock, `claude-mn` = minimal prompts.
@@ -39,7 +50,12 @@ CC auto-updates overwrite patched binaries:
 { "autoUpdates": false }
 ```
 
-Or `DISABLE_AUTOUPDATER=1`. If it fires, just re-apply.
+Or via `env` in `~/.claude/settings.json`:
+
+```jsonc
+{ "env": { "DISABLE_AUTOUPDATER": "1" } }
+```
+
 
 ## Key files to edit
 
@@ -57,7 +73,7 @@ Or `DISABLE_AUTOUPDATER=1`. If it fires, just re-apply.
 
 ## What changed
 
-**Principle**: System prompts provide tool access and safety rails. CLAUDE.md/AGENTS.md provide workflow and conventions. Inspired by [Pi's context engineering](https://lucumr.pocoo.org/2026/1/31/pi/).
+
 
 | File | Before | After | Notes |
 |------|--------|-------|-------|
@@ -76,4 +92,4 @@ Or `DISABLE_AUTOUPDATER=1`. If it fires, just re-apply.
 - [Pi system prompt](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts) | [Armin's blog](https://lucumr.pocoo.org/2026/1/31/pi/)
 - Other mods: [bl-ue/tweakcc-system-prompts](https://github.com/bl-ue/tweakcc-system-prompts) | [yansircc/tweakcc-prompts](https://github.com/yansircc/tweakcc-prompts) | [principled-claude-code](https://github.com/m0n0x41d/principled-claude-code)
 - [Trail of Bits Claude Code Config](https://github.com/trailofbits/claude-code-config)
-- [Internals](https://southbridge-research.notion.site/claude-code-an-agentic-cleanroom-analysis)
+- [Internals](https://www.southbridge.ai/blog/claude-code-an-analysis)
