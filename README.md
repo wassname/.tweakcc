@@ -1,6 +1,6 @@
 # tweakcc-minimal
 
-Minimal system prompts for Claude Code. 23 files changed, +102 -825 lines out of ~11k total (~47k chars removed).
+Minimal system prompts for Claude Code. 23 files changed, -47k chars (~10% of total), targeting the verbose files that override CLAUDE.md.
 
 ## Quick start
 
@@ -75,3 +75,4 @@ Or `DISABLE_AUTOUPDATER=1`. If it fires, just re-apply.
 - [tweakcc](https://github.com/Piebald-AI/tweakcc) | [CC system prompts source](https://github.com/Piebald-AI/claude-code-system-prompts)
 - [Pi system prompt](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts) | [Armin's blog](https://lucumr.pocoo.org/2026/1/31/pi/)
 - Other mods: [bl-ue/tweakcc-system-prompts](https://github.com/bl-ue/tweakcc-system-prompts) | [yansircc/tweakcc-prompts](https://github.com/yansircc/tweakcc-prompts) | [principled-claude-code](https://github.com/m0n0x41d/principled-claude-code)
+- [Trail of Bits Claude Code Config](https://github.com/trailofbits/claude-code-config)
