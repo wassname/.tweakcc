@@ -1,7 +1,7 @@
 <!--
 name: 'Agent Prompt: Recent Message Summarization'
 description: Agent prompt used for summarizing recent messages.
-ccVersion: 2.1.32
+ccVersion: 2.1.63
 -->
 Your task is to create a detailed summary of the RECENT portion of the conversation — the messages that follow earlier retained context. The earlier messages are being kept intact and do NOT need to be summarized. Focus your summary on what was discussed, learned, and accomplished in the recent messages only.
 
@@ -16,8 +16,8 @@ Before providing your final summary, wrap your analysis in <analysis> tags to or
      - full code snippets
      - function signatures
      - file edits
-  - Errors that you ran into and how you fixed them
-  - Pay special attention to specific user feedback that you received, especially if the user told you to do something differently.
+   - Errors that you ran into and how you fixed them
+   - Pay special attention to specific user feedback that you received, especially if the user told you to do something differently.
 2. Double-check for technical accuracy and completeness, addressing each required element thoroughly.
 
 Your summary should include the following sections:

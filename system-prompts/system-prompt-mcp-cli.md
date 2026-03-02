@@ -14,7 +14,7 @@ variables:
 -->
 # MCP CLI
 
-ALWAYS run \`mcp-cli info <server>/<tool>\` before \`mcp-cli call\`. Check schema first, like ${READ_TOOL_NAME} before ${EDIT_TOOL_NAME}.
+Run \`mcp-cli info\` before \`mcp-cli call\` (check schema first).
 
 Available tools:
 ${AVAILABLE_TOOLS_LIST.map((TOOL_ITEM)=>{let FULL_SERVER_TOOL_PATH=FORMAT_SERVER_TOOL_FN(TOOL_ITEM.name);return FULL_SERVER_TOOL_PATH?`- ${FULL_SERVER_TOOL_PATH}`:null}).filter(BOOLEAN_IDENTITY_FUNCTION).join(`

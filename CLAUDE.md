@@ -4,16 +4,14 @@ Minimal system prompts for Claude Code. Edits live in `system-prompts/*.md`.
 
 ## Design principles
 
-Sources: [Pi system prompt](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts), [Pi blog post](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/), [Armin on Pi](https://lucumr.pocoo.org/2026/1/31/pi/), [Trail of Bits config](https://github.com/trailofbits/claude-code-config)
+Sources: [Pi system prompt](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts), [Pi blog post](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/), [Armin on Pi](https://lucumr.pocoo.org/2026/1/31/pi/), [Trail of Bits config](https://github.com/trailofbits/claude-code-config), [arch](https://www.southbridge.ai/blog/claude-code-an-analysis)
 
 1. **Trust the model** -- frontier models know how to code; provide context and tools, not tutorials. Pi's entire prompt is ~1k tokens.
-2. **Conditional inclusion** -- only include instructions for tools/capabilities available in this session
-3. **Lazy-load** -- reference docs by path, don't embed; model reads on-demand
-4. **Delegate workflow** -- CLAUDE.md/AGENTS.md own conventions, not the system prompt
-5. **Disposability** -- cut anything that doesn't earn its context-window cost
-6. **Sandbox over guardrails** -- real security = OS-level sandboxing (bubblewrap/seatbelt) + hooks at decision points, not verbose prompt text saying "NEVER do X". Trail of Bits runs `--dangerously-skip-permissions` + sandbox + deny rules. Pi runs full YOLO mode.
-7. **Hooks over prompts** -- "NEVER use rm -rf" in a prompt can be forgotten; a PreToolUse hook blocking it fires every time. Hooks = structured prompt injection at the right moment.
-8. **Skills over MCP descriptions** -- MCP server schemas dump 13-18k tokens into always-loaded context. Move less-used tools to skills (on-demand loading). Symlink `skills/` to `~/.claude/skills/`.
+2. **Delegate workflow** -- CLAUDE.md/AGENTS.md own conventions, not the system prompt
+3. **Disposability** -- cut anything that doesn't earn its context-window cost
+4. **Sandbox over guardrails** -- real security = OS-level sandbox (bubblewrap/seatbelt via `/sandbox`) + deny rules + devcontainers, not verbose prompt text. Trail of Bits pairs `--dangerously-skip-permissions` with layered defense: sandbox + deny rules + ephemeral containers.
+5. **Hooks over prompts** -- "NEVER use rm -rf" in a prompt can be forgotten; a PreToolUse hook fires every time.
+6. **Cheapest effective layer** -- enforce at: OS sandbox > deny rules > hooks > prompt text (last resort)
 
 ## Review methodology: 6 dimensions
 
@@ -30,28 +28,41 @@ Heuristic: if removing a line would cause a failure mode you've actually seen, k
 
 ## What gets loaded when (CC 2.1.63)
 
-**Always loaded (every session):**
+Source: Southbridge Research reconstructed code (inferred, not decompiled). Treat thresholds as approximate.
+
+**Prompt assembly priority** (lower priority truncated first under context pressure):
+1. Base prompt (~2KB) > 2. Model adaptations > 3. CLAUDE.md (~5-50KB) > 4. Git context (~1-5KB) > 5. Directory > 6. Tools (~10KB+)
+
+**Always loaded:**
 - `system-prompt-*` core behavioral files
-- `tool-description-*` for available tools:
-  - Always: Bash (+ sub-files), Read, Edit, Write, Glob, Grep, Agent/Task, AskUserQuestion, EnterPlanMode, ExitPlanMode, TodoWrite/TaskCreate/TaskList/TaskUpdate
-  - Conditional: TeammateTool, SendMessageTool, TeamDelete (swarm only), Computer (computer use), Chrome (browser MCP)
+- `tool-description-*` for available tools (incl. MCP schemas as serialized JSON)
+- Monolithic + sub-files both loaded by tweakcc; empty monolithic ones to avoid duplication
 
-**Per-mode:** `system-reminder-plan-mode-*`, `system-reminder-team-*`, `system-reminder-todo-*`
+**Event-driven (injected per-turn on condition):**
+- `system-reminder-plan-mode-*` -- when plan mode active
+- `system-reminder-team-*` -- when team/swarm mode active
+- `system-reminder-todo-*`, task nudges -- periodic / on task events
+- File events, hook outcomes, token/budget warnings -- per-turn
 
-**On-demand:** `agent-prompt-*`, `data-*`, `skill-*`
+**On-demand (loaded at spawn/invocation):**
+- `agent-prompt-*` -- loaded when that agent type spawned
+- `data-*`, `skill-*` -- referenced on demand
+
+**Compaction**: triggers at 100k tokens OR 200 messages OR $5 cost. Skipped if <50 messages. Summarizes non-preserved messages via LLM call.
 
 **Context budget:**
 
-| Category | Files | Stock chars | Loading |
-|----------|-------|-------------|---------|
-| Tool Descriptions | 71 | 63k | Always (biggest cost) |
-| System Prompts | 52 | 45k | Always |
-| System Reminders | 38 | 17k | Per-mode |
-| Data | 25 | 154k | On-demand |
-| Agent Prompts | 28 | 69k | On-demand |
-| Skills | 7 | 45k | On-demand |
+| Category | Stock words | tweakcc words | Reduction | Loading |
+|----------|-------------|---------------|-----------|---------|
+| System Prompts | ~4.5k | ~3.7k | -18% | Always (Priority 1) |
+| Tool Descriptions | ~6.3k | ~3.8k | -40% | Always (Priority 6) |
+| System Reminders | ~1.7k | ~1.7k | -- | Event-driven |
+| Agent Prompts | ~6.9k | ~6.9k | -- | On-demand (spawn) |
 
-Note: CC 2.1.53+ split monolithic tool descriptions into granular sub-files. BOTH are loaded by tweakcc, so empty the monolithic ones to avoid duplication.
+Total always-loaded: ~7.5k words (down from ~10.8k stock).
+On-demand (untouched): Data ~154k chars, Skills ~45k chars, Agent Prompts ~69k chars.
+
+**Frontmatter is upstream-controlled**: `tweakcc --apply` restores YAML headers (name, description, ccVersion, variables) from CC. We only control the body content.
 
 ## How to edit
 
@@ -65,7 +76,7 @@ Note: CC 2.1.53+ split monolithic tool descriptions into granular sub-files. BOT
 ## File naming conventions
 
 - `system-prompt-*` -- core behavioral, always loaded
-- `system-reminder-*` -- mode-specific (plan mode, learning mode)
+- `system-reminder-*` -- event-driven (plan mode, task nudges, file events, hooks)
 - `tool-description-*` -- loaded with tool schemas
 - `agent-prompt-*` -- loaded when agent type spawned
 - `data-*` -- reference data, on-demand

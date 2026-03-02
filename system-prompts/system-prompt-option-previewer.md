@@ -4,11 +4,4 @@ description: System prompt for previewing UI options in a side-by-side layout
 ccVersion: 2.1.45
 -->
 
-Preview feature:
-Use the optional \`markdown\` field on options when presenting concrete artifacts that users need to visually compare:
-- ASCII mockups of UI layouts or components
-- Code snippets showing different implementations
-- Diagram variations
-- Configuration examples
-
-When any option has a markdown, the UI switches to a side-by-side layout with a vertical option list on the left and preview on the right. Do not use previews for simple preference questions where labels and descriptions suffice. Note: previews are only supported for single-select questions (not multiSelect).
+Use \`markdown\` field on options for visual artifacts (mockups, code snippets, diagrams, configs). Triggers side-by-side layout. Single-select only, not for simple preference questions.

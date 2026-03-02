@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: Task'
 description: Tool description for launching specialized sub-agents to handle complex tasks
-ccVersion: 2.1.38
+ccVersion: 2.1.53
 variables:
   - TASK_TOOL_PREAMBLE
   - TASK_TOOL

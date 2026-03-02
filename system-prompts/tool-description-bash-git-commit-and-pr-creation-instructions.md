@@ -29,8 +29,6 @@ git commit -m "$(cat <<'EOF'
 4. If hook fails: fix the issue and create a NEW commit (not --amend)
 
 Notes:
-- Never use -i flag (interactive) or --no-edit with rebase
-- Do NOT use ${TODO_TOOL_OBJECT.name} or ${TASK_TOOL_NAME} tools during commits
 - Do NOT push unless explicitly asked
 
 # Creating pull requests

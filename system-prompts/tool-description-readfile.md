@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: ReadFile'
 description: Tool description for reading files
-ccVersion: 2.1.30
+ccVersion: 2.1.50
 variables:
   - DEFAULT_READ_LINES
   - MAX_LINE_LENGTH
