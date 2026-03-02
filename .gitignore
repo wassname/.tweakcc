@@ -10,3 +10,12 @@ system-prompts/*.diff.html
 config.json
 .claude/
 docs/
+
+# Claude Code sandbox phantom files (repo-specific, too generic for global ignore)
+# https://github.com/anthropics/claude-code/issues/17087
+.gitmodules
+HEAD
+config
+hooks
+objects
+refs
