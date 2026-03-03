@@ -4,7 +4,7 @@ description: Instructions for using mcp-cli to interact with Model Context Proto
 ccVersion: 2.1.30
 variables:
   - READ_TOOL_NAME
-  - EDIT_TOOL_NAME
+  - WRITE_TOOL_NAME
   - AVAILABLE_TOOLS_LIST
   - TOOL_ITEM
   - FULL_SERVER_TOOL_PATH
