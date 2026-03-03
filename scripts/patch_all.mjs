@@ -8,12 +8,26 @@
 
 import { findAllInstallations, readContent, helpers } from 'tweakcc';
 const { clearCaches } = helpers;
-import { readFile, writeFile, mkdir, copyFile, stat } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, stat, rename, unlink } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { resolve, dirname, basename } from 'node:path';
 
 const CONFIG_PATH = resolve(import.meta.dirname, '..', 'config.json');
 const OUT_DIR = resolve(import.meta.dirname, '..', 'out');
+
+/** Copy src -> dest, handling ETXTBSY by unlinking dest first (rename to .old, then copy). */
+async function robustCopy(src, dest) {
+  try {
+    await copyFile(src, dest);
+  } catch (e) {
+    if (e.code !== 'ETXTBSY') throw e;
+    // Binary is busy -- rename it out of the way, then copy
+    const old = dest + '.old';
+    await rename(dest, old);
+    await copyFile(src, dest);
+    await unlink(old).catch(() => {}); // best-effort cleanup
+  }
+}
 
 async function readConfig() {
   return JSON.parse(await readFile(CONFIG_PATH, 'utf8'));
@@ -135,25 +149,29 @@ async function main() {
       console.error(`  apply FAILED: ${stderr.slice(0, 200)}`);
       results.push({ ...inst, status: 'FAILED (apply)', error: stderr.slice(0, 200) });
       // Restore backup
-      await copyFile(backupPath, inst.path).catch((restoreErr) => {
+      await robustCopy(backupPath, inst.path).catch((restoreErr) => {
         console.error(`  RESTORE FAILED: ${restoreErr.message}`);
         console.error(`  Manual restore from: ${backupPath}`);
       });
       continue;
     }
 
-    // Smoke test
-    let smokeStatus = 'OK';
+    // Smoke test -- if it fails, the binary is broken, restore backup
     try {
       smoke(inst);
       console.log(`  smoke OK`);
+      clearCaches();
+      results.push({ ...inst, status: 'OK' });
     } catch (e) {
-      smokeStatus = 'OK (smoke failed)';
-      console.warn(`  smoke FAILED: ${e.message}`);
+      console.error(`  smoke FAILED: ${e.message}`);
+      console.error(`  Restoring backup (patched binary is broken)...`);
+      await robustCopy(backupPath, inst.path).catch((restoreErr) => {
+        console.error(`  RESTORE FAILED: ${restoreErr.message}`);
+        console.error(`  Manual restore from: ${backupPath}`);
+      });
+      clearCaches();
+      results.push({ ...inst, status: 'FAILED (smoke)', error: e.message });
     }
-
-    clearCaches();
-    results.push({ ...inst, status: smokeStatus });
   }
 
   // Restore original config path (npm = primary terminal claude)
