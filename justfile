@@ -3,23 +3,14 @@ set shell := ["bash", "-cu"]
 default:
 	@just --list
 
-# Apply tweaks to npm Claude, then run template and runtime checks.
+# Discover all Claude installations, patch each, audit templates.
 apply:
-	bash scripts/apply_and_test.sh
+	node scripts/patch_all.mjs
+	python3 scripts/audit_templates.py
 
-# Clean-reset install path, reinstall Claude Code, then apply+test.
+# Reinstall Claude Code from npm, then apply tweaks to all installations.
 fresh version="2.1.63":
-	bash scripts/install_fresh.sh {{version}}
-
-
-apply2:
-    #/bin/bash
-
-    # fresh
-    rm -rf cli.js.backup
-    npm remove -g @anthropic-ai/claude-code
-    npm install -g @anthropic-ai/claude-code@2.1.63
-    
-    # apply and test
-    npx tweakcc --apply
-    claude -p ping -d
+	rm -f cli.js.backup native-binary.backup native-binary.pre-reinstall.backup
+	rm -rf out
+	npm install -g "@anthropic-ai/claude-code@{{version}}"
+	just apply
