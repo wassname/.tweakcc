@@ -6,11 +6,11 @@
  * run `npx tweakcc --apply`, then restore the original (npm) path.
  */
 
-import { findAllInstallations, helpers } from 'tweakcc';
+import { findAllInstallations, readContent, helpers } from 'tweakcc';
 const { clearCaches } = helpers;
-import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, stat } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, basename } from 'node:path';
 
 const CONFIG_PATH = resolve(import.meta.dirname, '..', 'config.json');
 const OUT_DIR = resolve(import.meta.dirname, '..', 'out');
@@ -43,12 +43,45 @@ function smoke(installation) {
   return out;
 }
 
+/** Build an Installation object from an explicit path (for installs findAllInstallations misses). */
+async function installationFromPath(filePath) {
+  const absPath = resolve(filePath);
+  const info = await stat(absPath);
+  // Native binaries are large ELF files; npm cli.js is smaller JS
+  const kind = absPath.endsWith('.js') ? 'npm' : 'native';
+  // Version: try directory name first (native binaries are named by version),
+  // then try reading JS content via tweakcc unpack
+  const dirName = basename(absPath);
+  const parentName = basename(dirname(absPath));
+  let version = 'unknown';
+  if (/^\d+\.\d+\.\d+$/.test(dirName)) version = dirName;
+  else if (/^\d+\.\d+\.\d+$/.test(parentName)) version = parentName;
+  else {
+    try {
+      const inst = { path: absPath, version: '0.0.0', kind };
+      const content = await readContent(inst);
+      const m = content.match(/"version"\s*:\s*"(\d+\.\d+\.\d+)"/);
+      if (m) version = m[1];
+    } catch {}
+  }
+  return { path: absPath, version, kind };
+}
+
 async function main() {
   const config = await readConfig();
   const originalPath = config.ccInstallationPath;
 
-  console.log('Discovering installations...');
-  const installs = await findAllInstallations();
+  // If explicit paths given as CLI args, use those instead of discovery
+  const extraPaths = process.argv.slice(2);
+
+  let installs;
+  if (extraPaths.length > 0) {
+    console.log('Building installations from explicit paths...');
+    installs = await Promise.all(extraPaths.map(installationFromPath));
+  } else {
+    console.log('Discovering installations...');
+    installs = await findAllInstallations();
+  }
   if (installs.length === 0) {
     console.error('No Claude Code installations found!');
     process.exit(1);
@@ -139,9 +172,9 @@ async function main() {
     );
   }
 
-  const failed = results.filter(r => r.status !== 'OK');
-  if (failed.length > 0) {
-    console.error(`\n${failed.length} installation(s) failed.`);
+  const hardFailed = results.filter(r => r.status.startsWith('FAILED'));
+  if (hardFailed.length > 0) {
+    console.error(`\n${hardFailed.length} installation(s) failed.`);
     process.exit(1);
   }
 }
