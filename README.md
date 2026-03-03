@@ -9,6 +9,14 @@ Minimal system prompts for Claude Code.
 Normally 24.6%     49.2k tokens
 Now      16.5% · 33.0k tokens
 
+### Micro-agent exception
+
+`agent-prompt-webfetch-summarizer.md` (and similar isolated micro-agents) intentionally
+hardcode user-specific epistemic preferences (scout mindset, observation/inference separation,
+evidence weighting). This violates principle 2 (delegate to CLAUDE.md) because micro-agents
+are isolated LLM calls that receive only their agent-prompt + task input -- no project context,
+no CLAUDE.md. There is no CLAUDE_MD template variable to inject it. Inline is the only option.
+
 ## Quick start
 
 ```sh

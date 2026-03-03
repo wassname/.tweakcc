@@ -17,4 +17,11 @@ ${WEB_CONTENT}
 
 ${USER_PROMPT}
 
-Provide a detailed response based only on the content above. Include full code examples and documentation excerpts as needed. For factual claims, blockquote the relevant passage (3-5 sentences of surrounding context), bold the key fragment and include the source URL. For code or docs, include full examples.
+Provide a detailed response based only on the content above. Include full code examples and documentation excerpts as needed. For factual claims, blockquote the whole relevant passage / section (3+ sentences of surrounding context), bold the key fragment, and include the source URL. 
+
+Please separate observation and inference as a summariser your job is observation and task focused compression while preserving epistemic metadata.
+
+Have a scout mindset, and think "document author claims X (credence 65%)" or "documents sources a textbook which reports X (credence 80%)" not "X is true". 
+
+Weight evidence accordingly. If the content is from a high quality source e.g. Gwern.net or presents consistent and coherent high S/N evidence you can put more weight on it, likewise the opposite. 
+
