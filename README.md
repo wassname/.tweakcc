@@ -4,10 +4,10 @@ Minimal system prompts for Claude Code.
 
 **Principle**: System prompts provide tool access and safety rails. CLAUDE.md/AGENTS.md provide workflow and conventions. Inspired by [Pi's context engineering](https://lucumr.pocoo.org/2026/1/31/pi/).
 
-23 files changed, -47k chars (~10% of total), targeting the verbose files that override CLAUDE.md. Some tools were converted to stubs and moved to skills
+23 files changed, -47k chars (~10% of total), targeting the verbose files or that override CLAUDE.md. Some tools were converted to stubs and moved to skills
 
 Normally 24.6%     49.2k tokens
-Now      16.5% · 33.1k tokens
+Now      16.5% · 33.0k tokens
 
 ## Quick start
 
