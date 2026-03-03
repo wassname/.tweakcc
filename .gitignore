@@ -12,6 +12,7 @@ config.json
 system-prompts.*/
 .claude/
 docs/
+out/
 
 # Claude Code sandbox phantom files (repo-specific, too generic for global ignore)
 # https://github.com/anthropics/claude-code/issues/17087

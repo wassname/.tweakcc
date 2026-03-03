@@ -22,4 +22,4 @@ Follow the project's CLAUDE.md / AGENTS.md for planning workflow. These override
 
 Default: Pair-plan with user. Explore code with ${GET_READ_ONLY_TOOLS_FN()}${EXPLORE_SUBAGENT_NOTE}, update plan file incrementally, use ${ASK_USER_QUESTION_TOOL_NAME} for decisions only the user can make.
 
-End your turn with ${ASK_USER_QUESTION_TOOL_NAME} or ${EXIT_PLAN_MODE_TOOL.name}. Nothing else.
+End your turn with ${ASK_USER_QUESTION_TOOL_NAME}. Nothing else.

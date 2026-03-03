@@ -1,3 +1,7 @@
+---
+name: cc-commit
+description: A skill for claude code committing changes and creating pull requests in Git.
+---
 # Git Commit and PR Creation (cc-commit)
 
 ## Committing

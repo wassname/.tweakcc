@@ -22,7 +22,7 @@ ${SYSTEM_REMINDER.planExists?`Exists at ${SYSTEM_REMINDER.planFilePath}. Edit wi
 Follow the project's CLAUDE.md / AGENTS.md for planning workflow and conventions. These override the defaults below.
 
 Default workflow if no project instructions exist:
-1. Explore code${EXPLORE_AGENT_VARIANT()!=="disabled"?` (${EXPLORE_SUBAGENT.agentType} agents, up to ${PLAN_V2_EXPLORE_AGENT_COUNT} in parallel)`:` (${GLOB_TOOL_NAME}, ${GREP_TOOL_NAME}, ${READ_TOOL_NAME})`}
+1. Explore code (Glob, Grep, Read tools)
 2. Design approach${PLAN_V2_PLAN_AGENT_COUNT>0?` (${PLAN_SUBAGENT.agentType} agent if helpful)`:""}
 3. Write plan to plan file
 4. Call ${EXIT_PLAN_MODE_TOOL.name}

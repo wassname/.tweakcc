@@ -18,22 +18,13 @@ git clone https://github.com/wassname/tweakcc-minimal ~/.tweakcc
 # 2. Install Claude Code (npm/global target)
 npm install -g @anthropic-ai/claude-code@2.1.63
 
-# 3. Ensure tweakcc patches the npm/global cli.js
-just set-node-target
+# 3. Apply tweaks + run full checks (template + runtime)
+just apply
 
-# Optional but recommended: force shell `claude` to npm install
-just fix-claude-link
+# 4. If state is corrupted, full reset + reinstall + apply + checks
+just fresh
 
-# 4. Patch current install and save local backups in out/<version>/
-just install
-
-# 5. Test patched npm/global claude directly
-just test
-
-# 6. Optional: test what your shell resolves as `claude`
-just test-shell
-
-# 7.Install skills (optional, some tools converted to stub+skills)
+# 5. Install skills (optional, some tools converted to stub+skills)
 mkdir -p ~/.claude/skills
 ln -s $PWD/skills/* ~/.claude/skills
 ```
@@ -41,6 +32,21 @@ ln -s $PWD/skills/* ~/.claude/skills
 Backups are local to this repo at `out/<version>/cli.js.orig` and `out/<version>/cli.js.patched`.
 
 ## Troubleshooting
+
+### Lessons learned
+
+1. Every template variable used in prompt body expressions (for example `${EXIT_PLAN_MODE_TOOL.name}`) must be declared in the file header `variables:` list.
+2. Do not remove unknown template references blindly. First decide whether to (a) declare a missing variable in header, or (b) remove/replace an invalid reference. Keep semantics minimal and explicit.
+3. `claude -p ping -v` is a marker check only. Real health check must parse `--output-format stream-json` and require `result.subtype == "success"`.
+4. Run static template audit before runtime test. It catches undefined template symbols deterministically.
+
+Template-error playbook:
+
+1. Run `just apply` (it includes template audit + strict runtime ping).
+2. If it fails with undefined symbol, inspect the file and classify:
+	- **missing declaration**: symbol is valid and intended -> add it to header `variables:`
+	- **invalid/offending reference**: symbol is bogus for that file -> remove/replace expression
+3. Re-run `just apply` until both audits pass.
 
 ### `claude -p ping` returns `error_during_execution` (for example `EXPLORE_AGENT_VARIANT is not defined` or `GLOB_TOOL_NAME is not defined`)
 
@@ -69,13 +75,13 @@ Typical failure mode:
 
 Break the loop by forcing a fresh install and fresh backup:
 
-- `just install-fresh`
+- `just fresh`
 
 This removes legacy tweakcc backups, clears local `out/`, reinstalls Claude Code, patches the npm/global `cli.js`, and writes fresh backups to `out/<version>/`.
 
 Use this as a recovery path, not the normal workflow. Normal day-to-day flow should stay:
 
-- `just install`
+- `just apply`
 
 ### `tweakcc` patches the wrong Claude install
 
@@ -95,14 +101,7 @@ If your shell still resolves `claude` to a snap path like:
 
 - `/home/.../snap/code-insiders/.../claude/versions/...`
 
-run:
-
-- `just fix-claude-link`
-
-and verify with:
-
-- `just paths`
-- `just test-shell`
+run `just apply` again. The apply script re-pins both `ccInstallationPath` and the `~/.local/bin/claude` symlink before patching.
 
 ### One known failing patch on `2.1.63` (Node install)
 
@@ -124,8 +123,6 @@ Edit `.md` files in `system-prompts/`, then:
 
 ```sh
 just apply
-just backup-patched
-just test
 ```
 
 ## Disable auto-updates
