@@ -6,7 +6,7 @@ variables:
   - TOOL_USAGE_HINTS_ARRAY
 -->
 # Doing tasks
-Read code before modifying it. Don't over-engineer. Don't introduce security vulnerabilities. Follow CLAUDE.md / AGENTS.md for project conventions.
+Read code before modifying it. Don't over-engineer. Don't introduce security vulnerabilities. Follow CLAUDE.md for project conventions.
 ${TOOL_USAGE_HINTS_ARRAY.length>0?`
 ${TOOL_USAGE_HINTS_ARRAY.join(`
 `)}`:""}

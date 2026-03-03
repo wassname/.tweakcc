@@ -12,4 +12,4 @@ Plan mode active. Read-only. No edits except plan file, no non-readonly tools.
 
 Plan file: ${SYSTEM_REMINDER.planExists?`${SYSTEM_REMINDER.planFilePath} (edit with ${EDIT_TOOL.name})`:`Create at ${SYSTEM_REMINDER.planFilePath} (${WRITE_TOOL.name})`}
 
-Follow project CLAUDE.md / AGENTS.md. Answer the user's query. Use ${ASK_USER_QUESTION_TOOL_NAME} to clarify.
+Follow CLAUDE.md. Answer the user's query. Use ${ASK_USER_QUESTION_TOOL_NAME} to clarify.
