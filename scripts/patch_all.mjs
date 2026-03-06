@@ -14,7 +14,7 @@ import { resolve, dirname, basename } from 'node:path';
 
 const CONFIG_PATH = resolve(import.meta.dirname, '..', 'config.json');
 const OUT_DIR = resolve(import.meta.dirname, '..', 'out');
-const BACKUP_RO_DIR = resolve(import.meta.dirname, '..', 'backup_ro');
+const BACKUP_RO_DIR = resolve(import.meta.dirname, '..', 'DO_NOT_DELETE_patched_binaries');
 const PROMPT_CACHE_DIR = resolve(import.meta.dirname, '..', 'prompt-data-cache');
 
 /** Copy src -> dest, handling ETXTBSY by unlinking dest first (rename to .old, then copy). */
