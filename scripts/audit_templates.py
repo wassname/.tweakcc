@@ -49,3 +49,19 @@ if issues:
     sys.exit(1)
 
 print('OK: all used template vars are declared')
+
+# Orphan check: local prompt files with no matching upstream ID
+cache_dir = pathlib.Path(__file__).resolve().parent.parent / 'prompt-data-cache'
+caches = sorted(cache_dir.glob('prompts-*.json'), key=lambda p: p.stem)
+if caches:
+    import json
+    latest = json.loads(caches[-1].read_text())
+    upstream_ids = {p['id'] for p in latest['prompts']}
+    local_ids = {p.stem for p in root.glob('*.md')}
+    orphaned = sorted(local_ids - upstream_ids)
+    if orphaned:
+        print(f'WARN: {len(orphaned)} orphaned prompts (no upstream match in {caches[-1].name}):')
+        for pid in orphaned:
+            print(f'  {pid}')
+    else:
+        print(f'OK: all {len(local_ids)} local prompts have upstream matches')

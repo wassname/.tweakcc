@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "claude": "^0.1.2",
     "tweakcc": "4.0.10"
   }
 }

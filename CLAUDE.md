@@ -69,8 +69,20 @@ On-demand (untouched): Data ~154k chars, Skills ~45k chars, Agent Prompts ~69k c
 2. Re-apply: `npx tweakcc --apply`
 3. Files use YAML frontmatter in HTML comments + `${VARIABLE}` template interpolation
 4. Backticks in body must be escaped as `\`` (tweakcc parser requirement)
-5. Don't delete files; empty the content to disable (tweakcc expects files to exist)
-6. Header-only files (just `<!-- -->`) effectively disable that prompt piece
+5. Delete orphaned prompts (no upstream match). Don't keep empty files -- they'd silently blank a re-added ID.
+6. `python3 scripts/audit_templates.py` checks both template vars and orphaned prompts.
+
+## Version workflow
+
+Each CC version gets a git tag (e.g. `v2.1.68`). When CC updates:
+
+1. `just apply` -- patches and runs orphan check
+2. If orphan warnings: migrate customizations to new sub-pieces, delete orphans
+3. Commit, tag: `git tag v<CC_VERSION>`
+
+Native patching: `tweakcc --apply` handles unpack/patch/repack internally for native binaries. `scripts/patch_all.mjs` adds prompt-cache fallback (copies latest cached templates when upstream hasn't published for the new version yet) and surfaces warnings.
+
+Artifacts in `out/<version>/native/`: `backup`, `backup.js`, `patched`, `patched.js`. These are gitignored.
 
 ## File naming conventions
 

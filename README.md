@@ -23,8 +23,9 @@ no CLAUDE.md. There is no CLAUDE_MD template variable to inject it. Inline is th
 # 1. Clone into ~/.tweakcc
 git clone https://github.com/wassname/tweakcc-minimal ~/.tweakcc
 
-# 2. Install Claude Code (npm/global target)
-npm install -g @anthropic-ai/claude-code@2.1.63
+# 2. Install Claude Code (native or npm)
+# Native: https://claude.ai/download
+# npm: npm install -g @anthropic-ai/claude-code
 
 # 3. Apply tweaks + run full checks (template + runtime)
 just apply
@@ -37,7 +38,7 @@ mkdir -p ~/.claude/skills
 ln -s $PWD/skills/* ~/.claude/skills
 ```
 
-Backups are local to this repo at `out/<version>/cli.js.orig` and `out/<version>/cli.js.patched`.
+Backups at `out/<version>/native/{backup,backup.js,patched,patched.js}` (gitignored).
 
 ## Troubleshooting
 
@@ -153,30 +154,26 @@ Or via `env` in `~/.claude/settings.json`:
 
 | File | Controls |
 |------|----------|
-| `system-reminder-plan-mode-is-active-5-phase.md` | Plan mode workflow (was overriding CLAUDE.md) |
+| `system-reminder-plan-mode-is-active-5-phase.md` | Plan mode workflow (defers to CLAUDE.md) |
 | `system-reminder-plan-mode-is-active-iterative.md` | Iterative plan mode variant |
-| `system-prompt-main-system-prompt.md` | Role definition, ~10 lines |
-| `system-prompt-doing-tasks.md` | Task execution rules + tool hints |
-| `system-prompt-tone-and-style.md` | Output style |
-| `system-prompt-tool-usage-policy.md` | Parallel calls, tool preferences |
+| `system-prompt-tone-concise-output-detailed.md` | Output style (accuracy over validation) |
+| `system-prompt-tone-concise-output-short.md` | Response length defaults |
 | `system-prompt-hooks-configuration.md` | Hook event definitions (don't drop events) |
+| `agent-prompt-webfetch-summarizer.md` | Epistemic preferences for isolated micro-agent |
 
-~200 files untouched (already 6-8 lines, tool descriptions, agent/skill prompts loaded on-demand).
+~220 files untouched (already minimal, tool descriptions, agent/skill prompts loaded on-demand).
 
-## What changed
+## What changed (vs stock prompts)
 
+| Category | Files | What we did |
+|----------|-------|-------------|
+| Tool descriptions | todowrite, teammatetool, sendmessage, bash-git-commit, enterplanmode, task, readfile, websearch, ... | Compressed. Cut examples and patterns the model already knows. Kept schemas and tool-binding info. |
+| Plan mode | plan-mode-5-phase, iterative, subagent, re-entry | Defer to CLAUDE.md for workflow. Provide minimal defaults if no project instructions exist. |
+| Tone | tone-concise-output-detailed, tone-concise-output-short | Accuracy over validation. Disagree when warranted. No emojis, no time estimates. |
+| WebFetch | tool-description-webfetch | Prefer skills/MCP for specific domains. Save to `evidence/` for research. |
+| WebFetch summarizer | agent-prompt-webfetch-summarizer | Scout mindset, observation/inference separation, credence weighting. Inline because micro-agents don't see CLAUDE.md. |
+| Verbose system prompts | hooks-config, learning-mode, insights-*, executing-actions, chrome-automation, skillify | Compressed. Kept structure, cut examples. |
 
-
-| File | Before | After | Notes |
-|------|--------|-------|-------|
-| plan-mode-5-phase | 90 | 20 | Defers to CLAUDE.md for workflow |
-| plan-mode-iterative | 61 | 18 | Same |
-| main-system-prompt | 17 | 10 | Pi-style minimal |
-| doing-tasks | 18 | 7 | "Read first, follow CLAUDE.md" |
-| learning-mode | 80 | 11 | Kept core, cut examples |
-| insights-* (5 files) | 170 | 45 | Kept JSON schema, cut examples |
-| hooks-configuration | 163 | 33 | Kept structure + all events, cut examples |
-| mcp-cli | 124 | 25 | Kept commands, cut 6x repeated examples |
 
 ## Links
 
@@ -185,3 +182,9 @@ Or via `env` in `~/.claude/settings.json`:
 - Other mods: [bl-ue/tweakcc-system-prompts](https://github.com/bl-ue/tweakcc-system-prompts) | [yansircc/tweakcc-prompts](https://github.com/yansircc/tweakcc-prompts) | [principled-claude-code](https://github.com/m0n0x41d/principled-claude-code)
 - [Trail of Bits Claude Code Config](https://github.com/trailofbits/claude-code-config)
 - [Internals](https://www.southbridge.ai/blog/claude-code-an-analysis)
+
+
+## Appendix future work
+
+- Patch vscode-bundled claude (snap: `~/snap/code-insiders/.../.local/share/claude/versions/X.Y.Z`)
+- Auto-detect CC version bumps and run orphan check

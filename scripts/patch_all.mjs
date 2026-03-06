@@ -8,12 +8,13 @@
 
 import { findAllInstallations, readContent, helpers } from 'tweakcc';
 const { clearCaches } = helpers;
-import { readFile, writeFile, mkdir, copyFile, stat, rename, unlink } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, stat, rename, unlink, readdir } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { resolve, dirname, basename } from 'node:path';
 
 const CONFIG_PATH = resolve(import.meta.dirname, '..', 'config.json');
 const OUT_DIR = resolve(import.meta.dirname, '..', 'out');
+const PROMPT_CACHE_DIR = resolve(import.meta.dirname, '..', 'prompt-data-cache');
 
 /** Copy src -> dest, handling ETXTBSY by unlinking dest first (rename to .old, then copy). */
 async function robustCopy(src, dest) {
@@ -81,6 +82,51 @@ async function installationFromPath(filePath) {
   return { path: absPath, version, kind };
 }
 
+/** Create a prompt cache entry for targetVersion by copying the latest available version. */
+async function ensurePromptCache(targetVersion) {
+  const targetFile = resolve(PROMPT_CACHE_DIR, `prompts-${targetVersion}.json`);
+  try {
+    await stat(targetFile);
+    return false; // already exists
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e;
+  }
+
+  // Find latest cached prompts file (excluding backups)
+  const files = (await readdir(PROMPT_CACHE_DIR))
+    .filter(f => /^prompts-\d+\.\d+\.\d+\.json$/.test(f))
+    .sort((a, b) => {
+      const va = a.match(/(\d+\.\d+\.\d+)/)[1].split('.').map(Number);
+      const vb = b.match(/(\d+\.\d+\.\d+)/)[1].split('.').map(Number);
+      return va[0] - vb[0] || va[1] - vb[1] || va[2] - vb[2];
+    });
+  if (files.length === 0) return false;
+
+  const latestFile = resolve(PROMPT_CACHE_DIR, files.at(-1));
+  const data = JSON.parse(await readFile(latestFile, 'utf8'));
+  const sourceVersion = data.version;
+  data.version = targetVersion;
+  await writeFile(targetFile, JSON.stringify(data, null, 2), 'utf8');
+  console.log(`  prompt fallback: copied ${sourceVersion} templates as ${targetVersion}`);
+  return true;
+}
+
+function runApply() {
+  const out = execFileSync('npx', ['tweakcc', '--apply'], {
+    encoding: 'utf8',
+    timeout: 120_000,
+    cwd: resolve(import.meta.dirname, '..'),
+    stdio: ['pipe', 'pipe', 'pipe'],
+  });
+  // Surface warnings/errors from tweakcc (otherwise silently swallowed)
+  for (const line of out.split('\n')) {
+    if (/^\s*(✖|⚠|Error|Warning)/i.test(line)) {
+      console.log(`  ${line.trim()}`);
+    }
+  }
+  return out;
+}
+
 async function main() {
   const config = await readConfig();
   const originalPath = config.ccInstallationPath;
@@ -133,13 +179,36 @@ async function main() {
 
     // Apply tweakcc
     try {
-      const applyOut = execFileSync('npx', ['tweakcc', '--apply'], {
-        encoding: 'utf8',
-        timeout: 120_000,
-        cwd: resolve(import.meta.dirname, '..'),
-        stdio: ['pipe', 'pipe', 'pipe'],
-      });
+      let applyOut = runApply();
+
+      // tweakcc exits 0 but skips prompts when templates are unavailable
+      if (applyOut.includes('skipping system prompt customizations')) {
+        console.warn(`  prompts unavailable for v${inst.version}, trying fallback...`);
+        const created = await ensurePromptCache(inst.version);
+        if (created) {
+          clearCaches();
+          // Restore binary to clean state before retry
+          await robustCopy(backupPath, inst.path);
+          applyOut = runApply();
+        }
+        if (applyOut.includes('skipping system prompt customizations')) {
+          console.error(`  FAILED: system prompts skipped even after fallback`);
+          results.push({ ...inst, status: 'FAILED (no prompts)' });
+          await robustCopy(backupPath, inst.path).catch(() => {});
+          continue;
+        }
+      }
+
       console.log(`  applied`);
+
+      // Save extracted JS files to versioned out dir (tweakcc writes these during --apply)
+      if (inst.kind === 'native') {
+        const tweakccDir = resolve(import.meta.dirname, '..');
+        const origJs = resolve(tweakccDir, 'native-claudejs-orig.js');
+        const patchedJs = resolve(tweakccDir, 'native-claudejs-patched.js');
+        await copyFile(origJs, resolve(backupDir, 'backup.js')).catch(() => {});
+        await copyFile(patchedJs, resolve(backupDir, 'patched.js')).catch(() => {});
+      }
 
       // Save patched copy
       const patchedPath = resolve(backupDir, 'patched' + (inst.kind === 'npm' ? '.js' : ''));

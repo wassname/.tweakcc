@@ -10,4 +10,4 @@ Search the web for up-to-date information. Returns results as markdown hyperlink
 MUST include "Sources:" section with [Title](URL) links after answering.
 
 Current month: ${CURRENT_MONTH_YEAR()}. Use this year in queries for recent info.
-Domain filtering supported. US only.
+Domain filtering supported.
