@@ -14,6 +14,7 @@ import { resolve, dirname, basename } from 'node:path';
 
 const CONFIG_PATH = resolve(import.meta.dirname, '..', 'config.json');
 const OUT_DIR = resolve(import.meta.dirname, '..', 'out');
+const BACKUP_RO_DIR = resolve(import.meta.dirname, '..', 'backup_ro');
 const PROMPT_CACHE_DIR = resolve(import.meta.dirname, '..', 'prompt-data-cache');
 
 /** Copy src -> dest, handling ETXTBSY by unlinking dest first (rename to .old, then copy). */
@@ -189,7 +190,7 @@ async function main() {
     const label = `${inst.kind} v${inst.version}`;
     console.log(`--- Patching ${label} ---`);
 
-    // Backup
+    // Backup: out/ (overwritten each run) + backup_ro/ (write-once, never overwritten)
     const backupDir = resolve(OUT_DIR, inst.version, inst.kind);
     await mkdir(backupDir, { recursive: true });
     const backupPath = resolve(backupDir, 'backup' + (inst.kind === 'npm' ? '.js' : ''));
@@ -200,6 +201,18 @@ async function main() {
       console.error(`  backup failed: ${e.message}`);
       results.push({ ...inst, status: 'FAILED (backup)', error: e.message });
       continue;
+    }
+
+    // Read-only backup: only written once per version+kind, never overwritten
+    const roDir = resolve(BACKUP_RO_DIR, inst.version, inst.kind);
+    await mkdir(roDir, { recursive: true });
+    const roPath = resolve(roDir, 'original' + (inst.kind === 'npm' ? '.js' : ''));
+    try {
+      await stat(roPath);
+      // already exists, don't overwrite
+    } catch {
+      await copyFile(inst.path, roPath);
+      console.log(`  backup_ro -> ${roPath} (first-time, read-only)`);
     }
 
     // Update config to point at this installation
