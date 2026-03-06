@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: Tool Description: Bash (Git commit and PR creation instructions) (tool-description-bash-git-commit-and-pr-creation-instructions)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tool Description: Bash (Git commit and PR creation instructions)</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.38 →
+      <strong>New Version:</strong> 2.1.10
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.38,
+    but Claude Code is now using version 2.1.10.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/tool-description-bash-git-commit-and-pr-creation-instructions.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.1.10</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.38 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span># Committing changes with git</div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>Only create commits when requested by the user. If unclear, ask first. When the user asks you to create a new git commit, follow these steps carefully:</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>Git Safety Protocol:</div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span>- NEVER update the git config</div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>- NEVER run destructive git commands (push --force, reset --hard, checkout ., restore ., clean -f, branch -D) unless the user explicitly requests these actions. Taking unauthorized destructive actions is unhelpful and can result in lost work, so it&#039;s best to ONLY run these commands when given direct instructions </div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span>- NEVER skip hooks (--no-verify, --no-gpg-sign, etc) unless the user explicitly requests it</div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>- NEVER run force push to main/master, warn the user if they request it</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>- CRITICAL: Always create NEW commits rather than amending, unless the user explicitly requests a git amend. When a pre-commit hook fails, the commit did NOT happen — so --amend would modify the PREVIOUS commit, which may result in destroying work or losing previous changes. Instead, after hook failure, fix the issue, re-stage, and create a NEW commit</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span>- When staging files, prefer adding specific files by name rather than using &quot;git add -A&quot; or &quot;git add .&quot;, which can accidentally include sensitive files (.env, credentials) or large binaries</div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>- NEVER commit changes unless the user explicitly asks you to. It is VERY IMPORTANT to only commit when explicitly asked, otherwise the user will feel that you are being too proactive</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span>1. ${GIT_COMMAND_PARALLEL_NOTE} run the following bash commands in parallel, each using the ${BASH_TOOL_NAME} tool:</div>
+<div class="line removed"><span class="line-num">  15</span><span class="prefix">- </span>  - Run a git status command to see all untracked files. IMPORTANT: Never use the -uall flag as it can cause memory issues on large repos.</div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>  - Run a git diff command to see both staged and unstaged changes that will be committed.</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>  - Run a git log command to see recent commit messages, so that you can follow this repository&#039;s commit message style.</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>2. Analyze all staged changes (both previously staged and newly added) and draft a commit message:</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span>  - Summarize the nature of the changes (eg. new feature, enhancement to an existing feature, bug fix, refactoring, test, docs, etc.). Ensure the message accurately reflects the changes and their purpose (i.e. &quot;add&quot; means a wholly new feature, &quot;update&quot; means an enhancement to an existing feature, &quot;fix&quot; means a bug fix, etc.).</div>
+<div class="line removed"><span class="line-num">  20</span><span class="prefix">- </span>  - Do not commit files that likely contain secrets (.env, credentials.json, etc). Warn the user if they specifically request to commit those files</div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span>  - Draft a concise (1-2 sentences) commit message that focuses on the &quot;why&quot; rather than the &quot;what&quot;</div>
+<div class="line removed"><span class="line-num">  22</span><span class="prefix">- </span>  - Ensure it accurately reflects the changes and their purpose</div>
+<div class="line removed"><span class="line-num">  23</span><span class="prefix">- </span>3. ${GIT_COMMAND_PARALLEL_NOTE} run the following commands:</div>
+<div class="line removed"><span class="line-num">  24</span><span class="prefix">- </span>   - Add relevant untracked files to the staging area.</div>
+<div class="line removed"><span class="line-num">  25</span><span class="prefix">- </span>   - Create the commit with a message${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?` ending with:</div>
+<div class="line removed"><span class="line-num">  26</span><span class="prefix">- </span>   ${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:&quot;.&quot;}</div>
+<div class="line removed"><span class="line-num">  27</span><span class="prefix">- </span>   - Run git status after the commit completes to verify success.</div>
+<div class="line removed"><span class="line-num">  28</span><span class="prefix">- </span>   Note: git status depends on the commit completing, so run it sequentially after the commit.</div>
+<div class="line removed"><span class="line-num">  29</span><span class="prefix">- </span>4. If the commit fails due to pre-commit hook: fix the issue and create a NEW commit</div>
+<div class="line removed"><span class="line-num">  30</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  31</span><span class="prefix">- </span>Important notes:</div>
+<div class="line removed"><span class="line-num">  32</span><span class="prefix">- </span>- NEVER run additional commands to read or explore code, besides git bash commands</div>
+<div class="line removed"><span class="line-num">  33</span><span class="prefix">- </span>- NEVER use the ${TODO_TOOL_OBJECT.name} or ${TASK_TOOL_NAME} tools</div>
+<div class="line removed"><span class="line-num">  34</span><span class="prefix">- </span>- DO NOT push to the remote repository unless the user explicitly asks you to do so</div>
+<div class="line removed"><span class="line-num">  35</span><span class="prefix">- </span>- IMPORTANT: Never use git commands with the -i flag (like git rebase -i or git add -i) since they require interactive input which is not supported.</div>
+<div class="line removed"><span class="line-num">  36</span><span class="prefix">- </span>- IMPORTANT: Do not use --no-edit with git rebase commands, as the --no-edit flag is not a valid option for git rebase.</div>
+<div class="line removed"><span class="line-num">  37</span><span class="prefix">- </span>- If there are no changes to commit (i.e., no untracked files and no modifications), do not create an empty commit</div>
+<div class="line removed"><span class="line-num">  38</span><span class="prefix">- </span>- In order to ensure good formatting, ALWAYS pass the commit message via a HEREDOC, a la this example:</div>
+<div class="line removed"><span class="line-num">  39</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  40</span><span class="prefix">- </span>git commit -m &quot;$(cat &lt;&lt;&#039;EOF&#039;</div>
+<div class="line removed"><span class="line-num">  41</span><span class="prefix">- </span>   Commit message here.${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?`</div>
+<div class="line removed"><span class="line-num">  42</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  43</span><span class="prefix">- </span>   ${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:&quot;&quot;}</div>
+<div class="line removed"><span class="line-num">  44</span><span class="prefix">- </span>   EOF</div>
+<div class="line removed"><span class="line-num">  45</span><span class="prefix">- </span>   )&quot;</div>
+<div class="line removed"><span class="line-num">  46</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  47</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  48</span><span class="prefix">- </span># Creating pull requests</div>
+<div class="line removed"><span class="line-num">  49</span><span class="prefix">- </span>Use the gh command via the Bash tool for ALL GitHub-related tasks including working with issues, pull requests, checks, and releases. If given a Github URL use the gh command to get the information needed.</div>
+<div class="line removed"><span class="line-num">  50</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  51</span><span class="prefix">- </span>IMPORTANT: When the user asks you to create a pull request, follow these steps carefully:</div>
+<div class="line removed"><span class="line-num">  52</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  53</span><span class="prefix">- </span>1. ${GIT_COMMAND_PARALLEL_NOTE} run the following bash commands in parallel using the ${BASH_TOOL_NAME} tool, in order to understand the current state of the branch since it diverged from the main branch:</div>
+<div class="line removed"><span class="line-num">  54</span><span class="prefix">- </span>   - Run a git status command to see all untracked files (never use -uall flag)</div>
+<div class="line removed"><span class="line-num">  55</span><span class="prefix">- </span>   - Run a git diff command to see both staged and unstaged changes that will be committed</div>
+<div class="line removed"><span class="line-num">  56</span><span class="prefix">- </span>   - Check if the current branch tracks a remote branch and is up to date with the remote, so you know if you need to push to the remote</div>
+<div class="line removed"><span class="line-num">  57</span><span class="prefix">- </span>   - Run a git log command and \`git diff [base-branch]...HEAD\` to understand the full commit history for the current branch (from the time it diverged from the base branch)</div>
+<div class="line removed"><span class="line-num">  58</span><span class="prefix">- </span>2. Analyze all changes that will be included in the pull request, making sure to look at all relevant commits (NOT just the latest commit, but ALL commits that will be included in the pull request!!!), and draft a pull request title and summary:</div>
+<div class="line removed"><span class="line-num">  59</span><span class="prefix">- </span>   - Keep the PR title short (under 70 characters)</div>
+<div class="line removed"><span class="line-num">  60</span><span class="prefix">- </span>   - Use the description/body for details, not the title</div>
+<div class="line removed"><span class="line-num">  61</span><span class="prefix">- </span>3. ${GIT_COMMAND_PARALLEL_NOTE} run the following commands in parallel:</div>
+<div class="line removed"><span class="line-num">  62</span><span class="prefix">- </span>   - Create new branch if needed</div>
+<div class="line removed"><span class="line-num">  63</span><span class="prefix">- </span>   - Push to remote with -u flag if needed</div>
+<div class="line removed"><span class="line-num">  64</span><span class="prefix">- </span>   - Create PR using gh pr create with the format below. Use a HEREDOC to pass the body to ensure correct formatting.</div>
+<div class="line removed"><span class="line-num">  65</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  66</span><span class="prefix">- </span>gh pr create --title &quot;the pr title&quot; --body &quot;$(cat &lt;&lt;&#039;EOF&#039;</div>
+<div class="line removed"><span class="line-num">  67</span><span class="prefix">- </span>## Summary</div>
+<div class="line removed"><span class="line-num">  68</span><span class="prefix">- </span>&lt;1-3 bullet points&gt;</div>
+<div class="line removed"><span class="line-num">  69</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  70</span><span class="prefix">- </span>## Test plan</div>
+<div class="line removed"><span class="line-num">  71</span><span class="prefix">- </span>[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_GENERATED_WITH_CLAUDE_CODE?`</div>
+<div class="line removed"><span class="line-num">  72</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  73</span><span class="prefix">- </span>${PR_GENERATED_WITH_CLAUDE_CODE}`:&quot;&quot;}</div>
+<div class="line removed"><span class="line-num">  74</span><span class="prefix">- </span>EOF</div>
+<div class="line removed"><span class="line-num">  75</span><span class="prefix">- </span>)&quot;</div>
+<div class="line removed"><span class="line-num">  76</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  77</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  78</span><span class="prefix">- </span>Important:</div>
+<div class="line removed"><span class="line-num">  79</span><span class="prefix">- </span>- DO NOT use the ${TODO_TOOL_OBJECT.name} or ${TASK_TOOL_NAME} tools</div>
+<div class="line removed"><span class="line-num">  80</span><span class="prefix">- </span><mark>-</mark><mark> </mark><mark>Return</mark><mark> </mark><mark>the</mark> <mark>PR</mark> <mark>URL</mark> <mark>when</mark> <mark>you&#039;re</mark> <mark>done,</mark> <mark>so</mark> the<mark> </mark><mark>user</mark><mark> </mark><mark>can</mark> <mark>see</mark> <mark>it</mark></div>
+<div class="line added"><span class="line-num">   1</span><span class="prefix">+ </span><mark>For</mark> <mark>git</mark> <mark>commits</mark> <mark>and</mark> <mark>PR</mark> <mark>creation,</mark> <mark>invoke</mark> the <mark>\`cc-commit\`</mark> <mark>skill.</mark></div>
+<div class="line unchanged"><span class="line-num">  81    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  82</span><span class="prefix">- </span># Other common operations</div>
+<div class="line removed"><span class="line-num">  83</span><span class="prefix">- </span>- View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments</div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.38 → v2.1.10)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span># Committing changes with git</div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>Only create commits when requested by the user. If unclear, ask first. When the user asks you to create a new git commit, follow these steps carefully:</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>Git Safety Protocol:</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span>- NEVER update the git config</div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>- NEVER run <mark>destructive</mark> git commands<mark> </mark><mark>(push</mark><mark> </mark><mark>--force,</mark><mark> </mark><mark>reset</mark><mark> </mark><mark>--hard,</mark><mark> </mark><mark>checkout</mark><mark> </mark><mark>.,</mark> <mark>restore</mark> <mark>.,</mark> <mark>clean</mark> <mark>-f,</mark> <mark>branch</mark> <mark>-D)</mark> unless the user explicitly requests<mark> </mark><mark>these</mark><mark> </mark><mark>actions.</mark><mark> </mark><mark>Taking</mark><mark> </mark><mark>unauthorized</mark><mark> </mark><mark>destructive</mark><mark> </mark><mark>actions</mark><mark> </mark><mark>is</mark><mark> </mark><mark>unhelpful</mark><mark> </mark><mark>and</mark><mark> </mark><mark>can</mark><mark> </mark><mark>result</mark><mark> </mark><mark>in</mark><mark> </mark><mark>lost</mark><mark> </mark><mark>work,</mark><mark> </mark><mark>so</mark><mark> </mark><mark>it&#039;s</mark><mark> </mark><mark>best</mark><mark> </mark><mark>to</mark><mark> </mark><mark>ONLY</mark><mark> </mark><mark>run</mark><mark> </mark><mark>these</mark><mark> </mark><mark>commands</mark><mark> </mark><mark>when</mark><mark> </mark><mark>given</mark><mark> </mark><mark>direct</mark><mark> </mark><mark>instructions</mark> <mark></mark></div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>- NEVER run <mark>destructive/irreversible</mark> git commands <mark>(like</mark> <mark>push</mark> <mark>--force,</mark> <mark>hard</mark> <mark>reset,</mark> <mark>etc)</mark> unless the user explicitly requests <mark>them</mark></div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span>- NEVER skip hooks (--no-verify, --no-gpg-sign, etc) unless the user explicitly requests it</div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span>- NEVER run force push to main/master, warn the user if they request it</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>- CRITICAL: Always create NEW commits rather than amending, unless the user explicitly requests a git amend. When a pre-commit hook fails, the commit did NOT happen — so --amend would modify the PREVIOUS commit, which may result in destroying work or losing previous changes. Instead, after hook failure, fix the issue, re-stage, and create a NEW commit</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span>- When staging files, prefer adding specific files by name rather than using &quot;git add -A&quot; or &quot;git add .&quot;, which can accidentally include sensitive files (.env, credentials) or large binaries</div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>-<mark> </mark><mark>NEVER</mark><mark> </mark><mark>commit</mark><mark> </mark><mark>changes</mark><mark> </mark><mark>unless</mark><mark> </mark><mark>the</mark><mark> </mark><mark>user</mark><mark> </mark><mark>explicitly</mark><mark> </mark><mark>asks</mark> <mark>you</mark> <mark>to.</mark> <mark>It</mark> <mark>is</mark> <mark>VERY</mark> <mark>IMPORTANT</mark> <mark>to</mark> <mark>only</mark> commit<mark> </mark><mark>when</mark><mark> </mark><mark>explicitly</mark> <mark>asked,</mark> <mark>otherwise</mark> the user<mark> </mark><mark>will</mark><mark> </mark><mark>feel</mark><mark> </mark><mark>that</mark><mark> </mark><mark>you</mark><mark> </mark><mark>are</mark> <mark>being</mark> <mark>too</mark> <mark>proactive</mark></div>
+<div class="line added"><span class="line-num">  10</span><span class="prefix">+ </span>- <mark>CRITICAL:</mark> <mark>ALWAYS</mark> <mark>create</mark> <mark>NEW</mark> <mark>commits.</mark> <mark>NEVER</mark> <mark>use</mark> <mark>git</mark> commit <mark>--amend,</mark> <mark>unless</mark> the user <mark>explicitly</mark> <mark>requests</mark> <mark>it</mark></div>
+<div class="line added"><span class="line-num">  11</span><span class="prefix">+ </span>- NEVER commit changes unless the user explicitly asks you to. It is VERY IMPORTANT to only commit when explicitly asked, otherwise the user will feel that you are being too proactive.</div>
+<div class="line unchanged"><span class="line-num">  13   12</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span>1. <mark>${GIT_COMMAND_PARALLEL_NOTE}</mark> run the following bash commands in parallel, each using the <mark>${BASH_TOOL_NAME}</mark> tool:</div>
+<div class="line added"><span class="line-num">  13</span><span class="prefix">+ </span>1. <mark>${BASH_TOOL_NAME}</mark> run the following bash commands in parallel, each using the <mark>${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}</mark> tool:</div>
+<div class="line unchanged"><span class="line-num">  15   14</span><span class="prefix">  </span>  - Run a git status command to see all untracked files. IMPORTANT: Never use the -uall flag as it can cause memory issues on large repos.</div>
+<div class="line unchanged"><span class="line-num">  16   15</span><span class="prefix">  </span>  - Run a git diff command to see both staged and unstaged changes that will be committed.</div>
+<div class="line unchanged"><span class="line-num">  17   16</span><span class="prefix">  </span>  - Run a git log command to see recent commit messages, so that you can follow this repository&#039;s commit message style.</div>
+<div class="line unchanged"><span class="line-num">  18   17</span><span class="prefix">  </span>2. Analyze all staged changes (both previously staged and newly added) and draft a commit message:</div>
+<div class="line unchanged"><span class="line-num">  19   18</span><span class="prefix">  </span>  - Summarize the nature of the changes (eg. new feature, enhancement to an existing feature, bug fix, refactoring, test, docs, etc.). Ensure the message accurately reflects the changes and their purpose (i.e. &quot;add&quot; means a wholly new feature, &quot;update&quot; means an enhancement to an existing feature, &quot;fix&quot; means a bug fix, etc.).</div>
+<div class="line unchanged"><span class="line-num">  20   19</span><span class="prefix">  </span>  - Do not commit files that likely contain secrets (.env, credentials.json, etc). Warn the user if they specifically request to commit those files</div>
+<div class="line unchanged"><span class="line-num">  21   20</span><span class="prefix">  </span>  - Draft a concise (1-2 sentences) commit message that focuses on the &quot;why&quot; rather than the &quot;what&quot;</div>
+<div class="line unchanged"><span class="line-num">  22   21</span><span class="prefix">  </span>  - Ensure it accurately reflects the changes and their purpose</div>
+<div class="line removed"><span class="line-num">  23</span><span class="prefix">- </span>3. <mark>${GIT_COMMAND_PARALLEL_NOTE}</mark> run the following commands:</div>
+<div class="line added"><span class="line-num">  22</span><span class="prefix">+ </span>3. <mark>${BASH_TOOL_NAME}</mark> run the following commands:</div>
+<div class="line unchanged"><span class="line-num">  24   23</span><span class="prefix">  </span>   - Add relevant untracked files to the staging area.</div>
+<div class="line removed"><span class="line-num">  25</span><span class="prefix">- </span>   - Create the commit with a message${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?` ending with:</div>
+<div class="line removed"><span class="line-num">  26</span><span class="prefix">- </span>   <mark>${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:&quot;.&quot;}</mark></div>
+<div class="line added"><span class="line-num">  24</span><span class="prefix">+ </span>   <mark>-</mark><mark> </mark><mark>Create</mark><mark> </mark><mark>the</mark><mark> </mark><mark>commit</mark><mark> </mark><mark>with</mark><mark> </mark><mark>a</mark><mark> </mark><mark>message${TODO_TOOL_OBJECT?`</mark><mark> </mark><mark>ending</mark><mark> </mark><mark>with:</mark></div>
+<div class="line added"><span class="line-num">  25</span><span class="prefix">+ </span>   ${TODO_TOOL_OBJECT}`:&quot;.&quot;}</div>
+<div class="line unchanged"><span class="line-num">  27   26</span><span class="prefix">  </span>   - Run git status after the commit completes to verify success.</div>
+<div class="line unchanged"><span class="line-num">  28   27</span><span class="prefix">  </span>   Note: git status depends on the commit completing, so run it sequentially after the commit.</div>
+<div class="line unchanged"><span class="line-num">  29   28</span><span class="prefix">  </span>4. If the commit fails due to pre-commit hook: fix the issue and create a NEW commit</div>
+<div class="line unchanged"><span class="line-num">  30   29</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  31   30</span><span class="prefix">  </span>Important notes:</div>
+<div class="line unchanged"><span class="line-num">  32   31</span><span class="prefix">  </span>- NEVER run additional commands to read or explore code, besides git bash commands</div>
+<div class="line removed"><span class="line-num">  33</span><span class="prefix">- </span>- NEVER use the <mark>${TODO_TOOL_OBJECT.name}</mark> or <mark>${TASK_TOOL_NAME}</mark> tools</div>
+<div class="line added"><span class="line-num">  32</span><span class="prefix">+ </span>- NEVER use the <mark>${TASK_TOOL_NAME.name}</mark> or <mark>${PR_GENERATED_WITH_CLAUDE_CODE}</mark> tools</div>
+<div class="line unchanged"><span class="line-num">  34   33</span><span class="prefix">  </span>- DO NOT push to the remote repository unless the user explicitly asks you to do so</div>
+<div class="line unchanged"><span class="line-num">  35   34</span><span class="prefix">  </span>- IMPORTANT: Never use git commands with the -i flag (like git rebase -i or git add -i) since they require interactive input which is not supported.</div>
+<div class="line removed"><span class="line-num">  36</span><span class="prefix">- </span>- IMPORTANT: Do not use --no-edit with git rebase commands, as the --no-edit flag is not a valid option for git rebase.</div>
+<div class="line unchanged"><span class="line-num">  37   35</span><span class="prefix">  </span>- If there are no changes to commit (i.e., no untracked files and no modifications), do not create an empty commit</div>
+<div class="line unchanged"><span class="line-num">  38   36</span><span class="prefix">  </span>- In order to ensure good formatting, ALWAYS pass the commit message via a HEREDOC, a la this example:</div>
+<div class="line unchanged"><span class="line-num">  39   37</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  40   38</span><span class="prefix">  </span>git commit -m &quot;$(cat &lt;&lt;&#039;EOF&#039;</div>
+<div class="line removed"><span class="line-num">  41</span><span class="prefix">- </span>   Commit message <mark>here.${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?`</mark></div>
+<div class="line added"><span class="line-num">  39</span><span class="prefix">+ </span>   Commit message <mark>here.${TODO_TOOL_OBJECT?`</mark></div>
+<div class="line unchanged"><span class="line-num">  42   40</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  43</span><span class="prefix">- </span>   <mark>${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:&quot;&quot;}</mark></div>
+<div class="line added"><span class="line-num">  41</span><span class="prefix">+ </span>   <mark>${TODO_TOOL_OBJECT}`:&quot;&quot;}</mark></div>
+<div class="line unchanged"><span class="line-num">  44   42</span><span class="prefix">  </span>   EOF</div>
+<div class="line unchanged"><span class="line-num">  45   43</span><span class="prefix">  </span>   )&quot;</div>
+<div class="line unchanged"><span class="line-num">  46   44</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  47   45</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  48   46</span><span class="prefix">  </span># Creating pull requests</div>
+<div class="line unchanged"><span class="line-num">  49   47</span><span class="prefix">  </span>Use the gh command via the Bash tool for ALL GitHub-related tasks including working with issues, pull requests, checks, and releases. If given a Github URL use the gh command to get the information needed.</div>
+<div class="line unchanged"><span class="line-num">  50   48</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  51   49</span><span class="prefix">  </span>IMPORTANT: When the user asks you to create a pull request, follow these steps carefully:</div>
+<div class="line unchanged"><span class="line-num">  52   50</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  53</span><span class="prefix">- </span>1. <mark>${GIT_COMMAND_PARALLEL_NOTE}</mark> run the following bash commands in parallel using the <mark>${BASH_TOOL_NAME}</mark> tool, in order to understand the current state of the branch since it diverged from the main branch:</div>
+<div class="line added"><span class="line-num">  51</span><span class="prefix">+ </span>1. <mark>${BASH_TOOL_NAME}</mark> run the following bash commands in parallel using the <mark>${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}</mark> tool, in order to understand the current state of the branch since it diverged from the main branch:</div>
+<div class="line unchanged"><span class="line-num">  54   52</span><span class="prefix">  </span>   - Run a git status command to see all untracked files (never use -uall flag)</div>
+<div class="line unchanged"><span class="line-num">  55   53</span><span class="prefix">  </span>   - Run a git diff command to see both staged and unstaged changes that will be committed</div>
+<div class="line unchanged"><span class="line-num">  56   54</span><span class="prefix">  </span>   - Check if the current branch tracks a remote branch and is up to date with the remote, so you know if you need to push to the remote</div>
+<div class="line unchanged"><span class="line-num">  57   55</span><span class="prefix">  </span>   - Run a git log command and \`git diff [base-branch]...HEAD\` to understand the full commit history for the current branch (from the time it diverged from the base branch)</div>
+<div class="line removed"><span class="line-num">  58</span><span class="prefix">- </span>2. Analyze all changes that will be included in the pull request, making sure to look at all relevant commits (NOT just the latest commit, but ALL commits that will be included in the pull request!!!), and draft a pull request title and summary:</div>
+<div class="line removed"><span class="line-num">  59</span><span class="prefix">- </span>   - Keep the PR title short (under 70 characters)</div>
+<div class="line removed"><span class="line-num">  60</span><span class="prefix">- </span>   - Use the description/body for details, not the title</div>
+<div class="line removed"><span class="line-num">  61</span><span class="prefix">- </span><mark>3.</mark> <mark>${GIT_COMMAND_PARALLEL_NOTE}</mark> <mark>run</mark> the <mark>following</mark> <mark>commands</mark> in <mark>parallel:</mark></div>
+<div class="line added"><span class="line-num">  56</span><span class="prefix">+ </span><mark>2.</mark> <mark>Analyze</mark> <mark>all</mark><mark> </mark><mark>changes</mark><mark> </mark><mark>that</mark><mark> </mark><mark>will</mark><mark> </mark><mark>be</mark><mark> </mark><mark>included</mark><mark> </mark><mark>in</mark> the <mark>pull</mark> <mark>request,</mark><mark> </mark><mark>making</mark><mark> </mark><mark>sure</mark><mark> </mark><mark>to</mark><mark> </mark><mark>look</mark><mark> </mark><mark>at</mark><mark> </mark><mark>all</mark><mark> </mark><mark>relevant</mark><mark> </mark><mark>commits</mark><mark> </mark><mark>(NOT</mark><mark> </mark><mark>just</mark><mark> </mark><mark>the</mark><mark> </mark><mark>latest</mark><mark> </mark><mark>commit,</mark><mark> </mark><mark>but</mark><mark> </mark><mark>ALL</mark><mark> </mark><mark>commits</mark><mark> </mark><mark>that</mark><mark> </mark><mark>will</mark><mark> </mark><mark>be</mark><mark> </mark><mark>included</mark> in <mark>the</mark><mark> </mark><mark>pull</mark><mark> </mark><mark>request!!!),</mark><mark> </mark><mark>and</mark><mark> </mark><mark>draft</mark><mark> </mark><mark>a</mark><mark> </mark><mark>pull</mark><mark> </mark><mark>request</mark><mark> </mark><mark>summary</mark></div>
+<div class="line added"><span class="line-num">  57</span><span class="prefix">+ </span>3. ${BASH_TOOL_NAME} run the following commands in parallel:</div>
+<div class="line unchanged"><span class="line-num">  62   58</span><span class="prefix">  </span>   - Create new branch if needed</div>
+<div class="line unchanged"><span class="line-num">  63   59</span><span class="prefix">  </span>   - Push to remote with -u flag if needed</div>
+<div class="line unchanged"><span class="line-num">  64   60</span><span class="prefix">  </span>   - Create PR using gh pr create with the format below. Use a HEREDOC to pass the body to ensure correct formatting.</div>
+<div class="line unchanged"><span class="line-num">  65   61</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  66   62</span><span class="prefix">  </span>gh pr create --title &quot;the pr title&quot; --body &quot;$(cat &lt;&lt;&#039;EOF&#039;</div>
+<div class="line unchanged"><span class="line-num">  67   63</span><span class="prefix">  </span>## Summary</div>
+<div class="line unchanged"><span class="line-num">  68   64</span><span class="prefix">  </span>&lt;1-3 bullet points&gt;</div>
+<div class="line unchanged"><span class="line-num">  69   65</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  70   66</span><span class="prefix">  </span>## Test plan</div>
+<div class="line removed"><span class="line-num">  71</span><span class="prefix">- </span>[Bulleted markdown checklist of TODOs for testing the pull <mark>request...]${PR_GENERATED_WITH_CLAUDE_CODE?`</mark></div>
+<div class="line added"><span class="line-num">  67</span><span class="prefix">+ </span>[Bulleted markdown checklist of TODOs for testing the pull <mark>request...]${GIT_COMMAND_PARALLEL_NOTE?`</mark></div>
+<div class="line unchanged"><span class="line-num">  72   68</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  73</span><span class="prefix">- </span><mark>${PR_GENERATED_WITH_CLAUDE_CODE}`:&quot;&quot;}</mark></div>
+<div class="line added"><span class="line-num">  69</span><span class="prefix">+ </span><mark>${GIT_COMMAND_PARALLEL_NOTE}`:&quot;&quot;}</mark></div>
+<div class="line unchanged"><span class="line-num">  74   70</span><span class="prefix">  </span>EOF</div>
+<div class="line unchanged"><span class="line-num">  75   71</span><span class="prefix">  </span>)&quot;</div>
+<div class="line unchanged"><span class="line-num">  76   72</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  77   73</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  78   74</span><span class="prefix">  </span>Important:</div>
+<div class="line removed"><span class="line-num">  79</span><span class="prefix">- </span>- DO NOT use the <mark>${TODO_TOOL_OBJECT.name}</mark> or <mark>${TASK_TOOL_NAME}</mark> tools</div>
+<div class="line added"><span class="line-num">  75</span><span class="prefix">+ </span>- DO NOT use the <mark>${TASK_TOOL_NAME.name}</mark> or <mark>${PR_GENERATED_WITH_CLAUDE_CODE}</mark> tools</div>
+<div class="line unchanged"><span class="line-num">  80   76</span><span class="prefix">  </span>- Return the PR URL when you&#039;re done, so the user can see it</div>
+<div class="line unchanged"><span class="line-num">  81   77</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  82   78</span><span class="prefix">  </span># Other common operations</div>
+<div class="line unchanged"><span class="line-num">  83   79</span><span class="prefix">  </span>- View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

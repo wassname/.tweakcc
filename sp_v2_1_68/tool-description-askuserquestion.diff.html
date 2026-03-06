@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: Tool Description: AskUserQuestion (tool-description-askuserquestion)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tool Description: AskUserQuestion</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.47 →
+      <strong>New Version:</strong> 2.0.77
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.47,
+    but Claude Code is now using version 2.0.77.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/tool-description-askuserquestion.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.0.77</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.47 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span>Use this tool when you need to ask the user questions during execution. This allows you to:</div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span>1. Gather user preferences or requirements</div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>2. Clarify ambiguous instructions</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span>3. Get decisions on implementation choices as you work</div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>4. Offer choices to the user about what direction to take.</div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>Usage notes:</div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span>- Users will always be able to select &quot;Other&quot; to provide custom text input</div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>- Use multiSelect: true to allow multiple answers to be selected for a question</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span><mark>-</mark><mark> </mark><mark>If</mark><mark> </mark><mark>you</mark><mark> </mark><mark>recommend</mark><mark> </mark><mark>a</mark><mark> </mark><mark>specific</mark><mark> </mark><mark>option,</mark><mark> </mark><mark>make</mark><mark> </mark><mark>that</mark><mark> </mark><mark>the</mark><mark> </mark><mark>first</mark> <mark>option</mark> <mark>in</mark> <mark>the</mark> <mark>list</mark> <mark>and</mark> <mark>add</mark> <mark>&quot;(Recommended)&quot;</mark> <mark>at</mark> <mark>the</mark> <mark>end</mark> <mark>of</mark> <mark>the</mark> <mark>label</mark></div>
+<div class="line added"><span class="line-num">   1</span><span class="prefix">+ </span><mark>Ask</mark> <mark>user</mark> <mark>questions</mark> <mark>during</mark> <mark>execution:</mark> <mark>gather</mark> <mark>preferences,</mark> <mark>clarify</mark> <mark>ambiguity,</mark> <mark>get</mark> <mark>decisions</mark> <mark>on</mark> <mark>implementation</mark> <mark>choices.</mark></div>
+<div class="line unchanged"><span class="line-num">  11    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span><mark>Plan</mark><mark> </mark><mark>mode</mark><mark> </mark><mark>note:</mark><mark> </mark><mark>In</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>mode,</mark><mark> </mark><mark>use</mark><mark> </mark><mark>this</mark><mark> </mark><mark>tool</mark><mark> </mark><mark>to</mark><mark> </mark><mark>clarify</mark><mark> </mark><mark>requirements</mark><mark> </mark><mark>or</mark><mark> </mark><mark>choose</mark><mark> </mark><mark>between</mark><mark> </mark><mark>approaches</mark><mark> </mark><mark>BEFORE</mark><mark> </mark><mark>finalizing</mark><mark> </mark><mark>your</mark><mark> </mark><mark>plan.</mark><mark> </mark><mark>Do</mark><mark> </mark><mark>NOT</mark><mark> </mark><mark>use</mark><mark> </mark><mark>this</mark><mark> </mark><mark>tool</mark><mark> </mark><mark>to</mark><mark> </mark><mark>ask</mark><mark> </mark><mark>&quot;Is</mark><mark> </mark><mark>my</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>ready?&quot;</mark><mark> </mark><mark>or</mark><mark> </mark><mark>&quot;Should</mark><mark> </mark><mark>I</mark><mark> </mark><mark>proceed?&quot;</mark><mark> </mark>-<mark> </mark><mark>use</mark><mark> </mark><mark>${EXIT_PLAN_MODE_TOOL_NAME}</mark><mark> </mark><mark>for</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>approval.</mark><mark> </mark><mark>IMPORTANT:</mark><mark> </mark><mark>Do</mark><mark> </mark><mark>not</mark><mark> </mark><mark>reference</mark><mark> </mark><mark>&quot;the</mark><mark> </mark><mark>plan&quot;</mark><mark> </mark><mark>in</mark><mark> </mark><mark>your</mark><mark> </mark><mark>questions</mark><mark> </mark><mark>(e.g.,</mark><mark> </mark><mark>&quot;Do</mark><mark> </mark><mark>you</mark><mark> </mark><mark>have</mark><mark> </mark><mark>feedback</mark><mark> </mark><mark>about</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan?&quot;,</mark><mark> </mark><mark>&quot;Does</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>look</mark><mark> </mark><mark>good?&quot;)</mark><mark> </mark><mark>because</mark><mark> </mark><mark>the</mark><mark> </mark><mark>user</mark><mark> </mark><mark>cannot</mark><mark> </mark><mark>see</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>in</mark><mark> </mark><mark>the</mark><mark> </mark><mark>UI</mark><mark> </mark><mark>until</mark><mark> </mark><mark>you</mark><mark> </mark><mark>call</mark><mark> </mark><mark>${EXIT_PLAN_MODE_TOOL_NAME}.</mark> <mark>If</mark> <mark>you</mark> <mark>need</mark> <mark>plan</mark> <mark>approval,</mark> <mark>use</mark> <mark>${EXIT_PLAN_MODE_TOOL_NAME}</mark> <mark>instead.</mark></div>
+<div class="line added"><span class="line-num">   3</span><span class="prefix">+ </span>- <mark>Users</mark> <mark>can</mark> <mark>always</mark> <mark>select</mark> <mark>&quot;Other&quot;</mark> <mark>for</mark> <mark>custom</mark> <mark>input</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span>- multiSelect: true for non-exclusive choices</div>
+<div class="line added"><span class="line-num">   5</span><span class="prefix">+ </span>- Recommended option: first in list with &quot;(Recommended)&quot; suffix</div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span>- Plan mode: clarify before finalizing. Do NOT ask &quot;Is my plan ready?&quot; -- use ExitPlanMode.</div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>- IMPORTANT: Do not reference &quot;the plan&quot; in questions (e.g. &quot;Does the plan look good?&quot;) because the user cannot see the plan until you call ${EXIT_PLAN_MODE_TOOL_NAME}. Use ExitPlanMode for plan approval.</div>
+<div class="line unchanged"><span class="line-num">  13    8</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.47 → v2.0.77)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span>Use this tool when you need to ask the user questions during execution. This allows you to:</div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span>1. Gather user preferences or requirements</div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>2. Clarify ambiguous instructions</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span>3. Get decisions on implementation choices as you work</div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>4. Offer choices to the user about what direction to take.</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span>Usage notes:</div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span>- Users will always be able to select &quot;Other&quot; to provide custom text input</div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span>- Use multiSelect: true to allow multiple answers to be selected for a question</div>
+<div class="line unchanged"><span class="line-num">  10   10</span><span class="prefix">  </span>- If you recommend a specific option, make that the first option in the list and add &quot;(Recommended)&quot; at the end of the label</div>
+<div class="line unchanged"><span class="line-num">  11   11</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>Plan mode note: In plan mode, use this tool to clarify requirements or choose between approaches BEFORE finalizing your plan. Do NOT use this tool to ask &quot;Is my plan ready?&quot; or &quot;Should I proceed?&quot; - use <mark>${EXIT_PLAN_MODE_TOOL_NAME}</mark> for plan approval.<mark> </mark><mark>IMPORTANT:</mark><mark> </mark><mark>Do</mark><mark> </mark><mark>not</mark><mark> </mark><mark>reference</mark><mark> </mark><mark>&quot;the</mark><mark> </mark><mark>plan&quot;</mark><mark> </mark><mark>in</mark><mark> </mark><mark>your</mark><mark> </mark><mark>questions</mark><mark> </mark><mark>(e.g.,</mark><mark> </mark><mark>&quot;Do</mark><mark> </mark><mark>you</mark><mark> </mark><mark>have</mark><mark> </mark><mark>feedback</mark><mark> </mark><mark>about</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan?&quot;,</mark><mark> </mark><mark>&quot;Does</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>look</mark><mark> </mark><mark>good?&quot;)</mark><mark> </mark><mark>because</mark><mark> </mark><mark>the</mark><mark> </mark><mark>user</mark><mark> </mark><mark>cannot</mark><mark> </mark><mark>see</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>in</mark><mark> </mark><mark>the</mark><mark> </mark><mark>UI</mark><mark> </mark><mark>until</mark><mark> </mark><mark>you</mark><mark> </mark><mark>call</mark><mark> </mark><mark>${EXIT_PLAN_MODE_TOOL_NAME}.</mark><mark> </mark><mark>If</mark><mark> </mark><mark>you</mark><mark> </mark><mark>need</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>approval,</mark><mark> </mark><mark>use</mark><mark> </mark><mark>${EXIT_PLAN_MODE_TOOL_NAME}</mark><mark> </mark><mark>instead.</mark></div>
+<div class="line added"><span class="line-num">  12</span><span class="prefix">+ </span>Plan mode note: In plan mode, use this tool to clarify requirements or choose between approaches BEFORE finalizing your plan. Do NOT use this tool to ask &quot;Is my plan ready?&quot; or &quot;Should I proceed?&quot; - use <mark>ExitPlanMode</mark> for plan approval.</div>
+<div class="line unchanged"><span class="line-num">  13   13</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

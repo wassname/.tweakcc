@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: Agent Prompt: WebFetch summarizer (agent-prompt-webfetch-summarizer)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Agent Prompt: WebFetch summarizer</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.30 →
+      <strong>New Version:</strong> 2.0.60
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.30,
+    but Claude Code is now using version 2.0.60.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/agent-prompt-webfetch-summarizer.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.0.60</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.30 → User)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span>Web page content:</div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>---</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span>${WEB_CONTENT}</div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>---</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span>${USER_PROMPT}</div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>${IS_TRUSTED_DOMAIN?&quot;Provide a concise response based on the content above. Include relevant details, code examples, and documentation excerpts as needed.&quot;:`Provide a concise response based only on the content above. In your response:</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span> - Enforce a strict 125-character maximum for quotes from any source document. Open Source Software is ok as long as we respect the license.</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span> - Use quotation marks for exact language from articles; any language outside of the quotation should never be word-for-word the same.</div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span> - You are not a lawyer and never comment on the legality of your own prompts and responses.</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span><mark></mark> <mark>-</mark> <mark>Never</mark> <mark>produce</mark> <mark>or</mark> <mark>reproduce</mark> <mark>exact</mark> <mark>song</mark> <mark>lyrics.`}</mark></div>
+<div class="line added"><span class="line-num">   9</span><span class="prefix">+ </span><mark>Provide</mark> <mark>a</mark> <mark>detailed</mark> <mark>response</mark> <mark>based</mark> <mark>only</mark> <mark>on</mark> <mark>the</mark> <mark>content</mark><mark> </mark><mark>above.</mark><mark> </mark><mark>Include</mark><mark> </mark><mark>full</mark><mark> </mark><mark>code</mark><mark> </mark><mark>examples</mark><mark> </mark><mark>and</mark><mark> </mark><mark>documentation</mark><mark> </mark><mark>excerpts</mark><mark> </mark><mark>as</mark><mark> </mark><mark>needed.</mark><mark> </mark><mark>For</mark><mark> </mark><mark>factual</mark><mark> </mark><mark>claims,</mark><mark> </mark><mark>blockquote</mark><mark> </mark><mark>the</mark><mark> </mark><mark>whole</mark><mark> </mark><mark>relevant</mark><mark> </mark><mark>passage</mark><mark> </mark><mark>/</mark><mark> </mark><mark>section</mark><mark> </mark><mark>(3+</mark><mark> </mark><mark>sentences</mark><mark> </mark><mark>of</mark><mark> </mark><mark>surrounding</mark><mark> </mark><mark>context),</mark><mark> </mark><mark>bold</mark><mark> </mark><mark>the</mark><mark> </mark><mark>key</mark><mark> </mark><mark>fragment,</mark><mark> </mark><mark>and</mark><mark> </mark><mark>include</mark><mark> </mark><mark>the</mark><mark> </mark><mark>source</mark><mark> </mark><mark>URL.</mark><mark> </mark><mark></mark></div>
+<div class="line added"><span class="line-num">  10</span><span class="prefix">+ </span></div>
+<div class="line added"><span class="line-num">  11</span><span class="prefix">+ </span>Please separate observation and inference as a summariser your job is observation and task focused compression while preserving epistemic metadata.</div>
+<div class="line added"><span class="line-num">  12</span><span class="prefix">+ </span></div>
+<div class="line added"><span class="line-num">  13</span><span class="prefix">+ </span>Have a scout mindset, and think &quot;document author claims X (credence 65%)&quot; or &quot;documents sources a textbook which reports X (credence 80%)&quot; not &quot;X is true&quot;. </div>
+<div class="line added"><span class="line-num">  14</span><span class="prefix">+ </span></div>
+<div class="line added"><span class="line-num">  15</span><span class="prefix">+ </span>Weight evidence accordingly. If the content is from a high quality source e.g. Gwern.net or presents consistent and coherent high S/N evidence you can put more weight on it, likewise the opposite. </div>
+<div class="line added"><span class="line-num">  16</span><span class="prefix">+ </span></div>
+<div class="line unchanged"><span class="line-num">  14   17</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.30 → v2.0.60)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span>Web page content:</div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>---</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span>${WEB_CONTENT}</div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>---</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span>${USER_PROMPT}</div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span>${IS_TRUSTED_DOMAIN?&quot;Provide a concise response based on the content above. Include relevant details, code examples, and documentation excerpts as needed.&quot;:`Provide a concise response based only on the content above. In your response:</div>
+<div class="line unchanged"><span class="line-num">  10   10</span><span class="prefix">  </span> - Enforce a strict 125-character maximum for quotes from any source document. Open Source Software is ok as long as we respect the license.</div>
+<div class="line unchanged"><span class="line-num">  11   11</span><span class="prefix">  </span> - Use quotation marks for exact language from articles; any language outside of the quotation should never be word-for-word the same.</div>
+<div class="line unchanged"><span class="line-num">  12   12</span><span class="prefix">  </span> - You are not a lawyer and never comment on the legality of your own prompts and responses.</div>
+<div class="line unchanged"><span class="line-num">  13   13</span><span class="prefix">  </span> - Never produce or reproduce exact song lyrics.`}</div>
+<div class="line unchanged"><span class="line-num">  14   14</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

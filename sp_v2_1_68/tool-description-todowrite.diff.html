@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: Tool Description: TodoWrite (tool-description-todowrite)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tool Description: TodoWrite</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.63 →
+      <strong>New Version:</strong> 2.0.14
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.63,
+    but Claude Code is now using version 2.0.14.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/tool-description-todowrite.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.0.14</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.63 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span>Use this tool to create and manage a structured task list for your current coding session. This helps you track progress, organize complex tasks, and demonstrate thoroughness to the user.</div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span>It also helps the user understand the progress of the task and overall progress of their requests.</div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span>## When to Use This Tool</div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>Use this tool proactively in these scenarios:</div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>1. Complex multi-step tasks - When a task requires 3 or more distinct steps or actions</div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span>2. Non-trivial and complex tasks - Tasks that require careful planning or multiple operations</div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>3. User explicitly requests todo list - When the user directly asks you to use the todo list</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>4. User provides multiple tasks - When users provide a list of things to be done (numbered or comma-separated)</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span>5. After receiving new instructions - Immediately capture user requirements as todos</div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>6. When you start working on a task - Mark it as in_progress BEFORE beginning work. Ideally you should only have one todo as in_progress at a time</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span>7. After completing a task - Mark it as completed and add any new follow-up tasks discovered during implementation</div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  15</span><span class="prefix">- </span>## When NOT to Use This Tool</div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>Skip using this tool when:</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>1. There is only a single, straightforward task</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span>2. The task is trivial and tracking it provides no organizational benefit</div>
+<div class="line removed"><span class="line-num">  20</span><span class="prefix">- </span>3. The task can be completed in less than 3 trivial steps</div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span>4. The task is purely conversational or informational</div>
+<div class="line removed"><span class="line-num">  22</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  23</span><span class="prefix">- </span>NOTE that you should not use this tool if there is only one trivial task to do. In this case you are better off just doing the task directly.</div>
+<div class="line removed"><span class="line-num">  24</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  25</span><span class="prefix">- </span>## Examples of When to Use the Todo List</div>
+<div class="line removed"><span class="line-num">  26</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  27</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  28</span><span class="prefix">- </span>User: I want to add a dark mode toggle to the application settings. Make sure you run the tests and build when you&#039;re done!</div>
+<div class="line removed"><span class="line-num">  29</span><span class="prefix">- </span>Assistant: I&#039;ll help add a dark mode toggle to your application settings. Let me create a todo list to track this implementation.</div>
+<div class="line removed"><span class="line-num">  30</span><span class="prefix">- </span>*Creates todo list with the following items:*</div>
+<div class="line removed"><span class="line-num">  31</span><span class="prefix">- </span>1. Creating dark mode toggle component in Settings page</div>
+<div class="line removed"><span class="line-num">  32</span><span class="prefix">- </span>2. Adding dark mode state management (context/store)</div>
+<div class="line removed"><span class="line-num">  33</span><span class="prefix">- </span>3. Implementing CSS-in-JS styles for dark theme</div>
+<div class="line removed"><span class="line-num">  34</span><span class="prefix">- </span>4. Updating existing components to support theme switching</div>
+<div class="line removed"><span class="line-num">  35</span><span class="prefix">- </span>5. Running tests and build process, addressing any failures or errors that occur</div>
+<div class="line removed"><span class="line-num">  36</span><span class="prefix">- </span>*Begins working on the first task*</div>
+<div class="line removed"><span class="line-num">  37</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  38</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  39</span><span class="prefix">- </span>The assistant used the todo list because:</div>
+<div class="line removed"><span class="line-num">  40</span><span class="prefix">- </span>1. Adding dark mode is a multi-step feature requiring UI, state management, and styling changes</div>
+<div class="line removed"><span class="line-num">  41</span><span class="prefix">- </span>2. The user explicitly requested tests and build be run afterward</div>
+<div class="line removed"><span class="line-num">  42</span><span class="prefix">- </span>3. The assistant inferred that tests and build need to pass by adding &quot;Ensure tests and build succeed&quot; as the final task</div>
+<div class="line removed"><span class="line-num">  43</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  44</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  45</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  46</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  47</span><span class="prefix">- </span>User: Help me rename the function getCwd to getCurrentWorkingDirectory across my project</div>
+<div class="line removed"><span class="line-num">  48</span><span class="prefix">- </span>Assistant: Let me first search through your codebase to find all occurrences of &#039;getCwd&#039;.</div>
+<div class="line removed"><span class="line-num">  49</span><span class="prefix">- </span>*Uses grep or search tools to locate all instances of getCwd in the codebase*</div>
+<div class="line removed"><span class="line-num">  50</span><span class="prefix">- </span>Assistant: I&#039;ve found 15 instances of &#039;getCwd&#039; across 8 different files. Let me create a todo list to track these changes.</div>
+<div class="line removed"><span class="line-num">  51</span><span class="prefix">- </span>*Creates todo list with specific items for each file that needs updating*</div>
+<div class="line removed"><span class="line-num">  52</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  53</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  54</span><span class="prefix">- </span>The assistant used the todo list because:</div>
+<div class="line removed"><span class="line-num">  55</span><span class="prefix">- </span>1. First, the assistant searched to understand the scope of the task</div>
+<div class="line removed"><span class="line-num">  56</span><span class="prefix">- </span>2. Upon finding multiple occurrences across different files, it determined this was a complex task with multiple steps</div>
+<div class="line removed"><span class="line-num">  57</span><span class="prefix">- </span>3. The todo list helps ensure every instance is tracked and updated systematically</div>
+<div class="line removed"><span class="line-num">  58</span><span class="prefix">- </span>4. This approach prevents missing any occurrences and maintains code consistency</div>
+<div class="line removed"><span class="line-num">  59</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  60</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  61</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  62</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  63</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  64</span><span class="prefix">- </span>User: I need to implement these features for my e-commerce site: user registration, product catalog, shopping cart, and checkout flow.</div>
+<div class="line removed"><span class="line-num">  65</span><span class="prefix">- </span>Assistant: I&#039;ll help implement these features. First, let&#039;s add all the features to the todo list.</div>
+<div class="line removed"><span class="line-num">  66</span><span class="prefix">- </span>*Creates a todo list breaking down each feature into specific tasks based on the project architecture*</div>
+<div class="line removed"><span class="line-num">  67</span><span class="prefix">- </span>Assistant: Let&#039;s start with user registration. This will involve creating database models, API endpoints, and frontend forms that integrate with your existing authentication system.</div>
+<div class="line removed"><span class="line-num">  68</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  69</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  70</span><span class="prefix">- </span>The assistant used the todo list because:</div>
+<div class="line removed"><span class="line-num">  71</span><span class="prefix">- </span>1. The user provided multiple complex features to implement in a comma separated list</div>
+<div class="line removed"><span class="line-num">  72</span><span class="prefix">- </span>2. The todo list helps organize these large features into manageable tasks</div>
+<div class="line removed"><span class="line-num">  73</span><span class="prefix">- </span>3. This approach allows for tracking progress across the entire implementation</div>
+<div class="line removed"><span class="line-num">  74</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  75</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  76</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  77</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  78</span><span class="prefix">- </span>User: Can you help optimize my React application? It&#039;s rendering slowly and has performance issues.</div>
+<div class="line removed"><span class="line-num">  79</span><span class="prefix">- </span>Assistant: I&#039;ll help optimize your React application. First, let me examine your codebase to identify potential performance bottlenecks.</div>
+<div class="line removed"><span class="line-num">  80</span><span class="prefix">- </span>*Reviews component structure, render patterns, state management, and data fetching*</div>
+<div class="line removed"><span class="line-num">  81</span><span class="prefix">- </span>Assistant: After analyzing your codebase, I&#039;ve identified several performance issues. Let me create a todo list to track our optimization efforts.</div>
+<div class="line removed"><span class="line-num">  82</span><span class="prefix">- </span>*Creates todo list with items like: 1) Implementing memoization for expensive calculations in ProductList, 2) Adding virtualization for long lists in Dashboard, 3) Optimizing image loading in Gallery component, 4) Fixing state update loops in ShoppingCart, 5) Reviewing bundle size and implementing code splitting*</div>
+<div class="line removed"><span class="line-num">  83</span><span class="prefix">- </span>Let&#039;s start by implementing memoization for the expensive calculations in your ProductList component.</div>
+<div class="line removed"><span class="line-num">  84</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  85</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  86</span><span class="prefix">- </span>The assistant used the todo list because:</div>
+<div class="line removed"><span class="line-num">  87</span><span class="prefix">- </span>1. First, the assistant examined the codebase to identify specific performance issues</div>
+<div class="line removed"><span class="line-num">  88</span><span class="prefix">- </span>2. Based on this analysis, it identified multiple optimization opportunities</div>
+<div class="line removed"><span class="line-num">  89</span><span class="prefix">- </span>3. Performance optimization is a non-trivial task requiring multiple steps</div>
+<div class="line removed"><span class="line-num">  90</span><span class="prefix">- </span>4. The todo list helps methodically track improvements across different components</div>
+<div class="line removed"><span class="line-num">  91</span><span class="prefix">- </span>5. This systematic approach ensures all performance bottlenecks are addressed</div>
+<div class="line removed"><span class="line-num">  92</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num">  93</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  94</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  95</span><span class="prefix">- </span>## Examples of When NOT to Use the Todo List</div>
+<div class="line removed"><span class="line-num">  96</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  97</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  98</span><span class="prefix">- </span>User: How do I print &#039;Hello World&#039; in Python?</div>
+<div class="line removed"><span class="line-num">  99</span><span class="prefix">- </span>Assistant: In Python, you can print &quot;Hello World&quot; with this simple code:</div>
+<div class="line removed"><span class="line-num"> 100</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 101</span><span class="prefix">- </span>python</div>
+<div class="line removed"><span class="line-num"> 102</span><span class="prefix">- </span>print(&quot;Hello World&quot;)</div>
+<div class="line removed"><span class="line-num"> 103</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 104</span><span class="prefix">- </span>This will output the text &quot;Hello World&quot; to the console when executed.</div>
+<div class="line removed"><span class="line-num"> 105</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 106</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 107</span><span class="prefix">- </span>The assistant did not use the todo list because this is a single, trivial task that can be completed in one step. There&#039;s no need to track multiple tasks or steps for such a straightforward request.</div>
+<div class="line removed"><span class="line-num"> 108</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 109</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num"> 110</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 111</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num"> 112</span><span class="prefix">- </span>User: What does the git status command do?</div>
+<div class="line removed"><span class="line-num"> 113</span><span class="prefix">- </span>Assistant: The git status command shows the current state of your working directory and staging area. It displays which changes have been staged, which haven&#039;t, and which files aren&#039;t being tracked by Git. This is a fundamental command for understanding the current state of your repository before making commits.</div>
+<div class="line removed"><span class="line-num"> 114</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 115</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 116</span><span class="prefix">- </span>The assistant did not use the todo list because this is an informational request with no actual coding task to complete. The user is simply asking for an explanation, not for the assistant to perform multiple steps or tasks.</div>
+<div class="line removed"><span class="line-num"> 117</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 118</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num"> 119</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 120</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num"> 121</span><span class="prefix">- </span>User: Can you add a comment to the calculateTotal function to explain what it does?</div>
+<div class="line removed"><span class="line-num"> 122</span><span class="prefix">- </span>Assistant: Sure, let me add a comment to the calculateTotal function to explain what it does.</div>
+<div class="line removed"><span class="line-num"> 123</span><span class="prefix">- </span>* Uses the ${EDIT_TOOL_NAME} tool to add a comment to the calculateTotal function *</div>
+<div class="line removed"><span class="line-num"> 124</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 125</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 126</span><span class="prefix">- </span>The assistant did not use the todo list because this is a single, straightforward task confined to one location in the code. Adding a comment doesn&#039;t require tracking multiple steps or systematic organization.</div>
+<div class="line removed"><span class="line-num"> 127</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 128</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num"> 129</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 130</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num"> 131</span><span class="prefix">- </span>User: Run npm install for me and tell me what happens.</div>
+<div class="line removed"><span class="line-num"> 132</span><span class="prefix">- </span>Assistant: I&#039;ll run the npm install command for you.</div>
+<div class="line removed"><span class="line-num"> 133</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 134</span><span class="prefix">- </span>*Executes: npm install*</div>
+<div class="line removed"><span class="line-num"> 135</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 136</span><span class="prefix">- </span>The command completed successfully. Here&#039;s the output:</div>
+<div class="line removed"><span class="line-num"> 137</span><span class="prefix">- </span><mark>[Output</mark> <mark>of</mark> <mark>npm</mark> <mark>install</mark> <mark>command]</mark></div>
+<div class="line added"><span class="line-num">   1</span><span class="prefix">+ </span><mark>Create</mark> <mark>and</mark> <mark>manage</mark> <mark>a</mark> <mark>structured</mark><mark> </mark><mark>task</mark><mark> </mark><mark>list</mark><mark> </mark><mark>for</mark><mark> </mark><mark>multi-step</mark><mark> </mark><mark>tasks.</mark><mark> </mark><mark>Helps</mark><mark> </mark><mark>track</mark><mark> </mark><mark>progress</mark><mark> </mark><mark>and</mark><mark> </mark><mark>show</mark><mark> </mark><mark>the</mark><mark> </mark><mark>user</mark><mark> </mark><mark>what&#039;s</mark><mark> </mark><mark>happening.</mark></div>
+<div class="line unchanged"><span class="line-num"> 138    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num"> 139</span><span class="prefix">- </span><mark>All</mark><mark> </mark><mark>dependencies</mark><mark> </mark><mark>have</mark><mark> </mark><mark>been</mark><mark> </mark><mark>installed</mark> <mark>according</mark> to<mark> </mark><mark>your</mark><mark> </mark><mark>package.json</mark> <mark>file.</mark></div>
+<div class="line added"><span class="line-num">   3</span><span class="prefix">+ </span><mark>##</mark> <mark>When</mark> to <mark>Use</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span>- Complex multi-step tasks (3+ distinct steps)</div>
+<div class="line added"><span class="line-num">   5</span><span class="prefix">+ </span>- Non-trivial tasks requiring planning or multiple operations</div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span>- User provides multiple tasks (numbered or comma-separated)</div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>- After receiving new instructions, capture as todos</div>
+<div class="line added"><span class="line-num">   8</span><span class="prefix">+ </span>- When in doubt, use this tool</div>
+<div class="line unchanged"><span class="line-num"> 140    9</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num"> 141</span><span class="prefix">- </span>&lt;reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 142</span><span class="prefix">- </span>The assistant did not use the todo list because this is a single command execution with immediate results. There are no multiple steps to track or organize, making the todo list unnecessary for this straightforward task.</div>
+<div class="line removed"><span class="line-num"> 143</span><span class="prefix">- </span>&lt;/reasoning&gt;</div>
+<div class="line removed"><span class="line-num"> 144</span><span class="prefix">- </span><mark>&lt;/example&gt;</mark></div>
+<div class="line added"><span class="line-num">  10</span><span class="prefix">+ </span><mark>##</mark><mark> </mark><mark>When</mark><mark> </mark><mark>NOT</mark><mark> </mark><mark>to</mark><mark> </mark><mark>Use</mark></div>
+<div class="line added"><span class="line-num">  11</span><span class="prefix">+ </span>- Single straightforward task (fewer than 3 trivial steps)</div>
+<div class="line added"><span class="line-num">  12</span><span class="prefix">+ </span>- Purely conversational or informational</div>
+<div class="line unchanged"><span class="line-num"> 145   13</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 146   14</span><span class="prefix">  </span>## Task States and Management</div>
+<div class="line removed"><span class="line-num"> 147</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 148</span><span class="prefix">- </span>1. **Task States**: Use these states to track progress:</div>
+<div class="line removed"><span class="line-num"> 149</span><span class="prefix">- </span>   - pending: Task not yet started</div>
+<div class="line removed"><span class="line-num"> 150</span><span class="prefix">- </span>   - in_progress: Currently working on (limit to ONE task at a time)</div>
+<div class="line removed"><span class="line-num"> 151</span><span class="prefix">- </span>   - completed: Task finished successfully</div>
+<div class="line removed"><span class="line-num"> 152</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 153</span><span class="prefix">- </span>   **IMPORTANT**: Task descriptions must have two forms:</div>
+<div class="line removed"><span class="line-num"> 154</span><span class="prefix">- </span>   - content: The imperative form describing what needs to be done (e.g., &quot;Run tests&quot;, &quot;Build the project&quot;)</div>
+<div class="line removed"><span class="line-num"> 155</span><span class="prefix">- </span>   - activeForm: The present continuous form shown during execution (e.g., &quot;Running tests&quot;, &quot;Building the project&quot;)</div>
+<div class="line removed"><span class="line-num"> 156</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 157</span><span class="prefix">- </span>2. **Task Management**:</div>
+<div class="line removed"><span class="line-num"> 158</span><span class="prefix">- </span>   - Update task status in real-time as you work</div>
+<div class="line removed"><span class="line-num"> 159</span><span class="prefix">- </span>   - Mark tasks complete IMMEDIATELY after finishing (don&#039;t batch completions)</div>
+<div class="line removed"><span class="line-num"> 160</span><span class="prefix">- </span>   - Exactly ONE task must be in_progress at any time (not less, not more)</div>
+<div class="line removed"><span class="line-num"> 161</span><span class="prefix">- </span>   - Complete current tasks before starting new ones</div>
+<div class="line removed"><span class="line-num"> 162</span><span class="prefix">- </span>   - Remove tasks that are no longer relevant from the list entirely</div>
+<div class="line removed"><span class="line-num"> 163</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 164</span><span class="prefix">- </span>3. **Task Completion Requirements**:</div>
+<div class="line removed"><span class="line-num"> 165</span><span class="prefix">- </span>   - ONLY mark a task as completed when you have FULLY accomplished it</div>
+<div class="line removed"><span class="line-num"> 166</span><span class="prefix">- </span>   - If you encounter errors, blockers, or cannot finish, keep the task as in_progress</div>
+<div class="line removed"><span class="line-num"> 167</span><span class="prefix">- </span>   - When blocked, create a new task describing what needs to be resolved</div>
+<div class="line removed"><span class="line-num"> 168</span><span class="prefix">- </span>   - Never mark a task as completed if:</div>
+<div class="line removed"><span class="line-num"> 169</span><span class="prefix">- </span>     - Tests are failing</div>
+<div class="line removed"><span class="line-num"> 170</span><span class="prefix">- </span>     - Implementation is partial</div>
+<div class="line removed"><span class="line-num"> 171</span><span class="prefix">- </span>     - You encountered unresolved errors</div>
+<div class="line removed"><span class="line-num"> 172</span><span class="prefix">- </span>     - You couldn&#039;t find necessary files or dependencies</div>
+<div class="line removed"><span class="line-num"> 173</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num"> 174</span><span class="prefix">- </span>4. **Task Breakdown**:</div>
+<div class="line removed"><span class="line-num"> 175</span><span class="prefix">- </span>   - Create specific, actionable items</div>
+<div class="line removed"><span class="line-num"> 176</span><span class="prefix">- </span>   - Break complex tasks into smaller, manageable steps</div>
+<div class="line removed"><span class="line-num"> 177</span><span class="prefix">- </span>   - Use clear, descriptive task names</div>
+<div class="line removed"><span class="line-num"> 178</span><span class="prefix">- </span>   - Always provide both forms:</div>
+<div class="line removed"><span class="line-num"> 179</span><span class="prefix">- </span>     - content: &quot;Fix authentication bug&quot;</div>
+<div class="line removed"><span class="line-num"> 180</span><span class="prefix">- </span><mark></mark><mark>     </mark>- <mark>activeForm:</mark> <mark>&quot;Fixing</mark> <mark>authentication</mark> <mark>bug&quot;</mark></div>
+<div class="line added"><span class="line-num">  15</span><span class="prefix">+ </span>- <mark>States:</mark> <mark>pending</mark> <mark>-&gt;</mark> <mark>in_progress</mark><mark> </mark><mark>-&gt;</mark><mark> </mark><mark>completed</mark></div>
+<div class="line added"><span class="line-num">  16</span><span class="prefix">+ </span>- Mark in_progress BEFORE starting; mark completed IMMEDIATELY after finishing</div>
+<div class="line added"><span class="line-num">  17</span><span class="prefix">+ </span>- ONE in_progress at a time</div>
+<div class="line added"><span class="line-num">  18</span><span class="prefix">+ </span>- ONLY mark completed when FULLY accomplished; keep in_progress if blocked/errored</div>
+<div class="line added"><span class="line-num">  19</span><span class="prefix">+ </span>- Remove tasks that are no longer relevant</div>
+<div class="line added"><span class="line-num">  20</span><span class="prefix">+ </span>- Break complex tasks into smaller, actionable steps</div>
+<div class="line unchanged"><span class="line-num"> 181   21</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num"> 182</span><span class="prefix">- </span><mark>When</mark><mark> </mark><mark>in</mark><mark> </mark><mark>doubt,</mark><mark> </mark><mark>use</mark><mark> </mark><mark>this</mark><mark> </mark><mark>tool.</mark><mark> </mark><mark>Being</mark><mark> </mark><mark>proactive</mark><mark> </mark><mark>with</mark><mark> </mark><mark>task</mark><mark> </mark><mark>management</mark><mark> </mark><mark>demonstrates</mark><mark> </mark><mark>attentiveness</mark><mark> </mark><mark>and</mark><mark> </mark><mark>ensures</mark> <mark>you</mark> <mark>complete</mark> <mark>all</mark> <mark>requirements</mark> <mark>successfully.</mark></div>
+<div class="line added"><span class="line-num">  22</span><span class="prefix">+ </span><mark>Task</mark> <mark>descriptions</mark> <mark>must</mark> <mark>have</mark> <mark>two</mark> <mark>forms:</mark></div>
+<div class="line added"><span class="line-num">  23</span><span class="prefix">+ </span>- content: imperative form (&quot;Run tests&quot;, &quot;Fix auth bug&quot;)</div>
+<div class="line added"><span class="line-num">  24</span><span class="prefix">+ </span>- activeForm: present continuous form shown during execution (&quot;Running tests&quot;, &quot;Fixing auth bug&quot;)</div>
+<div class="line unchanged"><span class="line-num"> 183   25</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.63 → v2.0.14)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span>Use this tool to create and manage a structured task list for your current coding session. This helps you track progress, organize complex tasks, and demonstrate thoroughness to the user.</div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span>It also helps the user understand the progress of the task and overall progress of their requests.</div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span>## When to Use This Tool</div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>Use this tool proactively in these scenarios:</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span>1. Complex multi-step tasks - When a task requires 3 or more distinct steps or actions</div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span>2. Non-trivial and complex tasks - Tasks that require careful planning or multiple operations</div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span>3. User explicitly requests todo list - When the user directly asks you to use the todo list</div>
+<div class="line unchanged"><span class="line-num">  10   10</span><span class="prefix">  </span>4. User provides multiple tasks - When users provide a list of things to be done (numbered or comma-separated)</div>
+<div class="line unchanged"><span class="line-num">  11   11</span><span class="prefix">  </span>5. After receiving new instructions - Immediately capture user requirements as todos</div>
+<div class="line unchanged"><span class="line-num">  12   12</span><span class="prefix">  </span>6. When you start working on a task - Mark it as in_progress BEFORE beginning work. Ideally you should only have one todo as in_progress at a time</div>
+<div class="line unchanged"><span class="line-num">  13   13</span><span class="prefix">  </span>7. After completing a task - Mark it as completed and add any new follow-up tasks discovered during implementation</div>
+<div class="line unchanged"><span class="line-num">  14   14</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  15   15</span><span class="prefix">  </span>## When NOT to Use This Tool</div>
+<div class="line unchanged"><span class="line-num">  16   16</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  17   17</span><span class="prefix">  </span>Skip using this tool when:</div>
+<div class="line unchanged"><span class="line-num">  18   18</span><span class="prefix">  </span>1. There is only a single, straightforward task</div>
+<div class="line unchanged"><span class="line-num">  19   19</span><span class="prefix">  </span>2. The task is trivial and tracking it provides no organizational benefit</div>
+<div class="line unchanged"><span class="line-num">  20   20</span><span class="prefix">  </span>3. The task can be completed in less than 3 trivial steps</div>
+<div class="line unchanged"><span class="line-num">  21   21</span><span class="prefix">  </span>4. The task is purely conversational or informational</div>
+<div class="line unchanged"><span class="line-num">  22   22</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  23   23</span><span class="prefix">  </span>NOTE that you should not use this tool if there is only one trivial task to do. In this case you are better off just doing the task directly.</div>
+<div class="line unchanged"><span class="line-num">  24   24</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  25   25</span><span class="prefix">  </span>## Examples of When to Use the Todo List</div>
+<div class="line unchanged"><span class="line-num">  26   26</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  27   27</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  28   28</span><span class="prefix">  </span>User: I want to add a dark mode toggle to the application settings. Make sure you run the tests and build when you&#039;re done!</div>
+<div class="line unchanged"><span class="line-num">  29   29</span><span class="prefix">  </span>Assistant: I&#039;ll help add a dark mode toggle to your application settings. Let me create a todo list to track this implementation.</div>
+<div class="line unchanged"><span class="line-num">  30   30</span><span class="prefix">  </span>*Creates todo list with the following items:*</div>
+<div class="line unchanged"><span class="line-num">  31   31</span><span class="prefix">  </span>1. Creating dark mode toggle component in Settings page</div>
+<div class="line unchanged"><span class="line-num">  32   32</span><span class="prefix">  </span>2. Adding dark mode state management (context/store)</div>
+<div class="line unchanged"><span class="line-num">  33   33</span><span class="prefix">  </span>3. Implementing CSS-in-JS styles for dark theme</div>
+<div class="line unchanged"><span class="line-num">  34   34</span><span class="prefix">  </span>4. Updating existing components to support theme switching</div>
+<div class="line unchanged"><span class="line-num">  35   35</span><span class="prefix">  </span>5. Running tests and build process, addressing any failures or errors that occur</div>
+<div class="line unchanged"><span class="line-num">  36   36</span><span class="prefix">  </span>*Begins working on the first task*</div>
+<div class="line unchanged"><span class="line-num">  37   37</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  38   38</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  39   39</span><span class="prefix">  </span>The assistant used the todo list because:</div>
+<div class="line unchanged"><span class="line-num">  40   40</span><span class="prefix">  </span>1. Adding dark mode is a multi-step feature requiring UI, state management, and styling changes</div>
+<div class="line unchanged"><span class="line-num">  41   41</span><span class="prefix">  </span>2. The user explicitly requested tests and build be run afterward</div>
+<div class="line unchanged"><span class="line-num">  42   42</span><span class="prefix">  </span>3. The assistant inferred that tests and build need to pass by adding &quot;Ensure tests and build succeed&quot; as the final task</div>
+<div class="line unchanged"><span class="line-num">  43   43</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  44   44</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  45   45</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  46   46</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  47   47</span><span class="prefix">  </span>User: Help me rename the function getCwd to getCurrentWorkingDirectory across my project</div>
+<div class="line unchanged"><span class="line-num">  48   48</span><span class="prefix">  </span>Assistant: Let me first search through your codebase to find all occurrences of &#039;getCwd&#039;.</div>
+<div class="line unchanged"><span class="line-num">  49   49</span><span class="prefix">  </span>*Uses grep or search tools to locate all instances of getCwd in the codebase*</div>
+<div class="line unchanged"><span class="line-num">  50   50</span><span class="prefix">  </span>Assistant: I&#039;ve found 15 instances of &#039;getCwd&#039; across 8 different files. Let me create a todo list to track these changes.</div>
+<div class="line unchanged"><span class="line-num">  51   51</span><span class="prefix">  </span>*Creates todo list with specific items for each file that needs updating*</div>
+<div class="line unchanged"><span class="line-num">  52   52</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  53   53</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  54   54</span><span class="prefix">  </span>The assistant used the todo list because:</div>
+<div class="line unchanged"><span class="line-num">  55   55</span><span class="prefix">  </span>1. First, the assistant searched to understand the scope of the task</div>
+<div class="line unchanged"><span class="line-num">  56   56</span><span class="prefix">  </span>2. Upon finding multiple occurrences across different files, it determined this was a complex task with multiple steps</div>
+<div class="line unchanged"><span class="line-num">  57   57</span><span class="prefix">  </span>3. The todo list helps ensure every instance is tracked and updated systematically</div>
+<div class="line unchanged"><span class="line-num">  58   58</span><span class="prefix">  </span>4. This approach prevents missing any occurrences and maintains code consistency</div>
+<div class="line unchanged"><span class="line-num">  59   59</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  60   60</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  61   61</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  62   62</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  63   63</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  64   64</span><span class="prefix">  </span>User: I need to implement these features for my e-commerce site: user registration, product catalog, shopping cart, and checkout flow.</div>
+<div class="line unchanged"><span class="line-num">  65   65</span><span class="prefix">  </span>Assistant: I&#039;ll help implement these features. First, let&#039;s add all the features to the todo list.</div>
+<div class="line unchanged"><span class="line-num">  66   66</span><span class="prefix">  </span>*Creates a todo list breaking down each feature into specific tasks based on the project architecture*</div>
+<div class="line unchanged"><span class="line-num">  67   67</span><span class="prefix">  </span>Assistant: Let&#039;s start with user registration. This will involve creating database models, API endpoints, and frontend forms that integrate with your existing authentication system.</div>
+<div class="line unchanged"><span class="line-num">  68   68</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  69   69</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  70   70</span><span class="prefix">  </span>The assistant used the todo list because:</div>
+<div class="line unchanged"><span class="line-num">  71   71</span><span class="prefix">  </span>1. The user provided multiple complex features to implement in a comma separated list</div>
+<div class="line unchanged"><span class="line-num">  72   72</span><span class="prefix">  </span>2. The todo list helps organize these large features into manageable tasks</div>
+<div class="line unchanged"><span class="line-num">  73   73</span><span class="prefix">  </span>3. This approach allows for tracking progress across the entire implementation</div>
+<div class="line unchanged"><span class="line-num">  74   74</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  75   75</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  76   76</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  77   77</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  78</span><span class="prefix">- </span>User: Can you help optimize my React application? It&#039;s rendering slowly and has performance <mark>issues.</mark></div>
+<div class="line added"><span class="line-num">  78</span><span class="prefix">+ </span>User: Can you help optimize my React application? It&#039;s rendering slowly and has performance <mark>issues.&lt;/user&gt;</mark></div>
+<div class="line unchanged"><span class="line-num">  79   79</span><span class="prefix">  </span>Assistant: I&#039;ll help optimize your React application. First, let me examine your codebase to identify potential performance bottlenecks.</div>
+<div class="line unchanged"><span class="line-num">  80   80</span><span class="prefix">  </span>*Reviews component structure, render patterns, state management, and data fetching*</div>
+<div class="line unchanged"><span class="line-num">  81   81</span><span class="prefix">  </span>Assistant: After analyzing your codebase, I&#039;ve identified several performance issues. Let me create a todo list to track our optimization efforts.</div>
+<div class="line unchanged"><span class="line-num">  82   82</span><span class="prefix">  </span>*Creates todo list with items like: 1) Implementing memoization for expensive calculations in ProductList, 2) Adding virtualization for long lists in Dashboard, 3) Optimizing image loading in Gallery component, 4) Fixing state update loops in ShoppingCart, 5) Reviewing bundle size and implementing code splitting*</div>
+<div class="line removed"><span class="line-num">  83</span><span class="prefix">- </span>Let&#039;s start by implementing memoization for the expensive calculations in your ProductList <mark>component.</mark></div>
+<div class="line added"><span class="line-num">  83</span><span class="prefix">+ </span>Let&#039;s start by implementing memoization for the expensive calculations in your ProductList <mark>component.&lt;/assistant&gt;</mark></div>
+<div class="line unchanged"><span class="line-num">  84   84</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  85   85</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  86   86</span><span class="prefix">  </span>The assistant used the todo list because:</div>
+<div class="line unchanged"><span class="line-num">  87   87</span><span class="prefix">  </span>1. First, the assistant examined the codebase to identify specific performance issues</div>
+<div class="line unchanged"><span class="line-num">  88   88</span><span class="prefix">  </span>2. Based on this analysis, it identified multiple optimization opportunities</div>
+<div class="line unchanged"><span class="line-num">  89   89</span><span class="prefix">  </span>3. Performance optimization is a non-trivial task requiring multiple steps</div>
+<div class="line unchanged"><span class="line-num">  90   90</span><span class="prefix">  </span>4. The todo list helps methodically track improvements across different components</div>
+<div class="line unchanged"><span class="line-num">  91   91</span><span class="prefix">  </span>5. This systematic approach ensures all performance bottlenecks are addressed</div>
+<div class="line unchanged"><span class="line-num">  92   92</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num">  93   93</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  94   94</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  95   95</span><span class="prefix">  </span>## Examples of When NOT to Use the Todo List</div>
+<div class="line unchanged"><span class="line-num">  96   96</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  97   97</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  98   98</span><span class="prefix">  </span>User: How do I print &#039;Hello World&#039; in Python?</div>
+<div class="line unchanged"><span class="line-num">  99   99</span><span class="prefix">  </span>Assistant: In Python, you can print &quot;Hello World&quot; with this simple code:</div>
+<div class="line unchanged"><span class="line-num"> 100  100</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 101  101</span><span class="prefix">  </span>python</div>
+<div class="line unchanged"><span class="line-num"> 102  102</span><span class="prefix">  </span>print(&quot;Hello World&quot;)</div>
+<div class="line unchanged"><span class="line-num"> 103  103</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num"> 104</span><span class="prefix">- </span>This will output the text &quot;Hello World&quot; to the console when <mark>executed.</mark></div>
+<div class="line added"><span class="line-num"> 104</span><span class="prefix">+ </span>This will output the text &quot;Hello World&quot; to the console when <mark>executed.&lt;/assistant&gt;</mark></div>
+<div class="line unchanged"><span class="line-num"> 105  105</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 106  106</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 107  107</span><span class="prefix">  </span>The assistant did not use the todo list because this is a single, trivial task that can be completed in one step. There&#039;s no need to track multiple tasks or steps for such a straightforward request.</div>
+<div class="line unchanged"><span class="line-num"> 108  108</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 109  109</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 110  110</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 111  111</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 112  112</span><span class="prefix">  </span>User: What does the git status command do?</div>
+<div class="line unchanged"><span class="line-num"> 113  113</span><span class="prefix">  </span>Assistant: The git status command shows the current state of your working directory and staging area. It displays which changes have been staged, which haven&#039;t, and which files aren&#039;t being tracked by Git. This is a fundamental command for understanding the current state of your repository before making commits.</div>
+<div class="line unchanged"><span class="line-num"> 114  114</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 115  115</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 116  116</span><span class="prefix">  </span>The assistant did not use the todo list because this is an informational request with no actual coding task to complete. The user is simply asking for an explanation, not for the assistant to perform multiple steps or tasks.</div>
+<div class="line unchanged"><span class="line-num"> 117  117</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 118  118</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 119  119</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 120  120</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 121  121</span><span class="prefix">  </span>User: Can you add a comment to the calculateTotal function to explain what it does?</div>
+<div class="line unchanged"><span class="line-num"> 122  122</span><span class="prefix">  </span>Assistant: Sure, let me add a comment to the calculateTotal function to explain what it does.</div>
+<div class="line unchanged"><span class="line-num"> 123  123</span><span class="prefix">  </span>* Uses the ${EDIT_TOOL_NAME} tool to add a comment to the calculateTotal function *</div>
+<div class="line unchanged"><span class="line-num"> 124  124</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 125  125</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 126  126</span><span class="prefix">  </span>The assistant did not use the todo list because this is a single, straightforward task confined to one location in the code. Adding a comment doesn&#039;t require tracking multiple steps or systematic organization.</div>
+<div class="line unchanged"><span class="line-num"> 127  127</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 128  128</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 129  129</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 130  130</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 131  131</span><span class="prefix">  </span>User: Run npm install for me and tell me what happens.</div>
+<div class="line unchanged"><span class="line-num"> 132  132</span><span class="prefix">  </span>Assistant: I&#039;ll run the npm install command for you.</div>
+<div class="line unchanged"><span class="line-num"> 133  133</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 134  134</span><span class="prefix">  </span>*Executes: npm install*</div>
+<div class="line unchanged"><span class="line-num"> 135  135</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 136  136</span><span class="prefix">  </span>The command completed successfully. Here&#039;s the output:</div>
+<div class="line unchanged"><span class="line-num"> 137  137</span><span class="prefix">  </span>[Output of npm install command]</div>
+<div class="line unchanged"><span class="line-num"> 138  138</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 139  139</span><span class="prefix">  </span>All dependencies have been installed according to your package.json file.</div>
+<div class="line unchanged"><span class="line-num"> 140  140</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 141  141</span><span class="prefix">  </span>&lt;reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 142  142</span><span class="prefix">  </span>The assistant did not use the todo list because this is a single command execution with immediate results. There are no multiple steps to track or organize, making the todo list unnecessary for this straightforward task.</div>
+<div class="line unchanged"><span class="line-num"> 143  143</span><span class="prefix">  </span>&lt;/reasoning&gt;</div>
+<div class="line unchanged"><span class="line-num"> 144  144</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num"> 145  145</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 146  146</span><span class="prefix">  </span>## Task States and Management</div>
+<div class="line unchanged"><span class="line-num"> 147  147</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 148  148</span><span class="prefix">  </span>1. **Task States**: Use these states to track progress:</div>
+<div class="line unchanged"><span class="line-num"> 149  149</span><span class="prefix">  </span>   - pending: Task not yet started</div>
+<div class="line unchanged"><span class="line-num"> 150  150</span><span class="prefix">  </span>   - in_progress: Currently working on (limit to ONE task at a time)</div>
+<div class="line unchanged"><span class="line-num"> 151  151</span><span class="prefix">  </span>   - completed: Task finished successfully</div>
+<div class="line unchanged"><span class="line-num"> 152  152</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 153  153</span><span class="prefix">  </span>   **IMPORTANT**: Task descriptions must have two forms:</div>
+<div class="line unchanged"><span class="line-num"> 154  154</span><span class="prefix">  </span>   - content: The imperative form describing what needs to be done (e.g., &quot;Run tests&quot;, &quot;Build the project&quot;)</div>
+<div class="line unchanged"><span class="line-num"> 155  155</span><span class="prefix">  </span>   - activeForm: The present continuous form shown during execution (e.g., &quot;Running tests&quot;, &quot;Building the project&quot;)</div>
+<div class="line unchanged"><span class="line-num"> 156  156</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 157  157</span><span class="prefix">  </span>2. **Task Management**:</div>
+<div class="line unchanged"><span class="line-num"> 158  158</span><span class="prefix">  </span>   - Update task status in real-time as you work</div>
+<div class="line unchanged"><span class="line-num"> 159  159</span><span class="prefix">  </span>   - Mark tasks complete IMMEDIATELY after finishing (don&#039;t batch completions)</div>
+<div class="line unchanged"><span class="line-num"> 160  160</span><span class="prefix">  </span>   - Exactly ONE task must be in_progress at any time (not less, not more)</div>
+<div class="line unchanged"><span class="line-num"> 161  161</span><span class="prefix">  </span>   - Complete current tasks before starting new ones</div>
+<div class="line unchanged"><span class="line-num"> 162  162</span><span class="prefix">  </span>   - Remove tasks that are no longer relevant from the list entirely</div>
+<div class="line unchanged"><span class="line-num"> 163  163</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 164  164</span><span class="prefix">  </span>3. **Task Completion Requirements**:</div>
+<div class="line unchanged"><span class="line-num"> 165  165</span><span class="prefix">  </span>   - ONLY mark a task as completed when you have FULLY accomplished it</div>
+<div class="line unchanged"><span class="line-num"> 166  166</span><span class="prefix">  </span>   - If you encounter errors, blockers, or cannot finish, keep the task as in_progress</div>
+<div class="line unchanged"><span class="line-num"> 167  167</span><span class="prefix">  </span>   - When blocked, create a new task describing what needs to be resolved</div>
+<div class="line unchanged"><span class="line-num"> 168  168</span><span class="prefix">  </span>   - Never mark a task as completed if:</div>
+<div class="line unchanged"><span class="line-num"> 169  169</span><span class="prefix">  </span>     - Tests are failing</div>
+<div class="line unchanged"><span class="line-num"> 170  170</span><span class="prefix">  </span>     - Implementation is partial</div>
+<div class="line unchanged"><span class="line-num"> 171  171</span><span class="prefix">  </span>     - You encountered unresolved errors</div>
+<div class="line unchanged"><span class="line-num"> 172  172</span><span class="prefix">  </span>     - You couldn&#039;t find necessary files or dependencies</div>
+<div class="line unchanged"><span class="line-num"> 173  173</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 174  174</span><span class="prefix">  </span>4. **Task Breakdown**:</div>
+<div class="line unchanged"><span class="line-num"> 175  175</span><span class="prefix">  </span>   - Create specific, actionable items</div>
+<div class="line unchanged"><span class="line-num"> 176  176</span><span class="prefix">  </span>   - Break complex tasks into smaller, manageable steps</div>
+<div class="line unchanged"><span class="line-num"> 177  177</span><span class="prefix">  </span>   - Use clear, descriptive task names</div>
+<div class="line unchanged"><span class="line-num"> 178  178</span><span class="prefix">  </span>   - Always provide both forms:</div>
+<div class="line unchanged"><span class="line-num"> 179  179</span><span class="prefix">  </span>     - content: &quot;Fix authentication bug&quot;</div>
+<div class="line unchanged"><span class="line-num"> 180  180</span><span class="prefix">  </span>     - activeForm: &quot;Fixing authentication bug&quot;</div>
+<div class="line unchanged"><span class="line-num"> 181  181</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num"> 182  182</span><span class="prefix">  </span>When in doubt, use this tool. Being proactive with task management demonstrates attentiveness and ensures you complete all requirements successfully.</div>
+<div class="line unchanged"><span class="line-num"> 183  183</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

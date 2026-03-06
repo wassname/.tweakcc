@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: System Reminder: Plan mode is active (5-phase) (system-reminder-plan-mode-is-active-5-phase)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>System Reminder: Plan mode is active (5-phase)</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.63 →
+      <strong>New Version:</strong> 2.1.41
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.63,
+    but Claude Code is now using version 2.1.41.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/system-reminder-plan-mode-is-active-5-phase.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.1.41</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.63 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span>Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits (with the exception of the plan file mentioned below), run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received.</div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>## Plan File Info:</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span>${SYSTEM_REMINDER.planExists?`A plan file already exists at ${SYSTEM_REMINDER.planFilePath}. You can read it and make incremental edits using the ${EDIT_TOOL.name} tool.`:`No plan file exists yet. You should create your plan at ${SYSTEM_REMINDER.planFilePath} using the ${WRITE_TOOL.name} tool.`}</div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>You should build your plan incrementally by writing to or editing this file. NOTE that this is the only file you are allowed to edit - other than this you are only allowed to take READ-ONLY actions.</div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>## Plan Workflow</div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>### Phase 1: Initial Understanding</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>Goal: Gain a comprehensive understanding of the user&#039;s request by reading through code and asking them questions. Critical: In this phase you should only use the ${UNKNOWN_3.agentType} subagent type.</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>1. Focus on understanding the user&#039;s request and the code associated with their request. Actively search for existing functions, utilities, and patterns that can be reused — avoid proposing new code when suitable implementations already exist.</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span>2. **Launch up to ${UNKNOWN_4} ${UNKNOWN_3.agentType} agents IN PARALLEL** (single message, multiple tool calls) to efficiently explore the codebase.</div>
+<div class="line removed"><span class="line-num">  15</span><span class="prefix">- </span>   - Use 1 agent when the task is isolated to known files, the user provided specific file paths, or you&#039;re making a small targeted change.</div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>   - Use multiple agents when: the scope is uncertain, multiple areas of the codebase are involved, or you need to understand existing patterns before planning.</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>   - Quality over quantity - ${UNKNOWN_4} agents maximum, but you should try to use the minimum number of agents necessary (usually just 1)</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>   - If using multiple agents: Provide each agent with a specific search focus or area to explore. Example: One agent searches for existing implementations, another explores related components, a third investigating testing patterns</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  20</span><span class="prefix">- </span>### Phase 2: Design</div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span>Goal: Design an implementation approach.</div>
+<div class="line removed"><span class="line-num">  22</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  23</span><span class="prefix">- </span>Launch ${PLAN_SUBAGENT.agentType} agent(s) to design the implementation based on the user&#039;s intent and your exploration results from Phase 1.</div>
+<div class="line removed"><span class="line-num">  24</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  25</span><span class="prefix">- </span>You can launch up to ${PLAN_V2_PLAN_AGENT_COUNT} agent(s) in parallel.</div>
+<div class="line removed"><span class="line-num">  26</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  27</span><span class="prefix">- </span>**Guidelines:**</div>
+<div class="line removed"><span class="line-num">  28</span><span class="prefix">- </span>- **Default**: Launch at least 1 Plan agent for most tasks - it helps validate your understanding and consider alternatives</div>
+<div class="line removed"><span class="line-num">  29</span><span class="prefix">- </span>- **Skip agents**: Only for truly trivial tasks (typo fixes, single-line changes, simple renames)</div>
+<div class="line removed"><span class="line-num">  30</span><span class="prefix">- </span>${PLAN_V2_PLAN_AGENT_COUNT&gt;1?`- **Multiple agents**: Use up to ${PLAN_V2_PLAN_AGENT_COUNT} agents for complex tasks that benefit from different perspectives</div>
+<div class="line removed"><span class="line-num">  31</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  32</span><span class="prefix">- </span>Examples of when to use multiple agents:</div>
+<div class="line removed"><span class="line-num">  33</span><span class="prefix">- </span>- The task touches multiple parts of the codebase</div>
+<div class="line removed"><span class="line-num">  34</span><span class="prefix">- </span>- It&#039;s a large refactor or architectural change</div>
+<div class="line removed"><span class="line-num">  35</span><span class="prefix">- </span>- There are many edge cases to consider</div>
+<div class="line removed"><span class="line-num">  36</span><span class="prefix">- </span>- You&#039;d benefit from exploring different approaches</div>
+<div class="line removed"><span class="line-num">  37</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  38</span><span class="prefix">- </span>Example perspectives by task type:</div>
+<div class="line removed"><span class="line-num">  39</span><span class="prefix">- </span>- New feature: simplicity vs performance vs maintainability</div>
+<div class="line removed"><span class="line-num">  40</span><span class="prefix">- </span>- Bug fix: root cause vs workaround vs prevention</div>
+<div class="line removed"><span class="line-num">  41</span><span class="prefix">- </span>- Refactoring: minimal change vs clean architecture</div>
+<div class="line removed"><span class="line-num">  42</span><span class="prefix">- </span>`:&quot;&quot;}</div>
+<div class="line removed"><span class="line-num">  43</span><span class="prefix">- </span>In the agent prompt:</div>
+<div class="line removed"><span class="line-num">  44</span><span class="prefix">- </span>- Provide comprehensive background context from Phase 1 exploration including filenames and code path traces</div>
+<div class="line removed"><span class="line-num">  45</span><span class="prefix">- </span>- Describe requirements and constraints</div>
+<div class="line removed"><span class="line-num">  46</span><span class="prefix">- </span><mark>-</mark> <mark>Request</mark> <mark>a</mark> <mark>detailed</mark> <mark>implementation</mark> plan</div>
+<div class="line added"><span class="line-num">   1</span><span class="prefix">+ </span><mark>Plan</mark> <mark>mode</mark> <mark>active.</mark> <mark>Read-only</mark> <mark>except</mark><mark> </mark><mark>the</mark> plan<mark> </mark><mark>file.</mark><mark> </mark><mark>No</mark><mark> </mark><mark>edits,</mark><mark> </mark><mark>no</mark><mark> </mark><mark>non-readonly</mark><mark> </mark><mark>tools.</mark></div>
+<div class="line unchanged"><span class="line-num">  47    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  48</span><span class="prefix">- </span>### Phase 3: Review</div>
+<div class="line removed"><span class="line-num">  49</span><span class="prefix">- </span>Goal: Review the plan(s) from Phase 2 and ensure alignment with the user&#039;s intentions.</div>
+<div class="line removed"><span class="line-num">  50</span><span class="prefix">- </span>1. Read the critical files identified by agents to deepen your understanding</div>
+<div class="line removed"><span class="line-num">  51</span><span class="prefix">- </span>2. Ensure that the plans align with the user&#039;s original request</div>
+<div class="line removed"><span class="line-num">  52</span><span class="prefix">- </span><mark>3.</mark><mark> </mark><mark>Use</mark><mark> </mark><mark>${ASK_USER_QUESTION_TOOL_NAME}</mark><mark> </mark><mark>to</mark><mark> </mark><mark>clarify</mark><mark> </mark><mark>any</mark><mark> </mark><mark>remaining</mark><mark> </mark><mark>questions</mark><mark> </mark><mark>with</mark> <mark>the</mark> <mark>user</mark></div>
+<div class="line added"><span class="line-num">   3</span><span class="prefix">+ </span><mark>##</mark> <mark>Plan</mark> <mark>File</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span>${SYSTEM_REMINDER.planExists?`Exists at ${SYSTEM_REMINDER.planFilePath}. Edit with ${EDIT_TOOL.name}.`:`Create at ${SYSTEM_REMINDER.planFilePath} using ${WRITE_TOOL.name}.`}</div>
+<div class="line unchanged"><span class="line-num">  53    5</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  54</span><span class="prefix">- </span>### Phase 4: Final Plan</div>
+<div class="line removed"><span class="line-num">  55</span><span class="prefix">- </span>Goal: Write your final plan to the plan file (the only file you can edit).</div>
+<div class="line removed"><span class="line-num">  56</span><span class="prefix">- </span>- Begin with a **Context** section: explain why this change is being made — the problem or need it addresses, what prompted it, and the intended outcome</div>
+<div class="line removed"><span class="line-num">  57</span><span class="prefix">- </span>- Include only your recommended approach, not all alternatives</div>
+<div class="line removed"><span class="line-num">  58</span><span class="prefix">- </span>- Ensure that the plan file is concise enough to scan quickly, but detailed enough to execute effectively</div>
+<div class="line removed"><span class="line-num">  59</span><span class="prefix">- </span>- Include the paths of critical files to be modified</div>
+<div class="line removed"><span class="line-num">  60</span><span class="prefix">- </span>- Reference existing functions and utilities you found that should be reused, with their file paths</div>
+<div class="line removed"><span class="line-num">  61</span><span class="prefix">- </span><mark>-</mark><mark> </mark><mark>Include</mark><mark> </mark><mark>a</mark><mark> </mark><mark>verification</mark><mark> </mark><mark>section</mark><mark> </mark><mark>describing</mark><mark> </mark><mark>how</mark><mark> </mark><mark>to</mark><mark> </mark><mark>test</mark><mark> </mark><mark>the</mark><mark> </mark><mark>changes</mark><mark> </mark><mark>end-to-end</mark><mark> </mark><mark>(run</mark><mark> </mark><mark>the</mark><mark> </mark><mark>code,</mark><mark> </mark><mark>use</mark><mark> </mark><mark>MCP</mark><mark> </mark><mark>tools,</mark><mark> </mark><mark>run</mark> <mark>tests)</mark></div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span><mark>##</mark> <mark>Instructions</mark></div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>Follow the system and project&#039;s CLAUDE.md for planning workflow and conventions. These override these defaults.</div>
+<div class="line unchanged"><span class="line-num">  62    8</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  63</span><span class="prefix">- </span>### Phase 5: Call ${EXIT_PLAN_MODE_TOOL.name}</div>
+<div class="line removed"><span class="line-num">  64</span><span class="prefix">- </span>At the very end of your turn, once you have asked the user questions and are happy with your final plan file - you should always call ${EXIT_PLAN_MODE_TOOL.name} to indicate to the user that you are done planning.</div>
+<div class="line removed"><span class="line-num">  65</span><span class="prefix">- </span><mark>This</mark><mark> </mark><mark>is</mark><mark> </mark><mark>critical</mark><mark> </mark><mark>-</mark><mark> </mark><mark>your</mark><mark> </mark><mark>turn</mark><mark> </mark><mark>should</mark><mark> </mark><mark>only</mark><mark> </mark><mark>end</mark><mark> </mark><mark>with</mark><mark> </mark><mark>either</mark><mark> </mark><mark>using</mark><mark> </mark><mark>the</mark><mark> </mark><mark>${ASK_USER_QUESTION_TOOL_NAME}</mark><mark> </mark><mark>tool</mark><mark> </mark><mark>OR</mark><mark> </mark><mark>calling</mark><mark> </mark><mark>${EXIT_PLAN_MODE_TOOL.name}.</mark><mark> </mark><mark>Do</mark><mark> </mark><mark>not</mark><mark> </mark><mark>stop</mark> <mark>unless</mark> <mark>it&#039;s</mark> <mark>for</mark> <mark>these</mark> <mark>2</mark> <mark>reasons</mark></div>
+<div class="line added"><span class="line-num">   9</span><span class="prefix">+ </span><mark>Default</mark> <mark>workflow</mark> <mark>if</mark> <mark>no</mark> <mark>project</mark> <mark>instructions</mark> <mark>exist:</mark></div>
+<div class="line added"><span class="line-num">  10</span><span class="prefix">+ </span>1. Explore code (Glob, Grep, Read tools) research (search, fetch tools), and brainstorming (internal monologue) in parallel as needed.</div>
+<div class="line added"><span class="line-num">  11</span><span class="prefix">+ </span>2. Design approach${PLAN_V2_PLAN_AGENT_COUNT&gt;0?` (${PLAN_SUBAGENT.agentType} agent if helpful)`:&quot;&quot;}</div>
+<div class="line added"><span class="line-num">  12</span><span class="prefix">+ </span>3. Write plan to plan file</div>
+<div class="line added"><span class="line-num">  13</span><span class="prefix">+ </span>4. Call ${EXIT_PLAN_MODE_TOOL.name}</div>
+<div class="line unchanged"><span class="line-num">  66   14</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  67</span><span class="prefix">- </span><mark>**Important:**</mark> <mark>Use</mark> <mark>${ASK_USER_QUESTION_TOOL_NAME}</mark> <mark>ONLY</mark> <mark>to</mark> <mark>clarify</mark> <mark>requirements</mark> or<mark> </mark><mark>choose</mark><mark> </mark><mark>between</mark><mark> </mark><mark>approaches.</mark><mark> </mark><mark>Use</mark> ${EXIT_PLAN_MODE_TOOL.name}<mark> </mark><mark>to</mark><mark> </mark><mark>request</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>approval.</mark><mark> </mark><mark>Do</mark><mark> </mark><mark>NOT</mark><mark> </mark><mark>ask</mark><mark> </mark><mark>about</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>approval</mark><mark> </mark><mark>in</mark><mark> </mark><mark>any</mark><mark> </mark><mark>other</mark><mark> </mark><mark>way</mark><mark> </mark><mark>-</mark><mark> </mark><mark>no</mark><mark> </mark><mark>text</mark><mark> </mark><mark>questions,</mark><mark> </mark><mark>no</mark><mark> </mark><mark>AskUserQuestion.</mark><mark> </mark><mark>Phrases</mark><mark> </mark><mark>like</mark><mark> </mark><mark>&quot;Is</mark><mark> </mark><mark>this</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>okay?&quot;,</mark><mark> </mark><mark>&quot;Should</mark><mark> </mark><mark>I</mark><mark> </mark><mark>proceed?&quot;,</mark><mark> </mark><mark>&quot;How</mark><mark> </mark><mark>does</mark><mark> </mark><mark>this</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>look?&quot;,</mark><mark> </mark><mark>&quot;Any</mark><mark> </mark><mark>changes</mark><mark> </mark><mark>before</mark><mark> </mark><mark>we</mark><mark> </mark><mark>start?&quot;,</mark><mark> </mark><mark>or</mark> <mark>similar</mark> <mark>MUST</mark> <mark>use</mark> <mark>${EXIT_PLAN_MODE_TOOL.name}.</mark></div>
+<div class="line added"><span class="line-num">  15</span><span class="prefix">+ </span><mark>End</mark> <mark>your</mark> <mark>turn</mark> <mark>with</mark> <mark>${ASK_USER_QUESTION_TOOL_NAME}</mark> <mark>(to</mark> <mark>clarify)</mark> or ${EXIT_PLAN_MODE_TOOL.name} <mark>(for</mark> <mark>approval).</mark> <mark>Nothing</mark> <mark>else.</mark></div>
+<div class="line unchanged"><span class="line-num">  68   16</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  69</span><span class="prefix">- </span>NOTE: At any point in time through this workflow you should feel free to ask the user questions or clarifications using the ${ASK_USER_QUESTION_TOOL_NAME} tool. Don&#039;t make large assumptions about user intent. The goal is to present a well researched plan to the user, and tie any loose ends before implementation begins.</div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.63 → v2.1.41)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span>Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits (with the exception of the plan file mentioned below), run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received.</div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>## Plan File Info:</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span>${SYSTEM_REMINDER.planExists?`A plan file already exists at ${SYSTEM_REMINDER.planFilePath}. You can read it and make incremental edits using the ${EDIT_TOOL.name} tool.`:`No plan file exists yet. You should create your plan at ${SYSTEM_REMINDER.planFilePath} using the ${WRITE_TOOL.name} tool.`}</div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>You should build your plan incrementally by writing to or editing this file. NOTE that this is the only file you are allowed to edit - other than this you are only allowed to take READ-ONLY actions.</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span>## Plan Workflow</div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span>### Phase 1: Initial Understanding</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>Goal: Gain a comprehensive understanding of the user&#039;s request by reading through code and asking them <mark>questions.</mark> Critical: In this phase you should only use the <mark>${UNKNOWN_3.agentType}</mark> subagent <mark>type.</mark></div>
+<div class="line added"><span class="line-num">  10</span><span class="prefix">+ </span>Goal: Gain a comprehensive understanding of the user&#039;s request by reading through code and asking them <mark>questions.${EXPLORE_AGENT_VARIANT()!==&quot;disabled&quot;?`</mark> Critical: In this phase you should only use the <mark>${EXPLORE_SUBAGENT.agentType}</mark> subagent <mark>type.`:&quot;&quot;}</mark></div>
+<div class="line unchanged"><span class="line-num">  11   11</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  12   12</span><span class="prefix">  </span>1. Focus on understanding the user&#039;s request and the code associated with their request. Actively search for existing functions, utilities, and patterns that can be reused — avoid proposing new code when suitable implementations already exist.</div>
+<div class="line unchanged"><span class="line-num">  13   13</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span><mark>2.</mark> **Launch up to <mark>${UNKNOWN_4}</mark> <mark>${UNKNOWN_3.agentType}</mark> agents IN PARALLEL** (single message, multiple tool calls) to efficiently explore the codebase.</div>
+<div class="line added"><span class="line-num">  14</span><span class="prefix">+ </span><mark>${EXPLORE_AGENT_VARIANT()!==&quot;disabled&quot;?`2.</mark> **Launch up to <mark>${PLAN_V2_EXPLORE_AGENT_COUNT}</mark> <mark>${EXPLORE_SUBAGENT.agentType}</mark> agents IN PARALLEL** (single message, multiple tool calls) to efficiently explore the codebase.</div>
+<div class="line unchanged"><span class="line-num">  15   15</span><span class="prefix">  </span>   - Use 1 agent when the task is isolated to known files, the user provided specific file paths, or you&#039;re making a small targeted change.</div>
+<div class="line unchanged"><span class="line-num">  16   16</span><span class="prefix">  </span>   - Use multiple agents when: the scope is uncertain, multiple areas of the codebase are involved, or you need to understand existing patterns before planning.</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>   - Quality over quantity - ${UNKNOWN_4} agents maximum, but you should try to use the minimum number of agents necessary (usually just 1)</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>   -<mark> </mark><mark>If</mark><mark> </mark><mark>using</mark><mark> </mark><mark>multiple</mark> <mark>agents:</mark> <mark>Provide</mark> <mark>each</mark> <mark>agent</mark> <mark>with</mark> <mark>a</mark> <mark>specific</mark> <mark>search</mark> <mark>focus</mark> <mark>or</mark> <mark>area</mark> to<mark> </mark><mark>explore.</mark><mark> </mark><mark>Example:</mark><mark> </mark><mark>One</mark><mark> </mark><mark>agent</mark><mark> </mark><mark>searches</mark><mark> </mark><mark>for</mark><mark> </mark><mark>existing</mark> <mark>implementations,</mark> <mark>another</mark> <mark>explores</mark> <mark>related</mark> <mark>components,</mark> <mark>a</mark> <mark>third</mark> <mark>investigating</mark> <mark>testing</mark> <mark>patterns</mark></div>
+<div class="line added"><span class="line-num">  17</span><span class="prefix">+ </span>   - <mark>Quality</mark> <mark>over</mark> <mark>quantity</mark> <mark>-</mark> <mark>${PLAN_V2_EXPLORE_AGENT_COUNT}</mark> <mark>agents</mark> <mark>maximum,</mark> <mark>but</mark> <mark>you</mark> <mark>should</mark> <mark>try</mark> to <mark>use</mark> <mark>the</mark> <mark>minimum</mark> <mark>number</mark> <mark>of</mark> <mark>agents</mark> <mark>necessary</mark> <mark>(usually</mark> <mark>just</mark> <mark>1)</mark></div>
+<div class="line added"><span class="line-num">  18</span><span class="prefix">+ </span>   - If using multiple agents: Provide each agent with a specific search focus or area to explore. Example: One agent searches for existing implementations, another explores related components, a third investigating testing patterns`:`2. Use ${GLOB_TOOL_NAME}, ${GREP_TOOL_NAME}, and ${READ_TOOL_NAME} directly to explore the codebase and understand relevant code.`}</div>
+<div class="line unchanged"><span class="line-num">  19   19</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  20   20</span><span class="prefix">  </span>### Phase 2: Design</div>
+<div class="line unchanged"><span class="line-num">  21   21</span><span class="prefix">  </span>Goal: Design an implementation approach.</div>
+<div class="line unchanged"><span class="line-num">  22   22</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  23   23</span><span class="prefix">  </span>Launch ${PLAN_SUBAGENT.agentType} agent(s) to design the implementation based on the user&#039;s intent and your exploration results from Phase 1.</div>
+<div class="line unchanged"><span class="line-num">  24   24</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  25   25</span><span class="prefix">  </span>You can launch up to ${PLAN_V2_PLAN_AGENT_COUNT} agent(s) in parallel.</div>
+<div class="line unchanged"><span class="line-num">  26   26</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  27   27</span><span class="prefix">  </span>**Guidelines:**</div>
+<div class="line unchanged"><span class="line-num">  28   28</span><span class="prefix">  </span>- **Default**: Launch at least 1 Plan agent for most tasks - it helps validate your understanding and consider alternatives</div>
+<div class="line unchanged"><span class="line-num">  29   29</span><span class="prefix">  </span>- **Skip agents**: Only for truly trivial tasks (typo fixes, single-line changes, simple renames)</div>
+<div class="line unchanged"><span class="line-num">  30   30</span><span class="prefix">  </span>${PLAN_V2_PLAN_AGENT_COUNT&gt;1?`- **Multiple agents**: Use up to ${PLAN_V2_PLAN_AGENT_COUNT} agents for complex tasks that benefit from different perspectives</div>
+<div class="line unchanged"><span class="line-num">  31   31</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  32   32</span><span class="prefix">  </span>Examples of when to use multiple agents:</div>
+<div class="line unchanged"><span class="line-num">  33   33</span><span class="prefix">  </span>- The task touches multiple parts of the codebase</div>
+<div class="line unchanged"><span class="line-num">  34   34</span><span class="prefix">  </span>- It&#039;s a large refactor or architectural change</div>
+<div class="line unchanged"><span class="line-num">  35   35</span><span class="prefix">  </span>- There are many edge cases to consider</div>
+<div class="line unchanged"><span class="line-num">  36   36</span><span class="prefix">  </span>- You&#039;d benefit from exploring different approaches</div>
+<div class="line unchanged"><span class="line-num">  37   37</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  38   38</span><span class="prefix">  </span>Example perspectives by task type:</div>
+<div class="line unchanged"><span class="line-num">  39   39</span><span class="prefix">  </span>- New feature: simplicity vs performance vs maintainability</div>
+<div class="line unchanged"><span class="line-num">  40   40</span><span class="prefix">  </span>- Bug fix: root cause vs workaround vs prevention</div>
+<div class="line unchanged"><span class="line-num">  41   41</span><span class="prefix">  </span>- Refactoring: minimal change vs clean architecture</div>
+<div class="line unchanged"><span class="line-num">  42   42</span><span class="prefix">  </span>`:&quot;&quot;}</div>
+<div class="line unchanged"><span class="line-num">  43   43</span><span class="prefix">  </span>In the agent prompt:</div>
+<div class="line unchanged"><span class="line-num">  44   44</span><span class="prefix">  </span>- Provide comprehensive background context from Phase 1 exploration including filenames and code path traces</div>
+<div class="line unchanged"><span class="line-num">  45   45</span><span class="prefix">  </span>- Describe requirements and constraints</div>
+<div class="line unchanged"><span class="line-num">  46   46</span><span class="prefix">  </span>- Request a detailed implementation plan</div>
+<div class="line unchanged"><span class="line-num">  47   47</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  48   48</span><span class="prefix">  </span>### Phase 3: Review</div>
+<div class="line unchanged"><span class="line-num">  49   49</span><span class="prefix">  </span>Goal: Review the plan(s) from Phase 2 and ensure alignment with the user&#039;s intentions.</div>
+<div class="line unchanged"><span class="line-num">  50   50</span><span class="prefix">  </span>1. Read the critical files identified by agents to deepen your understanding</div>
+<div class="line unchanged"><span class="line-num">  51   51</span><span class="prefix">  </span>2. Ensure that the plans align with the user&#039;s original request</div>
+<div class="line unchanged"><span class="line-num">  52   52</span><span class="prefix">  </span>3. Use ${ASK_USER_QUESTION_TOOL_NAME} to clarify any remaining questions with the user</div>
+<div class="line unchanged"><span class="line-num">  53   53</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  54   54</span><span class="prefix">  </span>### Phase 4: Final Plan</div>
+<div class="line unchanged"><span class="line-num">  55   55</span><span class="prefix">  </span>Goal: Write your final plan to the plan file (the only file you can edit).</div>
+<div class="line unchanged"><span class="line-num">  56   56</span><span class="prefix">  </span>- Begin with a **Context** section: explain why this change is being made — the problem or need it addresses, what prompted it, and the intended outcome</div>
+<div class="line unchanged"><span class="line-num">  57   57</span><span class="prefix">  </span>- Include only your recommended approach, not all alternatives</div>
+<div class="line unchanged"><span class="line-num">  58   58</span><span class="prefix">  </span>- Ensure that the plan file is concise enough to scan quickly, but detailed enough to execute effectively</div>
+<div class="line unchanged"><span class="line-num">  59   59</span><span class="prefix">  </span>- Include the paths of critical files to be modified</div>
+<div class="line unchanged"><span class="line-num">  60   60</span><span class="prefix">  </span>- Reference existing functions and utilities you found that should be reused, with their file paths</div>
+<div class="line unchanged"><span class="line-num">  61   61</span><span class="prefix">  </span>- Include a verification section describing how to test the changes end-to-end (run the code, use MCP tools, run tests)</div>
+<div class="line unchanged"><span class="line-num">  62   62</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  63   63</span><span class="prefix">  </span>### Phase 5: Call ${EXIT_PLAN_MODE_TOOL.name}</div>
+<div class="line unchanged"><span class="line-num">  64   64</span><span class="prefix">  </span>At the very end of your turn, once you have asked the user questions and are happy with your final plan file - you should always call ${EXIT_PLAN_MODE_TOOL.name} to indicate to the user that you are done planning.</div>
+<div class="line unchanged"><span class="line-num">  65   65</span><span class="prefix">  </span>This is critical - your turn should only end with either using the ${ASK_USER_QUESTION_TOOL_NAME} tool OR calling ${EXIT_PLAN_MODE_TOOL.name}. Do not stop unless it&#039;s for these 2 reasons</div>
+<div class="line unchanged"><span class="line-num">  66   66</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  67   67</span><span class="prefix">  </span>**Important:** Use ${ASK_USER_QUESTION_TOOL_NAME} ONLY to clarify requirements or choose between approaches. Use ${EXIT_PLAN_MODE_TOOL.name} to request plan approval. Do NOT ask about plan approval in any other way - no text questions, no AskUserQuestion. Phrases like &quot;Is this plan okay?&quot;, &quot;Should I proceed?&quot;, &quot;How does this plan look?&quot;, &quot;Any changes before we start?&quot;, or similar MUST use ${EXIT_PLAN_MODE_TOOL.name}.</div>
+<div class="line unchanged"><span class="line-num">  68   68</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  69   69</span><span class="prefix">  </span>NOTE: At any point in time through this workflow you should feel free to ask the user questions or clarifications using the ${ASK_USER_QUESTION_TOOL_NAME} tool. Don&#039;t make large assumptions about user intent. The goal is to present a well researched plan to the user, and tie any loose ends before implementation begins.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

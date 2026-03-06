@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: Tool Description: ToolSearch extended (tool-description-toolsearch-extended)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tool Description: ToolSearch extended</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.31 →
+      <strong>New Version:</strong> 2.1.69
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.31,
+    but Claude Code is now using version 2.1.69.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/tool-description-toolsearch-extended.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.1.69</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.31 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>**Why this is non-negotiable:**</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span>- Deferred tools are not loaded until discovered via this tool</div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>- Calling a deferred tool without first loading it will fail</div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>**Query modes:**</div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>1. **Keyword search** - Use keywords when you&#039;re unsure which tool to use or need to discover multiple tools at once:</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>   - &quot;list directory&quot; - find tools for listing directories</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span>   - &quot;notebook jupyter&quot; - find notebook editing tools</div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>   - &quot;slack message&quot; - find slack messaging tools</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span>   - Returns up to 5 matching tools ranked by relevance</div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span>   - All returned tools are immediately available to call — no further selection step needed</div>
+<div class="line removed"><span class="line-num">  15</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>2. **Direct selection** - Use \`select:&lt;tool_name&gt;\` when you know the exact tool name and only need that one tool:</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>   - &quot;select:mcp__slack__read_channel&quot;</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>   - &quot;select:NotebookEdit&quot;</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span>   - Returns just that tool if it exists</div>
+<div class="line removed"><span class="line-num">  20</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span>**IMPORTANT:** Both modes load tools equally. Do NOT follow up a keyword search with \`select:\` calls for tools already returned — they are already loaded.</div>
+<div class="line removed"><span class="line-num">  22</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  23</span><span class="prefix">- </span>3. **Required keyword** - Prefix with \`+\` to require a match:</div>
+<div class="line removed"><span class="line-num">  24</span><span class="prefix">- </span>   - &quot;+linear create issue&quot; - only tools from &quot;linear&quot;, ranked by &quot;create&quot;/&quot;issue&quot;</div>
+<div class="line removed"><span class="line-num">  25</span><span class="prefix">- </span>   - &quot;+slack send&quot; - only &quot;slack&quot; tools, ranked by &quot;send&quot;</div>
+<div class="line removed"><span class="line-num">  26</span><span class="prefix">- </span>   - Useful when you know the service name but not the exact tool</div>
+<div class="line removed"><span class="line-num">  27</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  28</span><span class="prefix">- </span>**CORRECT Usage Patterns:**</div>
+<div class="line removed"><span class="line-num">  29</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  30</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  31</span><span class="prefix">- </span>User: I need to work with slack somehow</div>
+<div class="line removed"><span class="line-num">  32</span><span class="prefix">- </span>Assistant: Let me search for slack tools.</div>
+<div class="line removed"><span class="line-num">  33</span><span class="prefix">- </span>[Calls ToolSearch with query: &quot;slack&quot;]</div>
+<div class="line removed"><span class="line-num">  34</span><span class="prefix">- </span>Assistant: Found several options including mcp__slack__read_channel.</div>
+<div class="line removed"><span class="line-num">  35</span><span class="prefix">- </span>[Calls mcp__slack__read_channel directly — it was loaded by the keyword search]</div>
+<div class="line removed"><span class="line-num">  36</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line removed"><span class="line-num">  37</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  38</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  39</span><span class="prefix">- </span>User: Edit the Jupyter notebook</div>
+<div class="line removed"><span class="line-num">  40</span><span class="prefix">- </span>Assistant: Let me load the notebook editing tool.</div>
+<div class="line removed"><span class="line-num">  41</span><span class="prefix">- </span>[Calls ToolSearch with query: &quot;select:NotebookEdit&quot;]</div>
+<div class="line removed"><span class="line-num">  42</span><span class="prefix">- </span>[Calls NotebookEdit]</div>
+<div class="line removed"><span class="line-num">  43</span><span class="prefix">- </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  44    1</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  45</span><span class="prefix">- </span>&lt;example&gt;</div>
+<div class="line removed"><span class="line-num">  46</span><span class="prefix">- </span>User: List files in the src directory</div>
+<div class="line removed"><span class="line-num">  47</span><span class="prefix">- </span>Assistant: I can see mcp__filesystem__list_directory in the available tools. Let me select it.</div>
+<div class="line removed"><span class="line-num">  48</span><span class="prefix">- </span>[Calls ToolSearch with query: &quot;select:mcp__filesystem__list_directory&quot;]</div>
+<div class="line removed"><span class="line-num">  49</span><span class="prefix">- </span>[Calls the tool]</div>
+<div class="line removed"><span class="line-num">  50</span><span class="prefix">- </span><mark>&lt;/example&gt;</mark></div>
+<div class="line added"><span class="line-num">   2</span><span class="prefix">+ </span><mark>**Deferred</mark><mark> </mark><mark>tools</mark><mark> </mark><mark>are</mark><mark> </mark><mark>not</mark><mark> </mark><mark>loaded</mark><mark> </mark><mark>until</mark><mark> </mark><mark>discovered</mark><mark> </mark><mark>via</mark><mark> </mark><mark>this</mark><mark> </mark><mark>tool.</mark><mark> </mark><mark>Calling</mark><mark> </mark><mark>without</mark><mark> </mark><mark>loading</mark><mark> </mark><mark>first</mark><mark> </mark><mark>will</mark><mark> </mark><mark>fail.**</mark></div>
+<div class="line unchanged"><span class="line-num">  51    3</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  52</span><span class="prefix">- </span><mark>**INCORRECT</mark><mark> </mark><mark>Usage</mark><mark> </mark><mark>Patterns</mark><mark> </mark><mark>-</mark><mark> </mark><mark>NEVER</mark><mark> </mark><mark>DO</mark> <mark>THESE:**</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span><mark>Query</mark> <mark>modes:</mark></div>
+<div class="line added"><span class="line-num">   5</span><span class="prefix">+ </span>1. **Keyword search** -- e.g. &quot;slack message&quot;, &quot;notebook jupyter&quot;. Returns up to 5 tools, all immediately callable.</div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span>2. **Direct select** -- \`select:&lt;tool_name&gt;\` when you know the exact name.</div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>3. **Required keyword** -- \`+linear create issue\` to require &quot;linear&quot;, rank by rest.</div>
+<div class="line unchanged"><span class="line-num">  53    8</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  54</span><span class="prefix">- </span>&lt;bad-example&gt;</div>
+<div class="line removed"><span class="line-num">  55</span><span class="prefix">- </span>User: Read my slack messages</div>
+<div class="line removed"><span class="line-num">  56</span><span class="prefix">- </span>Assistant: [Directly calls mcp__slack__read_channel without loading it first]</div>
+<div class="line removed"><span class="line-num">  57</span><span class="prefix">- </span>WRONG - You must load the tool FIRST using this tool</div>
+<div class="line removed"><span class="line-num">  58</span><span class="prefix">- </span><mark>&lt;/bad-example&gt;</mark></div>
+<div class="line added"><span class="line-num">   9</span><span class="prefix">+ </span><mark>Do</mark><mark> </mark><mark>NOT</mark><mark> </mark><mark>follow</mark><mark> </mark><mark>keyword</mark><mark> </mark><mark>search</mark><mark> </mark><mark>with</mark><mark> </mark><mark>\`select:\`</mark><mark> </mark><mark>for</mark><mark> </mark><mark>tools</mark><mark> </mark><mark>already</mark><mark> </mark><mark>returned</mark><mark> </mark><mark>--</mark><mark> </mark><mark>they</mark><mark> </mark><mark>are</mark><mark> </mark><mark>already</mark><mark> </mark><mark>loaded.</mark></div>
+<div class="line unchanged"><span class="line-num">  59   10</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  60</span><span class="prefix">- </span>&lt;bad-example&gt;</div>
+<div class="line removed"><span class="line-num">  61</span><span class="prefix">- </span>Assistant: [Calls ToolSearch with query: &quot;slack&quot;, gets back mcp__slack__read_channel]</div>
+<div class="line removed"><span class="line-num">  62</span><span class="prefix">- </span>Assistant: [Calls ToolSearch with query: &quot;select:mcp__slack__read_channel&quot;]</div>
+<div class="line removed"><span class="line-num">  63</span><span class="prefix">- </span>WRONG - The keyword search already loaded the tool. The select call is redundant.</div>
+<div class="line removed"><span class="line-num">  64</span><span class="prefix">- </span>&lt;/bad-example&gt;</div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.31 → v2.1.69)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>**Why this is non-negotiable:**</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span>- Deferred tools are not loaded until discovered via this tool</div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span>- Calling a deferred tool without first loading it will fail</div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span>**Query modes:**</div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span>1. **Keyword search** - Use keywords when you&#039;re unsure which tool to use or need to discover multiple tools at once:</div>
+<div class="line unchanged"><span class="line-num">  10   10</span><span class="prefix">  </span>   - &quot;list directory&quot; - find tools for listing directories</div>
+<div class="line unchanged"><span class="line-num">  11   11</span><span class="prefix">  </span>   - &quot;notebook jupyter&quot; - find notebook editing tools</div>
+<div class="line unchanged"><span class="line-num">  12   12</span><span class="prefix">  </span>   - &quot;slack message&quot; - find slack messaging tools</div>
+<div class="line unchanged"><span class="line-num">  13   13</span><span class="prefix">  </span>   - Returns up to 5 matching tools ranked by relevance</div>
+<div class="line unchanged"><span class="line-num">  14   14</span><span class="prefix">  </span>   - All returned tools are immediately available to call — no further selection step needed</div>
+<div class="line unchanged"><span class="line-num">  15   15</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>2. **Direct selection** - Use \`select:&lt;tool_name&gt;\` when you know the exact tool<mark> </mark><mark>name</mark><mark> </mark><mark>and</mark><mark> </mark><mark>only</mark><mark> </mark><mark>need</mark><mark> </mark><mark>that</mark><mark> </mark><mark>one</mark> <mark>tool:</mark></div>
+<div class="line added"><span class="line-num">  16</span><span class="prefix">+ </span>2. **Direct selection** - Use \`select:&lt;tool_name&gt;\` when you know the exact tool <mark>name:</mark></div>
+<div class="line unchanged"><span class="line-num">  17   17</span><span class="prefix">  </span>   - &quot;select:mcp__slack__read_channel&quot;</div>
+<div class="line unchanged"><span class="line-num">  18   18</span><span class="prefix">  </span>   - &quot;select:NotebookEdit&quot;</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span>   - <mark>Returns</mark> <mark>just</mark> <mark>that</mark> <mark>tool</mark> <mark>if</mark> <mark>it</mark> <mark>exists</mark></div>
+<div class="line added"><span class="line-num">  19</span><span class="prefix">+ </span>   - <mark>&quot;select:Read,Edit,Grep&quot;</mark> <mark>-</mark> <mark>load</mark> <mark>multiple</mark> <mark>tools</mark> <mark>at</mark> <mark>once</mark><mark> </mark><mark>with</mark><mark> </mark><mark>comma</mark><mark> </mark><mark>separation</mark></div>
+<div class="line added"><span class="line-num">  20</span><span class="prefix">+ </span>   - Returns the named tool(s) if they exist</div>
+<div class="line unchanged"><span class="line-num">  20   21</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  21   22</span><span class="prefix">  </span>**IMPORTANT:** Both modes load tools equally. Do NOT follow up a keyword search with \`select:\` calls for tools already returned — they are already loaded.</div>
+<div class="line unchanged"><span class="line-num">  22   23</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  23   24</span><span class="prefix">  </span>3. **Required keyword** - Prefix with \`+\` to require a match:</div>
+<div class="line unchanged"><span class="line-num">  24   25</span><span class="prefix">  </span>   - &quot;+linear create issue&quot; - only tools from &quot;linear&quot;, ranked by &quot;create&quot;/&quot;issue&quot;</div>
+<div class="line unchanged"><span class="line-num">  25   26</span><span class="prefix">  </span>   - &quot;+slack send&quot; - only &quot;slack&quot; tools, ranked by &quot;send&quot;</div>
+<div class="line unchanged"><span class="line-num">  26   27</span><span class="prefix">  </span>   - Useful when you know the service name but not the exact tool</div>
+<div class="line unchanged"><span class="line-num">  27   28</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  28   29</span><span class="prefix">  </span>**CORRECT Usage Patterns:**</div>
+<div class="line unchanged"><span class="line-num">  29   30</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  30   31</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  31   32</span><span class="prefix">  </span>User: I need to work with slack somehow</div>
+<div class="line unchanged"><span class="line-num">  32   33</span><span class="prefix">  </span>Assistant: Let me search for slack tools.</div>
+<div class="line unchanged"><span class="line-num">  33   34</span><span class="prefix">  </span>[Calls ToolSearch with query: &quot;slack&quot;]</div>
+<div class="line unchanged"><span class="line-num">  34   35</span><span class="prefix">  </span>Assistant: Found several options including mcp__slack__read_channel.</div>
+<div class="line unchanged"><span class="line-num">  35   36</span><span class="prefix">  </span>[Calls mcp__slack__read_channel directly — it was loaded by the keyword search]</div>
+<div class="line unchanged"><span class="line-num">  36   37</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  37   38</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  38   39</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  39   40</span><span class="prefix">  </span>User: Edit the Jupyter notebook</div>
+<div class="line unchanged"><span class="line-num">  40   41</span><span class="prefix">  </span>Assistant: Let me load the notebook editing tool.</div>
+<div class="line unchanged"><span class="line-num">  41   42</span><span class="prefix">  </span>[Calls ToolSearch with query: &quot;select:NotebookEdit&quot;]</div>
+<div class="line unchanged"><span class="line-num">  42   43</span><span class="prefix">  </span>[Calls NotebookEdit]</div>
+<div class="line unchanged"><span class="line-num">  43   44</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  44   45</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  45   46</span><span class="prefix">  </span>&lt;example&gt;</div>
+<div class="line unchanged"><span class="line-num">  46   47</span><span class="prefix">  </span>User: List files in the src directory</div>
+<div class="line unchanged"><span class="line-num">  47   48</span><span class="prefix">  </span>Assistant: I can see mcp__filesystem__list_directory in the available tools. Let me select it.</div>
+<div class="line unchanged"><span class="line-num">  48   49</span><span class="prefix">  </span>[Calls ToolSearch with query: &quot;select:mcp__filesystem__list_directory&quot;]</div>
+<div class="line unchanged"><span class="line-num">  49   50</span><span class="prefix">  </span>[Calls the tool]</div>
+<div class="line unchanged"><span class="line-num">  50   51</span><span class="prefix">  </span>&lt;/example&gt;</div>
+<div class="line unchanged"><span class="line-num">  51   52</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  52   53</span><span class="prefix">  </span>**INCORRECT Usage Patterns - NEVER DO THESE:**</div>
+<div class="line unchanged"><span class="line-num">  53   54</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  54   55</span><span class="prefix">  </span>&lt;bad-example&gt;</div>
+<div class="line unchanged"><span class="line-num">  55   56</span><span class="prefix">  </span>User: Read my slack messages</div>
+<div class="line unchanged"><span class="line-num">  56   57</span><span class="prefix">  </span>Assistant: [Directly calls mcp__slack__read_channel without loading it first]</div>
+<div class="line unchanged"><span class="line-num">  57   58</span><span class="prefix">  </span>WRONG - You must load the tool FIRST using this tool</div>
+<div class="line unchanged"><span class="line-num">  58   59</span><span class="prefix">  </span>&lt;/bad-example&gt;</div>
+<div class="line unchanged"><span class="line-num">  59   60</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  60   61</span><span class="prefix">  </span>&lt;bad-example&gt;</div>
+<div class="line unchanged"><span class="line-num">  61   62</span><span class="prefix">  </span>Assistant: [Calls ToolSearch with query: &quot;slack&quot;, gets back mcp__slack__read_channel]</div>
+<div class="line unchanged"><span class="line-num">  62   63</span><span class="prefix">  </span>Assistant: [Calls ToolSearch with query: &quot;select:mcp__slack__read_channel&quot;]</div>
+<div class="line unchanged"><span class="line-num">  63   64</span><span class="prefix">  </span>WRONG - The keyword search already loaded the tool. The select call is redundant.</div>
+<div class="line unchanged"><span class="line-num">  64   65</span><span class="prefix">  </span>&lt;/bad-example&gt;</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -31,9 +31,9 @@ ${ISSUE_DESCRIPTION||"The user did not describe a specific issue. Read the debug
 ## Settings
 
 Remember that settings are in:
-* user - ${SETTINGS_FILE_PATH("userSettings")}
-* project - ${SETTINGS_FILE_PATH("projectSettings")}
-* local - ${SETTINGS_FILE_PATH("localSettings")}
+* user - ${GET_SETTINGS_FILE_PATH_FN("userSettings")}
+* project - ${GET_SETTINGS_FILE_PATH_FN("projectSettings")}
+* local - ${GET_SETTINGS_FILE_PATH_FN("localSettings")}
 
 ## Instructions
 

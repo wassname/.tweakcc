@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: System Reminder: Plan mode is active (iterative) (system-reminder-plan-mode-is-active-iterative)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>System Reminder: Plan mode is active (iterative)</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.63 →
+      <strong>New Version:</strong> 2.1.33
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.63,
+    but Claude Code is now using version 2.1.33.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/system-reminder-plan-mode-is-active-iterative.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.1.33</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.63 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span>Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits (with the exception of the plan file mentioned below), run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received.</div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>## Plan File Info:</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span>${PLAN_FILE_INFO_BLOCK.planExists?`A plan file already exists at ${PLAN_FILE_INFO_BLOCK.planFilePath}. You can read it and make incremental edits using the ${EDIT_TOOL_NAME.name} tool.`:`No plan file exists yet. You should create your plan at ${PLAN_FILE_INFO_BLOCK.planFilePath} using the ${EXPLORE_SUBAGENT_NOTE.name} tool.`}</div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span>## Iterative Planning Workflow</div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span>You are pair-planning with the user. Explore the code to build context, ask the user questions when you hit decisions you can&#039;t make alone, and write your findings into the plan file as you go. The plan file (above) is the ONLY file you may edit — it starts as a rough skeleton and gradually becomes the final plan.</div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>### The Loop</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>Repeat this cycle until the plan is complete:</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span>1. **Explore** — Use ${GET_READ_ONLY_TOOLS_FN()} to read code. Look for existing functions, utilities, and patterns to reuse. You can use the ${WRITE_TOOL_NAME.agentType} agent type to parallelize complex searches without filling your context, though for straightforward queries direct tools are simpler.</div>
+<div class="line removed"><span class="line-num">  15</span><span class="prefix">- </span>2. **Update the plan file** — After each discovery, immediately capture what you learned. Don&#039;t wait until the end.</div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>3. **Ask the user** — When you hit an ambiguity or decision you can&#039;t resolve from code alone, use ${ASK_USER_QUESTION_TOOL_NAME}. Then go back to step 1.</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>### First Turn</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  20</span><span class="prefix">- </span>Start by quickly scanning a few key files to form an initial understanding of the task scope. Then write a skeleton plan (headers and rough notes) and ask the user your first round of questions. Don&#039;t explore exhaustively before engaging the user.</div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  22</span><span class="prefix">- </span>### Asking Good Questions</div>
+<div class="line removed"><span class="line-num">  23</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  24</span><span class="prefix">- </span>- Never ask what you could find out by reading the code</div>
+<div class="line removed"><span class="line-num">  25</span><span class="prefix">- </span>- Batch related questions together (use multi-question ${ASK_USER_QUESTION_TOOL_NAME} calls)</div>
+<div class="line removed"><span class="line-num">  26</span><span class="prefix">- </span>- Focus on things only the user can answer: requirements, preferences, tradeoffs, edge case priorities</div>
+<div class="line removed"><span class="line-num">  27</span><span class="prefix">- </span>- Scale depth to the task — a vague feature request needs many rounds; a focused bug fix may need one or none</div>
+<div class="line removed"><span class="line-num">  28</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">  29</span><span class="prefix">- </span>### Plan File Structure</div>
+<div class="line removed"><span class="line-num">  30</span><span class="prefix">- </span>Your plan file should be divided into clear sections using markdown headers, based on the request. Fill out these sections as you go.</div>
+<div class="line removed"><span class="line-num">  31</span><span class="prefix">- </span>- Begin with a **Context** section: explain why this change is being made — the problem or need it addresses, what prompted it, and the intended outcome</div>
+<div class="line removed"><span class="line-num">  32</span><span class="prefix">- </span>- Include only your recommended approach, not all alternatives</div>
+<div class="line removed"><span class="line-num">  33</span><span class="prefix">- </span>- Ensure that the plan file is concise enough to scan quickly, but detailed enough to execute effectively</div>
+<div class="line removed"><span class="line-num">  34</span><span class="prefix">- </span>- Include the paths of critical files to be modified</div>
+<div class="line removed"><span class="line-num">  35</span><span class="prefix">- </span>- Reference existing functions and utilities you found that should be reused, with their file paths</div>
+<div class="line removed"><span class="line-num">  36</span><span class="prefix">- </span><mark>-</mark><mark> </mark><mark>Include</mark><mark> </mark><mark>a</mark><mark> </mark><mark>verification</mark><mark> </mark><mark>section</mark> <mark>describing</mark> <mark>how</mark> <mark>to</mark> <mark>test</mark> the<mark> </mark><mark>changes</mark><mark> </mark><mark>end-to-end</mark><mark> </mark><mark>(run</mark> <mark>the</mark> <mark>code,</mark> <mark>use</mark> <mark>MCP</mark> <mark>tools,</mark> <mark>run</mark> <mark>tests)</mark></div>
+<div class="line added"><span class="line-num">   1</span><span class="prefix">+ </span><mark>Plan</mark> <mark>mode</mark> <mark>active.</mark> <mark>Read-only</mark> <mark>except</mark> the <mark>plan</mark> <mark>file.</mark> <mark>No</mark> <mark>edits,</mark> <mark>no</mark> <mark>non-readonly</mark> <mark>tools.</mark></div>
+<div class="line unchanged"><span class="line-num">  37    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  38</span><span class="prefix">- </span><mark>###</mark><mark> </mark><mark>When</mark> <mark>to</mark> <mark>Converge</mark></div>
+<div class="line added"><span class="line-num">   3</span><span class="prefix">+ </span><mark>##</mark> <mark>Plan</mark> <mark>File</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span>${PLAN_FILE_INFO_BLOCK}</div>
+<div class="line unchanged"><span class="line-num">  39    5</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  40</span><span class="prefix">- </span><mark>Your</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>is</mark><mark> </mark><mark>ready</mark><mark> </mark><mark>when</mark><mark> </mark><mark>you&#039;ve</mark><mark> </mark><mark>addressed</mark><mark> </mark><mark>all</mark><mark> </mark><mark>ambiguities</mark><mark> </mark><mark>and</mark><mark> </mark><mark>it</mark><mark> </mark><mark>covers:</mark><mark> </mark><mark>what</mark><mark> </mark><mark>to</mark><mark> </mark><mark>change,</mark><mark> </mark><mark>which</mark><mark> </mark><mark>files</mark><mark> </mark><mark>to</mark><mark> </mark><mark>modify,</mark><mark> </mark><mark>what</mark><mark> </mark><mark>existing</mark><mark> </mark><mark>code</mark><mark> </mark><mark>to</mark><mark> </mark><mark>reuse</mark><mark> </mark><mark>(with</mark><mark> </mark><mark>file</mark><mark> </mark><mark>paths),</mark><mark> </mark><mark>and</mark><mark> </mark><mark>how</mark><mark> </mark><mark>to</mark><mark> </mark><mark>verify</mark><mark> </mark><mark>the</mark><mark> </mark><mark>changes.</mark><mark> </mark><mark>Call</mark><mark> </mark><mark>${WRITE_TOOL_NAME.name}</mark><mark> </mark><mark>when</mark><mark> </mark><mark>the</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>is</mark><mark> </mark><mark>ready</mark><mark> </mark><mark>for</mark> <mark>approval.</mark></div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span><mark>##</mark> <mark>Instructions</mark></div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>Follow the project&#039;s CLAUDE.md for planning workflow. These override defaults.</div>
+<div class="line unchanged"><span class="line-num">  41    8</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  42</span><span class="prefix">- </span><mark>###</mark> <mark>Ending</mark> <mark>Your</mark> <mark>Turn</mark></div>
+<div class="line added"><span class="line-num">   9</span><span class="prefix">+ </span><mark>Default:</mark> <mark>Pair-plan</mark> <mark>with</mark> <mark>user.</mark><mark> </mark><mark>Explore</mark><mark> </mark><mark>code</mark><mark> </mark><mark>with</mark><mark> </mark><mark>${GET_READ_ONLY_TOOLS_FN()}${EXPLORE_SUBAGENT_NOTE},</mark><mark> </mark><mark>update</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>file</mark><mark> </mark><mark>incrementally,</mark><mark> </mark><mark>use</mark><mark> </mark><mark>${ASK_USER_QUESTION_TOOL_NAME}</mark><mark> </mark><mark>for</mark><mark> </mark><mark>decisions</mark><mark> </mark><mark>only</mark><mark> </mark><mark>the</mark><mark> </mark><mark>user</mark><mark> </mark><mark>can</mark><mark> </mark><mark>make.</mark></div>
+<div class="line unchanged"><span class="line-num">  43   10</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  44</span><span class="prefix">- </span>Your turn should only end by either:</div>
+<div class="line removed"><span class="line-num">  45</span><span class="prefix">- </span>- Using ${ASK_USER_QUESTION_TOOL_NAME} to gather more information</div>
+<div class="line removed"><span class="line-num">  46</span><span class="prefix">- </span><mark>-</mark><mark> </mark><mark>Calling</mark><mark> </mark><mark>${WRITE_TOOL_NAME.name}</mark><mark> </mark><mark>when</mark> <mark>the</mark> <mark>plan</mark> <mark>is</mark> <mark>ready</mark> <mark>for</mark> <mark>approval</mark></div>
+<div class="line added"><span class="line-num">  11</span><span class="prefix">+ </span><mark>End</mark> <mark>your</mark> <mark>turn</mark> <mark>with</mark> <mark>${ASK_USER_QUESTION_TOOL_NAME}.</mark> <mark>Nothing</mark> <mark>else.</mark></div>
+<div class="line unchanged"><span class="line-num">  47   12</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  48</span><span class="prefix">- </span>**Important:** Use ${WRITE_TOOL_NAME.name} to request plan approval. Do NOT ask about plan approval via text or AskUserQuestion.</div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.63 → v2.1.33)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span>Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits (with the exception of the plan file mentioned below), run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received.</div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   3    3</span><span class="prefix">  </span>## Plan File Info:</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span><mark>${PLAN_FILE_INFO_BLOCK.planExists?`A</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>file</mark><mark> </mark><mark>already</mark><mark> </mark><mark>exists</mark><mark> </mark><mark>at</mark><mark> </mark><mark>${PLAN_FILE_INFO_BLOCK.planFilePath}.</mark><mark> </mark><mark>You</mark><mark> </mark><mark>can</mark><mark> </mark><mark>read</mark><mark> </mark><mark>it</mark><mark> </mark><mark>and</mark><mark> </mark><mark>make</mark><mark> </mark><mark>incremental</mark><mark> </mark><mark>edits</mark><mark> </mark><mark>using</mark><mark> </mark><mark>the</mark><mark> </mark><mark>${EDIT_TOOL_NAME.name}</mark><mark> </mark><mark>tool.`:`No</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>file</mark><mark> </mark><mark>exists</mark><mark> </mark><mark>yet.</mark><mark> </mark><mark>You</mark><mark> </mark><mark>should</mark><mark> </mark><mark>create</mark><mark> </mark><mark>your</mark><mark> </mark><mark>plan</mark><mark> </mark><mark>at</mark><mark> </mark><mark>${PLAN_FILE_INFO_BLOCK.planFilePath}</mark><mark> </mark><mark>using</mark><mark> </mark><mark>the</mark><mark> </mark><mark>${EXPLORE_SUBAGENT_NOTE.name}</mark><mark> </mark><mark>tool.`}</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span><mark>${PLAN_FILE_INFO_BLOCK}</mark></div>
+<div class="line unchanged"><span class="line-num">   5    5</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   6    6</span><span class="prefix">  </span>## Iterative Planning Workflow</div>
+<div class="line unchanged"><span class="line-num">   7    7</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   8    8</span><span class="prefix">  </span>You are pair-planning with the user. Explore the code to build context, ask the user questions when you hit decisions you can&#039;t make alone, and write your findings into the plan file as you go. The plan file (above) is the ONLY file you may edit — it starts as a rough skeleton and gradually becomes the final plan.</div>
+<div class="line unchanged"><span class="line-num">   9    9</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  10   10</span><span class="prefix">  </span>### The Loop</div>
+<div class="line unchanged"><span class="line-num">  11   11</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  12   12</span><span class="prefix">  </span>Repeat this cycle until the plan is complete:</div>
+<div class="line unchanged"><span class="line-num">  13   13</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  14</span><span class="prefix">- </span>1. **Explore** — Use ${GET_READ_ONLY_TOOLS_FN()} to read code. Look for existing functions, utilities, and patterns to reuse.<mark> </mark><mark>You</mark><mark> </mark><mark>can</mark><mark> </mark><mark>use</mark><mark> </mark><mark>the</mark><mark> </mark><mark>${WRITE_TOOL_NAME.agentType}</mark><mark> </mark><mark>agent</mark><mark> </mark><mark>type</mark><mark> </mark><mark>to</mark><mark> </mark><mark>parallelize</mark><mark> </mark><mark>complex</mark><mark> </mark><mark>searches</mark><mark> </mark><mark>without</mark><mark> </mark><mark>filling</mark><mark> </mark><mark>your</mark><mark> </mark><mark>context,</mark><mark> </mark><mark>though</mark><mark> </mark><mark>for</mark><mark> </mark><mark>straightforward</mark><mark> </mark><mark>queries</mark><mark> </mark><mark>direct</mark><mark> </mark><mark>tools</mark><mark> </mark><mark>are</mark> <mark>simpler.</mark></div>
+<div class="line added"><span class="line-num">  14</span><span class="prefix">+ </span>1. **Explore** — Use ${GET_READ_ONLY_TOOLS_FN()} to read code. Look for existing functions, utilities, and patterns to reuse. <mark>${EXPLORE_SUBAGENT_NOTE}</mark></div>
+<div class="line unchanged"><span class="line-num">  15   15</span><span class="prefix">  </span>2. **Update the plan file** — After each discovery, immediately capture what you learned. Don&#039;t wait until the end.</div>
+<div class="line unchanged"><span class="line-num">  16   16</span><span class="prefix">  </span>3. **Ask the user** — When you hit an ambiguity or decision you can&#039;t resolve from code alone, use ${ASK_USER_QUESTION_TOOL_NAME}. Then go back to step 1.</div>
+<div class="line unchanged"><span class="line-num">  17   17</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  18   18</span><span class="prefix">  </span>### First Turn</div>
+<div class="line unchanged"><span class="line-num">  19   19</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  20   20</span><span class="prefix">  </span>Start by quickly scanning a few key files to form an initial understanding of the task scope. Then write a skeleton plan (headers and rough notes) and ask the user your first round of questions. Don&#039;t explore exhaustively before engaging the user.</div>
+<div class="line unchanged"><span class="line-num">  21   21</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  22   22</span><span class="prefix">  </span>### Asking Good Questions</div>
+<div class="line unchanged"><span class="line-num">  23   23</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  24   24</span><span class="prefix">  </span>- Never ask what you could find out by reading the code</div>
+<div class="line unchanged"><span class="line-num">  25   25</span><span class="prefix">  </span>- Batch related questions together (use multi-question ${ASK_USER_QUESTION_TOOL_NAME} calls)</div>
+<div class="line unchanged"><span class="line-num">  26   26</span><span class="prefix">  </span>- Focus on things only the user can answer: requirements, preferences, tradeoffs, edge case priorities</div>
+<div class="line unchanged"><span class="line-num">  27   27</span><span class="prefix">  </span>- Scale depth to the task — a vague feature request needs many rounds; a focused bug fix may need one or none</div>
+<div class="line unchanged"><span class="line-num">  28   28</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  29   29</span><span class="prefix">  </span>### Plan File Structure</div>
+<div class="line unchanged"><span class="line-num">  30   30</span><span class="prefix">  </span>Your plan file should be divided into clear sections using markdown headers, based on the request. Fill out these sections as you go.</div>
+<div class="line unchanged"><span class="line-num">  31   31</span><span class="prefix">  </span>- Begin with a **Context** section: explain why this change is being made — the problem or need it addresses, what prompted it, and the intended outcome</div>
+<div class="line unchanged"><span class="line-num">  32   32</span><span class="prefix">  </span>- Include only your recommended approach, not all alternatives</div>
+<div class="line unchanged"><span class="line-num">  33   33</span><span class="prefix">  </span>- Ensure that the plan file is concise enough to scan quickly, but detailed enough to execute effectively</div>
+<div class="line unchanged"><span class="line-num">  34   34</span><span class="prefix">  </span>- Include the paths of critical files to be modified</div>
+<div class="line unchanged"><span class="line-num">  35   35</span><span class="prefix">  </span>- Reference existing functions and utilities you found that should be reused, with their file paths</div>
+<div class="line unchanged"><span class="line-num">  36   36</span><span class="prefix">  </span>- Include a verification section describing how to test the changes end-to-end (run the code, use MCP tools, run tests)</div>
+<div class="line unchanged"><span class="line-num">  37   37</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  38   38</span><span class="prefix">  </span>### When to Converge</div>
+<div class="line unchanged"><span class="line-num">  39   39</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  40</span><span class="prefix">- </span>Your plan is ready when you&#039;ve addressed all ambiguities and it covers: what to change, which files to modify, what existing code to reuse (with file paths), and how to verify the changes. Call <mark>${WRITE_TOOL_NAME.name}</mark> when the plan is ready for approval.</div>
+<div class="line added"><span class="line-num">  40</span><span class="prefix">+ </span>Your plan is ready when you&#039;ve addressed all ambiguities and it covers: what to change, which files to modify, what existing code to reuse (with file paths), and how to verify the changes. Call <mark>${EXIT_PLAN_MODE_TOOL.name}</mark> when the plan is ready for approval.</div>
+<div class="line unchanged"><span class="line-num">  41   41</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  42   42</span><span class="prefix">  </span>### Ending Your Turn</div>
+<div class="line unchanged"><span class="line-num">  43   43</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  44   44</span><span class="prefix">  </span>Your turn should only end by either:</div>
+<div class="line unchanged"><span class="line-num">  45   45</span><span class="prefix">  </span>- Using ${ASK_USER_QUESTION_TOOL_NAME} to gather more information</div>
+<div class="line removed"><span class="line-num">  46</span><span class="prefix">- </span>- Calling <mark>${WRITE_TOOL_NAME.name}</mark> when the plan is ready for approval</div>
+<div class="line added"><span class="line-num">  46</span><span class="prefix">+ </span>- Calling <mark>${EXIT_PLAN_MODE_TOOL.name}</mark> when the plan is ready for approval</div>
+<div class="line unchanged"><span class="line-num">  47   47</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  48</span><span class="prefix">- </span>**Important:** Use <mark>${WRITE_TOOL_NAME.name}</mark> to request plan approval. Do NOT ask about plan approval via text or AskUserQuestion.</div>
+<div class="line added"><span class="line-num">  48</span><span class="prefix">+ </span>**Important:** Use <mark>${EXIT_PLAN_MODE_TOOL.name}</mark> to request plan approval. Do NOT ask about plan approval via text or AskUserQuestion.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

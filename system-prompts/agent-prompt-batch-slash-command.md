@@ -22,7 +22,7 @@ You are orchestrating a large, parallelizable change across this codebase.
 
 ${USER_INSTRUCTIONS}
 
-## Phase 1: Research, Brainstorm, and Plan (Plan Mode)
+## Phase 1: Research and Plan (Plan Mode)
 
 Call the \`${ENTER_PLAN_MODE_TOOL_NAME}\` tool now to enter plan mode, then:
 

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Diff: Tool Description: Skill (tool-description-skill)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .version-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .warning code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .diff-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .diff-container {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .diff-header {
+      background: #f8f9fa;
+      padding: 12px 15px;
+      font-weight: bold;
+      border-bottom: 2px solid #dee2e6;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .diff-content {
+      padding: 0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .line {
+      padding: 2px 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line .line-num {
+      display: inline-block;
+      min-width: 50px;
+      margin-right: 10px;
+      color: #6a737d;
+      text-align: right;
+      user-select: none;
+      font-size: 12px;
+    }
+    .line .prefix {
+      display: inline-block;
+      width: 20px;
+      font-weight: bold;
+      user-select: none;
+    }
+    .removed {
+      background: #ffebe9;
+      color: #24292e;
+    }
+    .removed .prefix {
+      color: #d73a49;
+    }
+    .added {
+      background: #e6ffed;
+      color: #24292e;
+    }
+    .added .prefix {
+      color: #22863a;
+    }
+    .unchanged {
+      background: #ffffff;
+      color: #24292e;
+    }
+    .unchanged .prefix {
+      color: #6a737d;
+    }
+    mark {
+      background: rgba(255, 200, 0, 0.4);
+      padding: 0;
+      border-radius: 2px;
+    }
+    .removed mark {
+      background: rgba(215, 58, 73, 0.3);
+    }
+    .added mark {
+      background: rgba(34, 134, 58, 0.3);
+    }
+    @media (max-width: 1200px) {
+      .diff-panels {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tool Description: Skill</h1>
+    <div class="version-info">
+      <strong>Old Version:</strong> 2.1.23 →
+      <strong>New Version:</strong> 2.0.77
+    </div>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Version Mismatch Warning</strong><br>
+    Your customized prompt file is based on version 2.1.23,
+    but Claude Code is now using version 2.0.77.
+    Review the differences below to understand both your customizations and the upstream changes.<br><br>
+    <strong>File:</strong> <code>/home/wassname/.tweakcc/system-prompts/tool-description-skill.md</code><br><br>
+    When you're done reviewing, update the <code>ccVersion</code> in the file to <strong>2.0.77</strong>.
+  </div>
+
+  <div class="diff-panels">
+    <div class="diff-container">
+      <div class="diff-header">Your Customizations (v2.1.23 → User)</div>
+      <div class="diff-content">
+<div class="line removed"><span class="line-num">   1</span><span class="prefix">- </span>Execute a skill within the main conversation</div>
+<div class="line removed"><span class="line-num">   2</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>When users ask you to perform tasks, check if any of the available skills match. Skills provide specialized capabilities and domain knowledge.</div>
+<div class="line removed"><span class="line-num">   4</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>When users reference a &quot;slash command&quot; or &quot;/&lt;something&gt;&quot; (e.g., &quot;/commit&quot;, &quot;/review-pr&quot;), they are referring to a skill. Use this tool to invoke it.</div>
+<div class="line removed"><span class="line-num">   6</span><span class="prefix">- </span></div>
+<div class="line removed"><span class="line-num">   7</span><span class="prefix">- </span>How to invoke:</div>
+<div class="line removed"><span class="line-num">   8</span><span class="prefix">- </span>- Use this tool with the skill name and optional arguments</div>
+<div class="line removed"><span class="line-num">   9</span><span class="prefix">- </span>- Examples:</div>
+<div class="line removed"><span class="line-num">  10</span><span class="prefix">- </span>  - \`skill: &quot;pdf&quot;\` - invoke the pdf skill</div>
+<div class="line removed"><span class="line-num">  11</span><span class="prefix">- </span>  - \`skill: &quot;commit&quot;, args: &quot;-m &#039;Fix bug&#039;&quot;\` - invoke with arguments</div>
+<div class="line removed"><span class="line-num">  12</span><span class="prefix">- </span>  - \`skill: &quot;review-pr&quot;, args: &quot;123&quot;\` - invoke with arguments</div>
+<div class="line removed"><span class="line-num">  13</span><span class="prefix">- </span><mark></mark><mark>  </mark><mark>-</mark> <mark>\`skill:</mark> <mark>&quot;ms-office-suite:pdf&quot;\`</mark> <mark>-</mark> <mark>invoke</mark> <mark>using</mark> <mark>fully</mark> <mark>qualified</mark> <mark>name</mark></div>
+<div class="line added"><span class="line-num">   1</span><span class="prefix">+ </span><mark>Execute</mark> <mark>a</mark> <mark>skill.</mark> <mark>&quot;/&lt;something&gt;&quot;</mark> <mark>(e.g.</mark> <mark>/commit)</mark> <mark>=</mark> <mark>skill</mark> <mark>invocation.</mark></div>
+<div class="line unchanged"><span class="line-num">  14    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">  15</span><span class="prefix">- </span>Important:</div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>- Available skills are listed in system-reminder messages in the conversation</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>- When a skill matches the user&#039;s request, this is a BLOCKING REQUIREMENT: invoke the relevant Skill tool BEFORE generating any other response about the task</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>- NEVER mention a skill without actually calling this tool</div>
+<div class="line removed"><span class="line-num">  19</span><span class="prefix">- </span>- Do not invoke a skill that is already running</div>
+<div class="line removed"><span class="line-num">  20</span><span class="prefix">- </span>- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)</div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span>-<mark> </mark><mark>If</mark><mark> </mark><mark>you</mark><mark> </mark><mark>see</mark><mark> </mark><mark>a</mark><mark> </mark><mark>&lt;${SKILL_TAG_NAME}&gt;</mark><mark> </mark><mark>tag</mark><mark> </mark><mark>in</mark><mark> </mark><mark>the</mark><mark> </mark><mark>current</mark><mark> </mark><mark>conversation</mark><mark> </mark><mark>turn,</mark><mark> </mark><mark>the</mark><mark> </mark><mark>skill</mark><mark> </mark><mark>has</mark><mark> </mark><mark>ALREADY</mark><mark> </mark><mark>been</mark><mark> </mark><mark>loaded</mark> <mark>-</mark> <mark>follow</mark> <mark>the</mark> <mark>instructions</mark> <mark>directly</mark> <mark>instead</mark> <mark>of</mark> <mark>calling</mark> <mark>this</mark> <mark>tool</mark> <mark>again</mark></div>
+<div class="line added"><span class="line-num">   3</span><span class="prefix">+ </span>- <mark>Invoke:</mark> <mark>\`skill:</mark> <mark>&quot;name&quot;\`</mark> <mark>or</mark> <mark>\`skill:</mark> <mark>&quot;name&quot;,</mark> <mark>args:</mark> <mark>&quot;...&quot;\`</mark> <mark>or</mark> <mark>\`skill:</mark> <mark>&quot;namespace:name&quot;\`</mark></div>
+<div class="line added"><span class="line-num">   4</span><span class="prefix">+ </span>- Available skills listed in system-reminder messages</div>
+<div class="line added"><span class="line-num">   5</span><span class="prefix">+ </span>- BLOCKING: invoke Skill tool BEFORE generating response about the task</div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span>- NEVER mention a skill without calling this tool</div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>- If &lt;${SKILL_TAG_NAME}&gt; tag already in this turn, skill is loaded -- follow its instructions directly</div>
+<div class="line added"><span class="line-num">   8</span><span class="prefix">+ </span>- Not for built-in CLI commands (/help, /clear)</div>
+<div class="line unchanged"><span class="line-num">  22    9</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-header">Upstream Changes (v2.1.23 → v2.0.77)</div>
+      <div class="diff-content">
+<div class="line unchanged"><span class="line-num">   1    1</span><span class="prefix">  </span>Execute a skill within the main conversation</div>
+<div class="line unchanged"><span class="line-num">   2    2</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">   3</span><span class="prefix">- </span>When users ask you to perform tasks, check if any of the available skills <mark>match.</mark> Skills provide specialized capabilities and domain knowledge.</div>
+<div class="line added"><span class="line-num">   3</span><span class="prefix">+ </span>When users ask you to perform tasks, check if any of the available skills <mark>below</mark><mark> </mark><mark>can</mark><mark> </mark><mark>help</mark><mark> </mark><mark>complete</mark><mark> </mark><mark>the</mark><mark> </mark><mark>task</mark><mark> </mark><mark>more</mark><mark> </mark><mark>effectively.</mark> Skills provide specialized capabilities and domain knowledge.</div>
+<div class="line unchanged"><span class="line-num">   4    4</span><span class="prefix">  </span></div>
+<div class="line removed"><span class="line-num">   5</span><span class="prefix">- </span>When users <mark>reference</mark> a &quot;slash command&quot; or &quot;/&lt;something&gt;&quot; (e.g., &quot;/commit&quot;, &quot;/review-pr&quot;), they are referring to a skill. Use this tool to invoke <mark>it.</mark></div>
+<div class="line added"><span class="line-num">   5</span><span class="prefix">+ </span>When users <mark>ask</mark><mark> </mark><mark>you</mark><mark> </mark><mark>to</mark><mark> </mark><mark>run</mark> a &quot;slash command&quot; or<mark> </mark><mark>reference</mark> &quot;/&lt;something&gt;&quot; (e.g., &quot;/commit&quot;, &quot;/review-pr&quot;), they are referring to a skill. Use this tool to invoke <mark>the</mark><mark> </mark><mark>corresponding</mark><mark> </mark><mark>skill.</mark></div>
+<div class="line added"><span class="line-num">   6</span><span class="prefix">+ </span></div>
+<div class="line added"><span class="line-num">   7</span><span class="prefix">+ </span>Example:</div>
+<div class="line added"><span class="line-num">   8</span><span class="prefix">+ </span>  User: &quot;run /commit&quot;</div>
+<div class="line added"><span class="line-num">   9</span><span class="prefix">+ </span>  Assistant: [Calls Skill tool with skill: &quot;commit&quot;]</div>
+<div class="line unchanged"><span class="line-num">   6   10</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">   7   11</span><span class="prefix">  </span>How to invoke:</div>
+<div class="line unchanged"><span class="line-num">   8   12</span><span class="prefix">  </span>- Use this tool with the skill name and optional arguments</div>
+<div class="line unchanged"><span class="line-num">   9   13</span><span class="prefix">  </span>- Examples:</div>
+<div class="line unchanged"><span class="line-num">  10   14</span><span class="prefix">  </span>  - \`skill: &quot;pdf&quot;\` - invoke the pdf skill</div>
+<div class="line unchanged"><span class="line-num">  11   15</span><span class="prefix">  </span>  - \`skill: &quot;commit&quot;, args: &quot;-m &#039;Fix bug&#039;&quot;\` - invoke with arguments</div>
+<div class="line unchanged"><span class="line-num">  12   16</span><span class="prefix">  </span>  - \`skill: &quot;review-pr&quot;, args: &quot;123&quot;\` - invoke with arguments</div>
+<div class="line unchanged"><span class="line-num">  13   17</span><span class="prefix">  </span>  - \`skill: &quot;ms-office-suite:pdf&quot;\` - invoke using fully qualified name</div>
+<div class="line unchanged"><span class="line-num">  14   18</span><span class="prefix">  </span></div>
+<div class="line unchanged"><span class="line-num">  15   19</span><span class="prefix">  </span>Important:</div>
+<div class="line removed"><span class="line-num">  16</span><span class="prefix">- </span>- Available skills are listed in system-reminder messages in the conversation</div>
+<div class="line removed"><span class="line-num">  17</span><span class="prefix">- </span>- When a skill matches the user&#039;s request, this is a BLOCKING REQUIREMENT: invoke the relevant Skill tool BEFORE generating any other response about the task</div>
+<div class="line removed"><span class="line-num">  18</span><span class="prefix">- </span>-<mark> </mark><mark>NEVER</mark> <mark>mention</mark> a skill <mark>without</mark> <mark>actually</mark> <mark>calling</mark> this tool</div>
+<div class="line added"><span class="line-num">  20</span><span class="prefix">+ </span>- <mark>When</mark> a skill <mark>is</mark> <mark>relevant,</mark> <mark>you</mark><mark> </mark><mark>must</mark><mark> </mark><mark>invoke</mark> this tool<mark> </mark><mark>IMMEDIATELY</mark><mark> </mark><mark>as</mark><mark> </mark><mark>your</mark><mark> </mark><mark>first</mark><mark> </mark><mark>action</mark></div>
+<div class="line added"><span class="line-num">  21</span><span class="prefix">+ </span>- NEVER just announce or mention a skill in your text response without actually calling this tool</div>
+<div class="line added"><span class="line-num">  22</span><span class="prefix">+ </span>- This is a BLOCKING REQUIREMENT: invoke the relevant Skill tool BEFORE generating any other response about the task</div>
+<div class="line added"><span class="line-num">  23</span><span class="prefix">+ </span>- Only use skills listed in &quot;Available skills&quot; below</div>
+<div class="line unchanged"><span class="line-num">  19   24</span><span class="prefix">  </span>- Do not invoke a skill that is already running</div>
+<div class="line unchanged"><span class="line-num">  20   25</span><span class="prefix">  </span>- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)</div>
+<div class="line removed"><span class="line-num">  21</span><span class="prefix">- </span>- If you see a <mark>&lt;${SKILL_TAG_NAME}&gt;</mark> tag in the current conversation <mark>turn,</mark> the skill has ALREADY been loaded <mark>-</mark> follow the <mark>instructions</mark> <mark>directly</mark> <mark>instead</mark> <mark>of</mark> <mark>calling</mark> this tool <mark>again</mark></div>
+<div class="line added"><span class="line-num">  26</span><span class="prefix">+ </span>- If you see a <mark>&lt;${FORMAT_SKILLS_AS_XML_FN}&gt;</mark> tag in the current conversation <mark>turn</mark><mark> </mark><mark>(e.g.,</mark><mark> </mark><mark>&lt;${FORMAT_SKILLS_AS_XML_FN}&gt;/commit&lt;/${FORMAT_SKILLS_AS_XML_FN}&gt;),</mark> the skill has ALREADY been loaded <mark>and</mark><mark> </mark><mark>its</mark><mark> </mark><mark>instructions</mark> follow<mark> </mark><mark>in</mark> the <mark>next</mark> <mark>message.</mark> <mark>Do</mark> <mark>NOT</mark> <mark>call</mark> this tool <mark>-</mark><mark> </mark><mark>just</mark><mark> </mark><mark>follow</mark><mark> </mark><mark>the</mark><mark> </mark><mark>skill</mark><mark> </mark><mark>instructions</mark><mark> </mark><mark>directly.</mark></div>
+<div class="line added"><span class="line-num">  27</span><span class="prefix">+ </span></div>
+<div class="line added"><span class="line-num">  28</span><span class="prefix">+ </span>Available skills:</div>
+<div class="line added"><span class="line-num">  29</span><span class="prefix">+ </span>${LIMITED_COMMANDS}</div>
+<div class="line unchanged"><span class="line-num">  22   30</span><span class="prefix">  </span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

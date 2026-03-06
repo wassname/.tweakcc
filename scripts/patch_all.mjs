@@ -8,7 +8,7 @@
 
 import { findAllInstallations, readContent, helpers } from 'tweakcc';
 const { clearCaches } = helpers;
-import { readFile, writeFile, mkdir, copyFile, stat, rename, unlink, readdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, stat, rename, unlink, readdir, chmod } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { resolve, dirname, basename } from 'node:path';
 
@@ -111,6 +111,34 @@ async function ensurePromptCache(targetVersion) {
   return true;
 }
 
+/** Fix known tweakcc 4.0.11 bugs in patched output. */
+async function postPatchFix(filePath) {
+  let content = await readFile(filePath, 'utf8');
+  let fixes = 0;
+
+  // Bug 1: tweakcc injects ASK_USER_QUESTION_TOOL instead of ASK_USER_QUESTION_TOOL_NAME
+  // The runtime scope only defines _NAME; bare form throws ReferenceError.
+  const badVar = /ASK_USER_QUESTION_TOOL([^_])/g;
+  if (badVar.test(content)) {
+    content = content.replace(/ASK_USER_QUESTION_TOOL([^_])/g, 'ASK_USER_QUESTION_TOOL_NAME$1');
+    fixes++;
+  }
+
+  // Bug 2: version string duplicated 4x
+  const quadVersion = /\\n4\.\d+\.\d+ \(tweakcc\)(\\n4\.\d+\.\d+ \(tweakcc\)){1,}/g;
+  if (quadVersion.test(content)) {
+    content = content.replace(quadVersion, (m) => m.split('\\n').filter(Boolean)[0] ? '\\n' + m.split('\\n').filter(Boolean)[0] : m);
+    fixes++;
+  }
+
+  if (fixes > 0) {
+    await writeFile(filePath, content);
+    // Restore execute permission for native binaries
+    if (!filePath.endsWith('.js')) await chmod(filePath, 0o755);
+    console.log(`  post-patch: fixed ${fixes} tweakcc bug(s)`);
+  }
+}
+
 function runApply() {
   const out = execFileSync('npx', ['tweakcc', '--apply'], {
     encoding: 'utf8',
@@ -200,6 +228,9 @@ async function main() {
       }
 
       console.log(`  applied`);
+
+      // Fix known tweakcc bugs in the patched output
+      await postPatchFix(inst.path);
 
       // Save extracted JS files to versioned out dir (tweakcc writes these during --apply)
       if (inst.kind === 'native') {
