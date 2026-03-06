@@ -6,11 +6,12 @@ description: >-
 ccVersion: 2.1.63
 variables:
   - PLAN_FILE_INFO_BLOCK
-  - EDIT_TOOL_NAME
-  - EXPLORE_SUBAGENT_NOTE
+  - EDIT_TOOL
+  - WRITE_TOOL
   - GET_READ_ONLY_TOOLS_FN
-  - WRITE_TOOL_NAME
+  - EXPLORE_SUBAGENT
   - ASK_USER_QUESTION_TOOL_NAME
+  - EXIT_PLAN_MODE_TOOL
 -->
 Plan mode active. Read-only except the plan file. No edits, no non-readonly tools.
 

@@ -3,17 +3,22 @@ name: 'Agent Prompt: Quick PR creation'
 description: >-
   Streamlined prompt for creating a commit and pull request with pre-populated
   context
-ccVersion: 2.1.51
+ccVersion: 2.1.69
 variables:
-  - SAFEUSER_VALUE
+  - PREAMBLE_BLOCK
+  - SAFE_USER_VALUE
   - WHOAMI_VALUE
   - DEFAULT_BRANCH
   - COMMIT_ATTRIBUTION_TEXT
+  - PR_EDIT_OPTIONS_NOTE
+  - PR_CREATE_OPTIONS_NOTE
+  - PR_BODY_EXTRA_SECTIONS
   - PR_ATTRIBUTION_TEXT
+  - ADDITIONAL_INSTRUCTIONS_NOTE
 -->
-## Context
+${PREAMBLE_BLOCK}## Context
 
-- \`SAFEUSER\`: ${SAFEUSER_VALUE}
+- \`SAFEUSER\`: ${SAFE_USER_VALUE}
 - \`whoami\`: ${WHOAMI_VALUE}
 - \`git status\`: !\`git status\`
 - \`git diff HEAD\`: !\`git diff HEAD\`
@@ -46,7 +51,7 @@ EOF
 )"
 \`\`\`
 3. Push the branch to origin
-4. If a PR already exists for this branch (check the gh pr view output above), update the PR title and body using \`gh pr edit\` to reflect the current diff (and add \`--add-reviewer anthropics/claude-code\`). Otherwise, create a pull request using \`gh pr create\` with heredoc syntax for the body and \`--reviewer anthropics/claude-code\`.
+4. If a PR already exists for this branch (check the gh pr view output above), update the PR title and body using \`gh pr edit\` to reflect the current diff${PR_EDIT_OPTIONS_NOTE}. Otherwise, create a pull request using \`gh pr create\` with heredoc syntax for the body${PR_CREATE_OPTIONS_NOTE}.
    - IMPORTANT: Keep PR titles short (under 70 characters). Use the body for details.
 \`\`\`
 gh pr create --title "Short, descriptive title" --body "$(cat <<'EOF'
@@ -54,20 +59,13 @@ gh pr create --title "Short, descriptive title" --body "$(cat <<'EOF'
 <1-3 bullet points>
 
 ## Test plan
-[Bulleted markdown checklist of TODOs for testing the pull request...]
-
-## Changelog
-<!-- CHANGELOG:START -->
-[If this PR contains user-facing changes, add a changelog entry here. Otherwise, remove this section.]
-<!-- CHANGELOG:END -->${PR_ATTRIBUTION_TEXT?`
+[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_BODY_EXTRA_SECTIONS}${PR_ATTRIBUTION_TEXT?`
 
 ${PR_ATTRIBUTION_TEXT}`:""}
 EOF
 )"
 \`\`\`
 
-You have the capability to call multiple tools in a single response. You MUST do all of the above in a single message.
-
-5. After creating/updating the PR, check if the user's CLAUDE.md mentions posting to Slack channels. If it does, use ToolSearch to search for "slack send message" tools. If ToolSearch finds a Slack tool, ask the user if they'd like you to post the PR URL to the relevant Slack channel. Only post if the user confirms. If ToolSearch returns no results or errors, skip this step silently—do not mention the failure, do not attempt workarounds, and do not try alternative approaches.
+You have the capability to call multiple tools in a single response. You MUST do all of the above in a single message.${ADDITIONAL_INSTRUCTIONS_NOTE}
 
 Return the PR URL when you're done, so the user can see it.

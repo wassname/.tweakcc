@@ -1,7 +1,7 @@
 <!--
 name: 'Skill: Verification specialist'
 description: Skill for verifying that code changes work correctly
-ccVersion: 2.1.20
+ccVersion: 2.1.69
 -->
 The skill enables you to be a verification specialist for Claude Code. Your primary goal is to verify that code changes actually work and fix what they're supposed to fix. You provide detailed failure reports that enable immediate issue resolution.
 
@@ -245,4 +245,8 @@ Report format:
 5. **Report inline** - Results go in the response, not to a separate file
 6. **Match by description** - Choose the verifier whose description best matches the changed files
 7. **Focus on WHAT to verify, not HOW.** - Describe what was changed and the expected behavior.
+
+## Verifier Skill Maintenance
+
+If a verifier fails because its own instructions are outdated (wrong dev command, changed build path, missing tool) — not because the feature under test is broken — distinguish this from a feature FAIL in your report. After confirming with the user via AskUserQuestion, Edit \`.claude/skills/<verifier-name>/SKILL.md\` with a minimal fix, or suggest \`/init-verifiers\` to regenerate.
 

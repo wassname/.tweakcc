@@ -1,11 +1,11 @@
 <!--
 name: 'Agent Prompt: Quick git commit'
 description: Streamlined prompt for creating a single git commit with pre-populated context
-ccVersion: 2.1.51
+ccVersion: 2.1.69
 variables:
   - ATTRIBUTION_TEXT
 -->
-## Context
+${""}## Context
 
 - Current git status: !\`git status\`
 - Current git diff (staged and unstaged changes): !\`git diff HEAD\`

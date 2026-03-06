@@ -3,7 +3,7 @@ name: 'Skill: Create verifier skills'
 description: >-
   Prompt for creating verifier skills for the Verify agent to automatically
   verify code changes
-ccVersion: 2.1.51
+ccVersion: 2.1.69
 -->
 Use the TodoWrite tool to track your progress through this multi-step task.
 
@@ -194,6 +194,10 @@ After verification:
 1. Stop any dev servers started
 2. Close any browser sessions
 3. Report final summary
+
+## Self-Update
+
+If verification fails because this skill's instructions are outdated (dev server command/port/ready-signal changed, etc.) — not because the feature under test is broken — or if the user corrects you mid-run, use AskUserQuestion to confirm and then Edit this SKILL.md with a minimal targeted fix.
 \`\`\`
 
 ### Allowed Tools by Type
@@ -241,3 +245,4 @@ After writing the skill file(s), inform the user:
 2. How the Verify agent will discover them — the folder name must contain "verifier" (case-insensitive) for automatic discovery
 3. That they can edit the skills to customize them
 4. That they can run /init-verifiers again to add more verifiers for other areas
+5. That the verifier will offer to self-update if it detects its own instructions are outdated (wrong dev server command, changed ready signal, etc.)

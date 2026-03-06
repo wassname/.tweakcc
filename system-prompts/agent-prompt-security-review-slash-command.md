@@ -3,7 +3,7 @@ name: 'Agent Prompt: /security-review slash command'
 description: >-
   Comprehensive security review prompt for analyzing code changes with focus on
   exploitable vulnerabilities
-ccVersion: 2.0.70
+ccVersion: 2.1.70
 -->
 ---
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git show:*), Bash(git remote show:*), Read, Glob, Grep, LS, Task
@@ -33,7 +33,7 @@ COMMITS:
 DIFF CONTENT:
 
 \`\`\`
-!\`git diff --merge-base origin/HEAD\`
+!\`git diff origin/HEAD...\`
 \`\`\`
 
 Review the complete diff above. This contains all code changes in the PR.

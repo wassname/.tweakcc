@@ -3,7 +3,7 @@ name: 'Data: Tool use reference — Python'
 description: >-
   Python tool use reference including tool runner, manual agentic loop, code
   execution, and structured outputs
-ccVersion: 2.1.63
+ccVersion: 2.1.69
 -->
 # Tool Use — Python
 
@@ -53,6 +53,84 @@ For async usage, use \`@beta_async_tool\` with \`async def\` functions.
 - Type-safe tool inputs via decorators
 - Tool schemas are generated automatically from function signatures
 - Iteration stops automatically when Claude has no more tool calls
+
+---
+
+## MCP Tool Conversion Helpers
+
+**Beta.** Convert [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) tools, prompts, and resources to Anthropic API types for use with the tool runner. Requires \`pip install anthropic[mcp]\` (Python 3.10+).
+
+> **Note:** The Claude API also supports an \`mcp_servers\` parameter that lets Claude connect directly to remote MCP servers. Use these helpers instead when you need local MCP servers, prompts, resources, or more control over the MCP connection.
+
+### MCP Tools with Tool Runner
+
+\`\`\`python
+from anthropic import AsyncAnthropic
+from anthropic.lib.tools.mcp import async_mcp_tool
+from mcp import ClientSession
+from mcp.client.stdio import stdio_client, StdioServerParameters
+
+client = AsyncAnthropic()
+
+async with stdio_client(StdioServerParameters(command="mcp-server")) as (read, write):
+    async with ClientSession(read, write) as mcp_client:
+        await mcp_client.initialize()
+
+        tools_result = await mcp_client.list_tools()
+        runner = await client.beta.messages.tool_runner(
+            model="{{OPUS_ID}}",
+            max_tokens=1024,
+            messages=[{"role": "user", "content": "Use the available tools"}],
+            tools=[async_mcp_tool(t, mcp_client) for t in tools_result.tools],
+        )
+        async for message in runner:
+            print(message)
+\`\`\`
+
+For sync usage, use \`mcp_tool\` instead of \`async_mcp_tool\`.
+
+### MCP Prompts
+
+\`\`\`python
+from anthropic.lib.tools.mcp import mcp_message
+
+prompt = await mcp_client.get_prompt(name="my-prompt")
+response = await client.beta.messages.create(
+    model="{{OPUS_ID}}",
+    max_tokens=1024,
+    messages=[mcp_message(m) for m in prompt.messages],
+)
+\`\`\`
+
+### MCP Resources as Content
+
+\`\`\`python
+from anthropic.lib.tools.mcp import mcp_resource_to_content
+
+resource = await mcp_client.read_resource(uri="file:///path/to/doc.txt")
+response = await client.beta.messages.create(
+    model="{{OPUS_ID}}",
+    max_tokens=1024,
+    messages=[{
+        "role": "user",
+        "content": [
+            mcp_resource_to_content(resource),
+            {"type": "text", "text": "Summarize this document"},
+        ],
+    }],
+)
+\`\`\`
+
+### Upload MCP Resources as Files
+
+\`\`\`python
+from anthropic.lib.tools.mcp import mcp_resource_to_file
+
+resource = await mcp_client.read_resource(uri="file:///path/to/data.json")
+uploaded = await client.beta.files.upload(file=mcp_resource_to_file(resource))
+\`\`\`
+
+Conversion functions raise \`UnsupportedMCPValueError\` if an MCP value cannot be converted (e.g., unsupported content types like audio, unsupported MIME types).
 
 ---
 

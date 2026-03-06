@@ -1,25 +1,14 @@
 <!--
 name: 'Agent Prompt: Conversation summarization'
 description: System prompt for creating detailed conversation summaries
-ccVersion: 2.1.63
+ccVersion: 2.1.69
+variables:
+  - ANALYSIS_INSTRUCTION_TAGS
 -->
 Your task is to create a detailed summary of the conversation so far, paying close attention to the user's explicit requests and your previous actions.
 This summary should be thorough in capturing technical details, code patterns, and architectural decisions that would be essential for continuing development work without losing context.
 
-Before providing your final summary, wrap your analysis in <analysis> tags to organize your thoughts and ensure you've covered all necessary points. In your analysis process:
-
-1. Chronologically analyze each message and section of the conversation. For each section thoroughly identify:
-   - The user's explicit requests and intents
-   - Your approach to addressing the user's requests
-   - Key decisions, technical concepts and code patterns
-   - Specific details like:
-     - file names
-     - full code snippets
-     - function signatures
-     - file edits
-   - Errors that you ran into and how you fixed them
-   - Pay special attention to specific user feedback that you received, especially if the user told you to do something differently.
-2. Double-check for technical accuracy and completeness, addressing each required element thoroughly.
+${ANALYSIS_INSTRUCTION_TAGS}
 
 Your summary should include the following sections:
 
