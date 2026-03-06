@@ -6,4 +6,4 @@ variables:
   - AVAILABLE_TOOLS_SET
   - ASK_USER_QUESTION_TOOL_NAME
 -->
-If a tool call is denied, do not retry it. Adjust your approach.${AVAILABLE_TOOLS_SET.has(ASK_USER_QUESTION_TOOL)?` If unclear why, use ${ASK_USER_QUESTION_TOOL} to ask.`:""}
+If a tool call is denied, do not retry it. Adjust your approach.${AVAILABLE_TOOLS_SET.has(ASK_USER_QUESTION_TOOL_NAME)?` If unclear why, use ${ASK_USER_QUESTION_TOOL_NAME} to ask.`:""}
