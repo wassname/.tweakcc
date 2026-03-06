@@ -116,11 +116,13 @@ async function postPatchFix(filePath) {
   let content = await readFile(filePath, 'utf8');
   let fixes = 0;
 
-  // Bug 1: tweakcc injects ASK_USER_QUESTION_TOOL instead of ASK_USER_QUESTION_TOOL_NAME
-  // The runtime scope only defines _NAME; bare form throws ReferenceError.
-  const badVar = /ASK_USER_QUESTION_TOOL([^_])/g;
-  if (badVar.test(content)) {
-    content = content.replace(/ASK_USER_QUESTION_TOOL([^_])/g, 'ASK_USER_QUESTION_TOOL_NAME$1');
+  // Bug 1: tweakcc injects ${...ASK_USER_QUESTION_TOOL...} as a raw JS expression,
+  // but CC runtime uses positional identifier substitution, not JS scope variables.
+  // Neither ASK_USER_QUESTION_TOOL nor _NAME exist in scope -> ReferenceError.
+  // Fix: replace the whole conditional with static text (AskUserQuestion is always available).
+  const badExpr = /\$\{[A-Z_]*\.has\(ASK_USER_QUESTION_TOOL[A-Z_]*\)\?[^}]*\}/g;
+  if (badExpr.test(content)) {
+    content = content.replace(badExpr, ' If unclear why, use AskUserQuestion to ask.');
     fixes++;
   }
 
