@@ -84,6 +84,8 @@ Native patching: `tweakcc --apply` handles unpack/patch/repack internally for na
 
 Artifacts in `out/<version>/native/`: `backup`, `backup.js`, `patched`, `patched.js`. These are gitignored.
 
+**NEVER delete `DO_NOT_DELETE_patched_binaries/`**. Write-once archive of working patched binaries. These are irreplaceable (specific CC version + tweakcc patch combo). The script writes here once per version; if the file exists it skips.
+
 ## File naming conventions
 
 - `system-prompt-*` -- core behavioral, always loaded
