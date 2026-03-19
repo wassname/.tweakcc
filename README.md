@@ -40,6 +40,12 @@ ln -s $PWD/skills/* ~/.claude/skills
 
 Backups at `out/<version>/native/{backup,backup.js,patched,patched.js}` (gitignored).
 
+
+Note if you use the vscode claude extension, it bundles it's own unmodified copy, but you can use your own by changing the vscode extension config to point to your patched version:
+```json
+"claudeCode.claudeProcessWrapper": "~/local/bin/claude" // or wherever your patched cli.js is
+```
+
 ## Troubleshooting
 
 ### Lessons learned

@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: EnterWorktree'
 description: Tool description for the EnterWorktree tool.
-ccVersion: 2.1.51
+ccVersion: 2.1.72
 -->
 Use this tool ONLY when the user explicitly asks to work in a worktree. This tool creates an isolated git worktree and switches the current session into it.
 
@@ -25,7 +25,7 @@ Use this tool ONLY when the user explicitly asks to work in a worktree. This too
 - In a git repository: creates a new git worktree inside \`.claude/worktrees/\` with a new branch based on HEAD
 - Outside a git repository: delegates to WorktreeCreate/WorktreeRemove hooks for VCS-agnostic isolation
 - Switches the session's working directory to the new worktree
-- On session exit, the user will be prompted to keep or remove the worktree
+- Use ExitWorktree to leave the worktree mid-session (keep or remove). On session exit, if still in the worktree, the user will be prompted to keep or remove it
 
 ## Parameters
 

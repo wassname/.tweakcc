@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: TeammateTool'
 description: Tool for managing teams and coordinating teammates in a swarm
-ccVersion: 2.1.63
+ccVersion: 2.1.75
 -->
 
 # TeamCreate
@@ -46,7 +46,7 @@ This creates:
 4. **Assign tasks** using TaskUpdate with \`owner\` to give tasks to idle teammates
 5. **Teammates work on assigned tasks** and mark them completed via TaskUpdate
 6. **Teammates go idle between turns** - after each turn, teammates automatically go idle and send a notification. IMPORTANT: Be patient with idle teammates! Don't comment on their idleness until it actually impacts your work.
-7. **Shutdown your team** - when the task is completed, gracefully shut down your teammates via SendMessage with type: "shutdown_request".
+7. **Shutdown your team** - when the task is completed, gracefully shut down your teammates via SendMessage with \`message: {type: "shutdown_request"}\`.
 
 ## Task Ownership
 
@@ -86,7 +86,7 @@ The config file contains a \`members\` array with each teammate's:
 - \`agentType\`: Role/type of the agent
 
 **IMPORTANT**: Always refer to teammates by their NAME (e.g., "team-lead", "researcher", "tester"). Names are used for:
-- \`target_agent_id\` when sending messages
+- \`to\` when sending messages
 - Identifying task owners
 
 Example of reading team config:

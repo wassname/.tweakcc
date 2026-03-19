@@ -1,7 +1,7 @@
 <!--
 name: 'System Reminder: Team Coordination'
 description: System reminder for team coordination
-ccVersion: 2.1.16
+ccVersion: 2.1.75
 variables:
   - TEAM_OBJECT
 -->
@@ -25,9 +25,9 @@ Read the team config to discover your teammates' names. Check the task list peri
 
 \`\`\`json
 {
-  "operation": "write",
-  "target_agent_id": "team-lead",
-  "value": "Your message here"
+  "to": "team-lead",
+  "message": "Your message here",
+  "summary": "Brief 5-10 word preview"
 }
 \`\`\`
 </system-reminder>

@@ -1,10 +1,11 @@
 <!--
 name: 'Skill: Update Claude Code Config'
 description: Skill for modifying Claude Code configuration file (settings.json).
-ccVersion: 2.1.9
+ccVersion: 2.1.77
 variables:
   - SETTINGS_FILE_LOCATION_PROMPT
   - HOOKS_CONFIGURATION_PROMPT
+  - CONSTRUCTING_HOOK_PROMPT
 -->
 # Update Config Skill
 
@@ -20,7 +21,7 @@ If the user wants something to happen automatically in response to an EVENT, the
 - "When I run bash commands, log them" → PreToolUse hook with Bash matcher
 - "Always run tests after code changes" → PostToolUse hook
 
-**Hook events:** PreToolUse, PostToolUse, PreCompact, Stop, Notification, SessionStart
+**Hook events:** PreToolUse, PostToolUse, PreCompact, PostCompact, Stop, Notification, SessionStart
 
 ## CRITICAL: Read Before Write
 
@@ -81,6 +82,8 @@ ${SETTINGS_FILE_LOCATION_PROMPT}
 
 ${HOOKS_CONFIGURATION_PROMPT}
 
+${CONSTRUCTING_HOOK_PROMPT}
+
 ## Example Workflows
 
 ### Adding a Hook
@@ -98,7 +101,7 @@ User: "Format my code after Claude writes it"
       "matcher": "Write|Edit",
       "hooks": [{
         "type": "command",
-        "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | xargs prettier --write 2>/dev/null || true"
+        "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; prettier --write \\"$f\\"; } 2>/dev/null || true"
       }]
     }]
   }

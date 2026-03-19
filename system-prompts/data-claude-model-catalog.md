@@ -3,7 +3,7 @@ name: 'Data: Claude model catalog'
 description: >-
   Catalog of current and legacy Claude models with exact model IDs, aliases,
   context windows, and pricing
-ccVersion: 2.1.63
+ccVersion: 2.1.73
 -->
 # Claude Model Catalog
 
@@ -35,9 +35,9 @@ ccVersion: 2.1.63
 
 ## Deprecated Models (retiring soon)
 
-| Friendly Name     | Alias (use this)    | Full ID                       | Status     |
-|-------------------|---------------------|-------------------------------|------------|
-| Claude Haiku 3    | —                   | \`claude-3-haiku-20240307\`     | Deprecated |
+| Friendly Name     | Alias (use this)    | Full ID                       | Status     | Retires      |
+|-------------------|---------------------|-------------------------------|------------|--------------|
+| Claude Haiku 3    | —                   | \`claude-3-haiku-20240307\`     | Deprecated | Apr 19, 2026 |
 
 ## Retired Models (no longer available)
 

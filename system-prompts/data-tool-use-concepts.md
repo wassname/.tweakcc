@@ -3,7 +3,7 @@ name: 'Data: Tool use concepts'
 description: >-
   Conceptual foundations of tool use with the Claude API including tool
   definitions, tool choice, and best practices
-ccVersion: 2.1.69
+ccVersion: 2.1.77
 -->
 # Tool Use Concepts
 
@@ -246,7 +246,7 @@ The memory tool enables Claude to store and retrieve information across conversa
 - Client-side tool — you control storage via your implementation
 - Supports commands: \`view\`, \`create\`, \`str_replace\`, \`insert\`, \`delete\`, \`rename\`
 - Operates on files in a \`/memories\` directory
-- The SDKs provide helper classes/functions for implementing the memory backend
+- The Python, TypeScript, and Java SDKs provide helper classes/functions for implementing the memory backend
 
 > **Security:** Never store API keys, passwords, tokens, or other secrets in memory files. Be cautious with personally identifiable information (PII) — check data privacy regulations (GDPR, CCPA) before persisting user data. The reference implementations have no built-in access control; in multi-user systems, implement per-user memory directories and authentication in your tool handlers.
 

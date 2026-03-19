@@ -3,7 +3,7 @@ name: 'Data: Files API reference — Python'
 description: >-
   Python Files API reference including file upload, listing, deletion, and usage
   in messages
-ccVersion: 2.1.63
+ccVersion: 2.1.78
 -->
 # Files API — Python
 
@@ -44,7 +44,7 @@ print(f"Size: {uploaded.size_bytes} bytes")
 \`\`\`python
 response = client.beta.messages.create(
     model="{{OPUS_ID}}",
-    max_tokens=1024,
+    max_tokens=16000,
     messages=[{
         "role": "user",
         "content": [
@@ -59,7 +59,9 @@ response = client.beta.messages.create(
     }],
     betas=["files-api-2025-04-14"],
 )
-print(response.content[0].text)
+for block in response.content:
+    if block.type == "text":
+        print(block.text)
 \`\`\`
 
 ### Image
@@ -71,7 +73,7 @@ image_file = client.beta.files.upload(
 
 response = client.beta.messages.create(
     model="{{OPUS_ID}}",
-    max_tokens=1024,
+    max_tokens=16000,
     messages=[{
         "role": "user",
         "content": [
@@ -148,7 +150,7 @@ questions = [
 for question in questions:
     response = client.beta.messages.create(
         model="{{OPUS_ID}}",
-        max_tokens=1024,
+        max_tokens=16000,
         messages=[{
             "role": "user",
             "content": [
@@ -162,7 +164,8 @@ for question in questions:
         betas=["files-api-2025-04-14"],
     )
     print(f"\\nQ: {question}")
-    print(f"A: {response.content[0].text[:200]}")
+    text = next((b.text for b in response.content if b.type == "text"), "")
+    print(f"A: {text[:200]}")
 
 # 3. Clean up when done
 client.beta.files.delete(uploaded.id)

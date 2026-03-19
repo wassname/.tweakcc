@@ -114,6 +114,10 @@ async function ensurePromptCache(targetVersion) {
 
 /** Fix known tweakcc 4.0.11 bugs in patched output. */
 async function postPatchFix(filePath) {
+  // Native ELF binaries can't be safely round-tripped through UTF-8 strings.
+  // The embedded JS is inside a binary container; skip and accept minor template bugs there.
+  if (!filePath.endsWith('.js')) return;
+
   let content = await readFile(filePath, 'utf8');
   let fixes = 0;
 

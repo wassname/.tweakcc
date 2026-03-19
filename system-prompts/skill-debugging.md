@@ -5,6 +5,7 @@ description: >-
   Claude Code session
 ccVersion: 2.1.30
 variables:
+  - DEBUG_LOGGING_WAS_ALREADY_ACTIVE
   - DEBUG_LOG_PATH
   - DEBUG_LOG_SUMMARY
   - ISSUE_DESCRIPTION

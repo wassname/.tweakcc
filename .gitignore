@@ -13,6 +13,7 @@ system-prompts.*/
 .claude/
 docs/
 out/
+DO_NOT_DELETE_patched_binaries/
 
 # Claude Code sandbox phantom files (repo-specific, too generic for global ignore)
 # https://github.com/anthropics/claude-code/issues/17087

@@ -13,6 +13,7 @@ variables:
   - PLAN_SUBAGENT
   - PLAN_V2_PLAN_AGENT_COUNT
   - ASK_USER_QUESTION_TOOL_NAME
+  - GET_PHASE_FOUR_FN
   - EXIT_PLAN_MODE_TOOL
 -->
 Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits (with the exception of the plan file mentioned below), run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received.
