@@ -4,7 +4,7 @@ description: >-
   A comprehensive onboarding flow for setting up CLAUDE.md and related
   skills/hooks in the current repository, including codebase exploration, user
   interviews, and iterative proposal refinement.
-ccVersion: 2.1.77
+ccVersion: 2.1.81
 -->
 Set up a minimal CLAUDE.md (and optionally skills and hooks) for this repo. CLAUDE.md is loaded into every Claude Code session, so it must be concise — only include what Claude would get wrong without it.
 
@@ -24,7 +24,7 @@ Use AskUserQuestion to find out what the user wants:
 
 ## Phase 2: Explore the codebase
 
-Use the Explore subagent to survey the codebase, and ask it to read key files to understand the project: manifest files (package.json, Cargo.toml, pyproject.toml, go.mod, pom.xml, etc.), README, Makefile/build configs, CI config, existing CLAUDE.md, .claude/rules/, AGENTS.md, .cursor/rules or .cursorrules, .github/copilot-instructions.md, .windsurfrules, .clinerules, .mcp.json.
+Launch a subagent to survey the codebase, and ask it to read key files to understand the project: manifest files (package.json, Cargo.toml, pyproject.toml, go.mod, pom.xml, etc.), README, Makefile/build configs, CI config, existing CLAUDE.md, .claude/rules/, AGENTS.md, .cursor/rules or .cursorrules, .github/copilot-instructions.md, .windsurfrules, .clinerules, .mcp.json.
 
 Detect:
 - Build, test, and lint commands (especially non-standard ones)

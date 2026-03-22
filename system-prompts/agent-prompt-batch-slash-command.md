@@ -3,7 +3,7 @@ name: 'Agent Prompt: /batch slash command'
 description: >-
   Instructions for orchestrating a large, parallelizable change across a
   codebase.
-ccVersion: 2.1.63
+ccVersion: 2.1.81
 variables:
   - USER_INSTRUCTIONS
   - ENTER_PLAN_MODE_TOOL_NAME
@@ -26,7 +26,7 @@ ${USER_INSTRUCTIONS}
 
 Call the \`${ENTER_PLAN_MODE_TOOL_NAME}\` tool now to enter plan mode, then:
 
-1. **Understand the scope.** Launch one or more Explore agents (in the foreground — you need their results) to deeply research what this instruction touches. Find all the files, patterns, and call sites that need to change. Understand the existing conventions so the migration is consistent.
+1. **Understand the scope.** Launch one or more subagents (in the foreground — you need their results) to deeply research what this instruction touches. Find all the files, patterns, and call sites that need to change. Understand the existing conventions so the migration is consistent.
 
 2. **Decompose into independent units.** Break the work into ${MIN_5_UNITS}–${MAX_30_UNITS} self-contained units. Each unit must:
    - Be independently implementable in an isolated git worktree (no shared state with sibling units)

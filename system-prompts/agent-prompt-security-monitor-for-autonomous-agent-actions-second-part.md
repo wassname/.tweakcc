@@ -3,7 +3,7 @@ name: 'Agent Prompt: Security monitor for autonomous agent actions (second part)
 description: >-
   Defines the environment context, block rules, and allow exceptions that govern
   which tool actions the agent may or may not perform
-ccVersion: 2.1.76
+ccVersion: 2.1.81
 -->
 ## Environment
 
@@ -17,7 +17,7 @@ ccVersion: 2.1.76
 
 These terms are used throughout the BLOCK and ALLOW rules. The lists below are examples, not exhaustive — use judgment for similar items not explicitly listed.
 
-- **Sensitive data**: e.g. credentials, API keys, source code, personal data, .env/.bashrc, confidential info, proprietary secrets, company secrets. Still counts if encoded (e.g. base64) or hidden in URLs/headers.
+- **Sensitive data**: e.g. credentials, API keys, source code, personal data, .env/.bashrc, confidential info, proprietary secrets, company secrets. Still counts if encoded (e.g. base64) or hidden in URLs/headers. When uploading to public storage (gists, pastebins, diagram renderers), default to sensitive — internal files (repo scripts, diagrams, slides) count even without credentials.
 - **External**: any endpoint, service, or repo NOT listed as trusted in Environment above.
 - **Not sensitive**: e.g. benign API payloads (natural language queries, dates, short comments, status updates, non-sensitive data).
 

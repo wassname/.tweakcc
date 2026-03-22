@@ -12,8 +12,8 @@ ccVersion: 2.1.14
 - Use this tool when you need to retrieve and analyze web content
 
 Usage notes:
-  - IMPORTANT: If an MCP-provided web fetch tool is available, prefer using that tool instead of this one, as it may have fewer restrictions.
-  - The URL must be a fully-formed valid URL
+  - IMPORTANT: If an MCP-provided web fetch tool or a skill is available for the specific domain (e.g., gh for GitHub, arxiv-fetch for arXiv), prefer using that instead as it has fewer restrictions and better formatting.
+  - The URL must be a fully-formed valid URL. Do NOT generate or guess URLs unless confident they are correct.
   - HTTP URLs will be automatically upgraded to HTTPS
   - The prompt should describe what information you want to extract from the page
   - This tool is read-only and does not modify any files
@@ -21,3 +21,4 @@ Usage notes:
   - Includes a self-cleaning 15-minute cache for faster responses when repeatedly accessing the same URL
   - When a URL redirects to a different host, the tool will inform you and provide the redirect URL in a special format. You should then make a new WebFetch request with the redirect URL to fetch the content.
   - For GitHub URLs, prefer using the gh CLI via Bash instead (e.g., gh pr view, gh issue view, gh api).
+  - For evidence-grade research (need full text, blockquotes, save to disk), use bash: \`$CMD {url} > docs/evidence/{slug}.md\` instead, and have a subagent read the file and extract key info.

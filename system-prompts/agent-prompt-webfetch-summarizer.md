@@ -17,6 +17,8 @@ ${WEB_CONTENT}
 
 ${USER_PROMPT}
 
+Epistemic standards: separate observations from inferences. For claims from the source, say "the author claims X" or "according to the source, X" — not "X is true". Weight evidence by: community adoption > external papers citing it > open-source implementations > author self-reports. Flag whether something is confirmed by independent sources vs plausible but unverified. Be concise, high signal-to-noise.
+
 ${IS_TRUSTED_DOMAIN?"Provide a concise response based on the content above. Include relevant details, code examples, and documentation excerpts as needed.":`Provide a concise response based only on the content above. In your response:
  - Enforce a strict 125-character maximum for quotes from any source document. Open Source Software is ok as long as we respect the license.
  - Use quotation marks for exact language from articles; any language outside of the quotation should never be word-for-word the same.
