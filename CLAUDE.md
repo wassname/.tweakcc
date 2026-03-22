@@ -86,6 +86,8 @@ Artifacts in `out/<version>/native/`: `backup`, `backup.js`, `patched`, `patched
 
 **NEVER delete `DO_NOT_DELETE_patched_binaries/`**. Write-once archive of working patched binaries. These are irreplaceable (specific CC version + tweakcc patch combo). The script writes here once per version; if the file exists it skips.
 
+**HACK (remove when tweakcc releases a fix)**: `node_modules/tweakcc/dist/` contains a manually patched build from PR #620 (`fix/dont-escape-everything`) fixing over-escaping of quotes in 2.1.80+. When tweakcc releases a new version, `npm install` will overwrite this fix — re-apply from the PR or verify the fix is included. Check [releases](https://github.com/Piebald-AI/tweakcc/releases).
+
 ## File naming conventions
 
 - `system-prompt-*` -- core behavioral, always loaded
