@@ -31,6 +31,7 @@ link-versions:
     	echo "linked claude-native-tcc-$slug -> $bin"
     done
     # tweakcc-patched npm versions from out/*/npm/patched.js (needs a node wrapper)
+    latest_wrapper=""
     for js in "{{ justfile_directory() }}/out"/*/npm/patched.js; do
     	ver=$(basename "$(dirname "$(dirname "$js")")")
     	slug="${ver//./-}"
@@ -38,7 +39,13 @@ link-versions:
     	printf '#!/bin/bash\nexec node "%s" "$@"\n' "$js" > "$wrapper"
     	chmod +x "$wrapper"
     	echo "linked claude-npm-tcc-$slug -> $js"
+    	latest_wrapper="$wrapper"
     done
+    # set claude -> latest patched npm version
+    if [[ -n "$latest_wrapper" ]]; then
+    	ln -sf "$latest_wrapper" "$BINDIR/claude"
+    	echo "default: claude -> $latest_wrapper"
+    fi
 
 # Reinstall Claude Code from npm, then apply tweaks to all installations.
 fresh version="2.1.63":
