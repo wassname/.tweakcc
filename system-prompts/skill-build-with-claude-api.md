@@ -3,7 +3,7 @@ name: 'Skill: Build with Claude API'
 description: >-
   Main routing guide for building LLM-powered applications with Claude,
   including language detection, surface selection, and architecture overview
-ccVersion: 2.1.78
+ccVersion: 2.1.79
 -->
 # Building LLM-Powered Applications with Claude
 
@@ -127,7 +127,7 @@ Everything goes through \`POST /v1/messages\`. Tools and output constraints are 
 
 **Structured outputs** — Constrains the Messages API response format (\`output_config.format\`) and/or tool parameter validation (\`strict: true\`). The recommended approach is \`client.messages.parse()\` which validates responses against your schema automatically. Note: the old \`output_format\` parameter is deprecated; use \`output_config: {format: {...}}\` on \`messages.create()\`.
 
-**Supporting endpoints** — Batches (\`POST /v1/messages/batches\`), Files (\`POST /v1/files\`), and Token Counting feed into or support Messages API requests.
+**Supporting endpoints** — Batches (\`POST /v1/messages/batches\`), Files (\`POST /v1/files\`), Token Counting, and Models (\`GET /v1/models\`, \`GET /v1/models/{id}\` — live capability/context-window discovery) feed into or support Messages API requests.
 
 ---
 
@@ -144,6 +144,8 @@ Everything goes through \`POST /v1/messages\`. Tools and output constraints are 
 **CRITICAL: Use only the exact model ID strings from the table above — they are complete as-is. Do not append date suffixes.** For example, use \`claude-sonnet-4-5\`, never \`claude-sonnet-4-5-20250514\` or any other date-suffixed variant you might recall from training data. If the user requests an older model not in the table (e.g., "opus 4.5", "sonnet 3.7"), read \`shared/models.md\` for the exact ID — do not construct one yourself.
 
 A note: if any of the model strings above look unfamiliar to you, that's to be expected — that just means they were released after your training data cutoff. Rest assured they are real models; we wouldn't mess with you like that.
+
+**Live capability lookup:** The table above is cached. When the user asks "what's the context window for X", "does X support vision/thinking/effort", or "which models support Y", query the Models API (\`client.models.retrieve(id)\` / \`client.models.list()\`) — see \`shared/models.md\` for the field reference and capability-filter examples.
 
 ---
 

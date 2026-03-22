@@ -38,12 +38,12 @@ This file documents HTTP error codes returned by the Claude API, their common ca
 
 ```json
 {
-  "type": "error",
-  "error": {
-    "type": "invalid_request_error",
-    "message": "messages: roles must alternate between \"user\" and \"assistant\""
+  \"type\": \"error\",
+  \"error\": {
+    \"type\": \"invalid_request_error\",
+    \"message\": \"messages: roles must alternate between \\\"user\\\" and \\\"assistant\\\"\"
   },
-  "request_id": "req_011CSHoEeqs5C35K2UUqR7Fy"
+  \"request_id\": \"req_011CSHoEeqs5C35K2UUqR7Fy\"
 }
 ```
 
@@ -206,7 +206,7 @@ try {
   const response = await client.messages.create({...});
 } catch (error) {
   const msg = error instanceof Error ? error.message : String(error);
-  if (msg.includes("429") || msg.includes("rate_limit")) { ... }
+  if (msg.includes(\"429\") || msg.includes(\"rate_limit\")) { ... }
 }
 ```
 
