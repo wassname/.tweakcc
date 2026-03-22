@@ -12,7 +12,7 @@ apply:
 patch path:
     node scripts/patch_all.mjs {{ path }}
 
-# Create ~/.local/bin symlinks: claude-native-{ver} and claude-native-tcc-{ver}
+# Create ~/.local/bin symlinks: claude-native-{ver}, claude-native-tcc-{ver}, claude-npm-tcc-{ver}
 link-versions:
     #!/bin/bash -eu
     BINDIR="$HOME/.local/bin"
@@ -23,12 +23,21 @@ link-versions:
     	ln -sf "$bin" "$BINDIR/claude-native-$slug"
     	echo "linked claude-native-$slug -> $bin"
     done
-    # tweakcc-patched binaries from out/*/native/patched
+    # tweakcc-patched native binaries from out/*/native/patched
     for bin in "{{ justfile_directory() }}/out"/*/native/patched; do
     	ver=$(basename "$(dirname "$(dirname "$bin")")")
     	slug="${ver//./-}"
     	ln -sf "$bin" "$BINDIR/claude-native-tcc-$slug"
     	echo "linked claude-native-tcc-$slug -> $bin"
+    done
+    # tweakcc-patched npm versions from out/*/npm/patched.js (needs a node wrapper)
+    for js in "{{ justfile_directory() }}/out"/*/npm/patched.js; do
+    	ver=$(basename "$(dirname "$(dirname "$js")")")
+    	slug="${ver//./-}"
+    	wrapper="$BINDIR/claude-npm-tcc-$slug"
+    	printf '#!/bin/bash\nexec node "%s" "$@"\n' "$js" > "$wrapper"
+    	chmod +x "$wrapper"
+    	echo "linked claude-npm-tcc-$slug -> $js"
     done
 
 # Reinstall Claude Code from npm, then apply tweaks to all installations.
