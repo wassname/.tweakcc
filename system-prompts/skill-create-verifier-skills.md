@@ -3,7 +3,7 @@ name: 'Skill: Create verifier skills'
 description: >-
   Prompt for creating verifier skills for the Verify agent to automatically
   verify code changes
-ccVersion: 2.1.69
+ccVersion: 2.1.108
 -->
 Use the TodoWrite tool to track your progress through this multi-step task.
 
@@ -205,10 +205,10 @@ If verification fails because this skill's instructions are outdated (dev server
 **verifier-playwright**:
 \`\`\`yaml
 allowed-tools:
-  - Bash(npm:*)
-  - Bash(yarn:*)
-  - Bash(pnpm:*)
-  - Bash(bun:*)
+  - Bash(npm *)
+  - Bash(yarn *)
+  - Bash(pnpm *)
+  - Bash(bun *)
   - mcp__playwright__*
   - Read
   - Glob
@@ -219,7 +219,7 @@ allowed-tools:
 \`\`\`yaml
 allowed-tools:
   - Tmux
-  - Bash(asciinema:*)
+  - Bash(asciinema *)
   - Read
   - Glob
   - Grep
@@ -228,10 +228,10 @@ allowed-tools:
 **verifier-api**:
 \`\`\`yaml
 allowed-tools:
-  - Bash(curl:*)
-  - Bash(http:*)
-  - Bash(npm:*)
-  - Bash(yarn:*)
+  - Bash(curl *)
+  - Bash(http *)
+  - Bash(npm *)
+  - Bash(yarn *)
   - Read
   - Glob
   - Grep

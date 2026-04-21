@@ -3,7 +3,7 @@ name: 'Data: Streaming reference — Python'
 description: >-
   Python streaming reference including sync/async streaming and handling
   different content types
-ccVersion: 2.1.78
+ccVersion: 2.1.111
 -->
 # Streaming — Python
 
@@ -37,7 +37,7 @@ async with async_client.messages.stream(
 
 Claude may return text, thinking blocks, or tool use. Handle each appropriately:
 
-> **Opus 4.6:** Use \`thinking: {type: "adaptive"}\`. On older models, use \`thinking: {type: "enabled", budget_tokens: N}\` instead.
+> **Opus 4.7 / Opus 4.6:** Use \`thinking: {type: "adaptive"}\`. On older models, use \`thinking: {type: "enabled", budget_tokens: N}\` instead.
 
 \`\`\`python
 with client.messages.stream(

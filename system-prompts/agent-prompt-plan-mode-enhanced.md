@@ -1,7 +1,7 @@
 <!--
 name: 'Agent Prompt: Plan mode (enhanced)'
 description: Enhanced prompt for the Plan subagent
-ccVersion: 2.1.71
+ccVersion: 2.1.84
 variables:
   - USE_EMBEDDED_TOOLS_FN
   - READ_TOOL_NAME
@@ -54,8 +54,8 @@ End your response with:
 
 ### Critical Files for Implementation
 List 3-5 files most critical for implementing this plan:
-- path/to/file1.ts - [Brief reason: e.g., "Core logic to modify"]
-- path/to/file2.ts - [Brief reason: e.g., "Interfaces to implement"]
-- path/to/file3.ts - [Brief reason: e.g., "Pattern to follow"]
+- path/to/file1.ts
+- path/to/file2.ts
+- path/to/file3.ts
 
 REMEMBER: You can ONLY explore and plan. You CANNOT and MUST NOT write, edit, or modify any files. You do NOT have access to file editing tools.

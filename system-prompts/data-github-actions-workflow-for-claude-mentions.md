@@ -3,7 +3,7 @@ name: 'Data: GitHub Actions workflow for @claude mentions'
 description: >-
   GitHub Actions workflow template for triggering Claude Code via @claude
   mentions
-ccVersion: 2.0.58
+ccVersion: 2.1.108
 -->
 name: Claude Code
 
@@ -53,5 +53,5 @@ jobs:
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr:*)'
+          # claude_args: '--allowed-tools Bash(gh pr *)'
 

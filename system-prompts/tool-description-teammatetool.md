@@ -1,7 +1,7 @@
 <!--
 name: 'Tool Description: TeammateTool'
 description: Tool for managing teams and coordinating teammates in a swarm
-ccVersion: 2.1.75
+ccVersion: 2.1.88
 -->
 
 # TeamCreate
@@ -35,7 +35,7 @@ Create a new team to coordinate multiple agents working on a project. Teams have
 \`\`\`
 
 This creates:
-- A team file at \`~/.claude/teams/{team-name}.json\`
+- A team file at \`~/.claude/teams/{team-name}/config.json\`
 - A corresponding task list directory at \`~/.claude/tasks/{team-name}/\`
 
 ## Team Workflow

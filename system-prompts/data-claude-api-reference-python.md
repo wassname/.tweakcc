@@ -3,7 +3,7 @@ name: 'Data: Claude API reference — Python'
 description: >-
   Python SDK reference including installation, client initialization, basic
   requests, thinking, and multi-turn conversation
-ccVersion: 2.1.78
+ccVersion: 2.1.111
 -->
 # Claude API — Python
 
@@ -118,7 +118,7 @@ response = client.messages.create(
 
 ## Prompt Caching
 
-Cache large context to reduce costs (up to 90% savings).
+Cache large context to reduce costs (up to 90% savings). **Caching is a prefix match** — any byte change anywhere in the prefix invalidates everything after it. For placement patterns, architectural guidance (frozen system prompt, deterministic tool order, where to put volatile content), and the silent-invalidator audit checklist, read \`shared/prompt-caching.md\`.
 
 ### Automatic Caching (Recommended)
 
@@ -163,15 +163,25 @@ response = client.messages.create(
 )
 \`\`\`
 
+### Verifying Cache Hits
+
+\`\`\`python
+print(response.usage.cache_creation_input_tokens)  # tokens written to cache (~1.25x cost)
+print(response.usage.cache_read_input_tokens)      # tokens served from cache (~0.1x cost)
+print(response.usage.input_tokens)                 # uncached tokens (full cost)
+\`\`\`
+
+If \`cache_read_input_tokens\` is zero across repeated identical-prefix requests, a silent invalidator is at work — \`datetime.now()\` or a UUID in the system prompt, unsorted \`json.dumps()\`, or a varying tool set. See \`shared/prompt-caching.md\` for the full audit table.
+
 ---
 
 ## Extended Thinking
 
-> **Opus 4.6 and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is deprecated on both Opus 4.6 and Sonnet 4.6.
+> **Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Opus 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
 > **Older models:** Use \`thinking: {type: "enabled", budget_tokens: N}\` (must be < \`max_tokens\`, min 1024).
 
 \`\`\`python
-# Opus 4.6: adaptive thinking (recommended)
+# Opus 4.7 / 4.6: adaptive thinking (recommended)
 response = client.messages.create(
     model="{{OPUS_ID}}",
     max_tokens=16000,
@@ -272,7 +282,7 @@ response2 = conversation.send("What's my name?")  # Claude remembers "Alice"
 
 ### Compaction (long conversations)
 
-> **Beta, Opus 4.6 and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
+> **Beta, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
 
 \`\`\`python
 import anthropic

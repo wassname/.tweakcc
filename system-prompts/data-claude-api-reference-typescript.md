@@ -3,7 +3,7 @@ name: 'Data: Claude API reference — TypeScript'
 description: >-
   TypeScript SDK reference including installation, client initialization, basic
   requests, thinking, and multi-turn conversation
-ccVersion: 2.1.78
+ccVersion: 2.1.111
 -->
 # Claude API — TypeScript
 
@@ -112,6 +112,8 @@ const response = await client.messages.create({
 
 ## Prompt Caching
 
+**Caching is a prefix match** — any byte change anywhere in the prefix invalidates everything after it. For placement patterns, architectural guidance (frozen system prompt, deterministic tool order, where to put volatile content), and the silent-invalidator audit checklist, read \`shared/prompt-caching.md\`.
+
 ### Automatic Caching (Recommended)
 
 Use top-level \`cache_control\` to automatically cache the last cacheable block in the request:
@@ -159,15 +161,25 @@ const response2 = await client.messages.create({
 });
 \`\`\`
 
+### Verifying Cache Hits
+
+\`\`\`typescript
+console.log(response.usage.cache_creation_input_tokens); // tokens written to cache (~1.25x cost)
+console.log(response.usage.cache_read_input_tokens);     // tokens served from cache (~0.1x cost)
+console.log(response.usage.input_tokens);                // uncached tokens (full cost)
+\`\`\`
+
+If \`cache_read_input_tokens\` is zero across repeated identical-prefix requests, a silent invalidator is at work — \`Date.now()\` or a UUID in the system prompt, non-deterministic key ordering, or a varying tool set. See \`shared/prompt-caching.md\` for the full audit table.
+
 ---
 
 ## Extended Thinking
 
-> **Opus 4.6 and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is deprecated on both Opus 4.6 and Sonnet 4.6.
+> **Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. \`budget_tokens\` is removed on Opus 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
 > **Older models:** Use \`thinking: {type: "enabled", budget_tokens: N}\` (must be < \`max_tokens\`, min 1024).
 
 \`\`\`typescript
-// Opus 4.6: adaptive thinking (recommended)
+// Opus 4.7 / 4.6: adaptive thinking (recommended)
 const response = await client.messages.create({
   model: "{{OPUS_ID}}",
   max_tokens: 16000,
@@ -243,7 +255,7 @@ const response = await client.messages.create({
 
 ### Compaction (long conversations)
 
-> **Beta, Opus 4.6 and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
+> **Beta, Opus 4.7, Opus 4.6, and Sonnet 4.6.** When conversations approach the 200K context window, compaction automatically summarizes earlier context server-side. The API returns a \`compaction\` block; you must pass it back on subsequent requests — append \`response.content\`, not just the text.
 
 \`\`\`typescript
 import Anthropic from "@anthropic-ai/sdk";

@@ -88,6 +88,8 @@ Artifacts in `out/<version>/native/`: `backup`, `backup.js`, `patched`, `patched
 
 **HACK (remove when tweakcc releases a fix)**: `node_modules/tweakcc/dist/` contains a manually patched build from PR #620 (`fix/dont-escape-everything`) fixing over-escaping of quotes in 2.1.80+. When tweakcc releases a new version, `npm install` will overwrite this fix — re-apply from the PR or verify the fix is included. Check [releases](https://github.com/Piebald-AI/tweakcc/releases).
 
+**NOTE: CC 2.1.113+ npm package format change**: Starting 2.1.113, the npm package ships a native binary at `bin/claude.exe` instead of JS at `cli.js` (`bin` field changed). tweakcc 4.0.11 cannot patch this new format. Maximum patchable npm version is 2.1.112. Future upgrades require a new tweakcc release supporting the new format.
+
 ## File naming conventions
 
 - `system-prompt-*` -- core behavioral, always loaded

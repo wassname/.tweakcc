@@ -1,10 +1,10 @@
 <!--
 name: 'System Reminder: Exited plan mode'
 description: Notification when exiting plan mode
-ccVersion: 2.1.30
+ccVersion: 2.1.105
 variables:
-  - ATTACHMENT_OBJECT
+  - CONDITIONAL_NOTE
 -->
 ## Exited Plan Mode
 
-You have exited plan mode. You can now make edits, run tools, and take actions.${ATTACHMENT_OBJECT.planExists?` The plan file is located at ${ATTACHMENT_OBJECT.planFilePath} if you need to reference it.`:""}
+You have exited plan mode. You can now make edits, run tools, and take actions.${CONDITIONAL_NOTE}

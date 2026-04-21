@@ -35,6 +35,9 @@ for path in sorted(root.glob('*.md')):
     used = set()
     for m in pat.finditer(body):
         expr = m.group(1).strip()
+        # Skip bash array syntax like ${HEADERS[@]} and JS like ${JSON.stringify(...)}
+        if re.search(r'[@\[]|\.', expr):
+            continue
         sm = re.match(r'([A-Z][A-Z0-9_]*)(?:\s*\(|\b)', expr)
         if sm:
             used.add(sm.group(1))
@@ -52,7 +55,11 @@ print('OK: all used template vars are declared')
 
 # Orphan check: local prompt files with no matching upstream ID
 cache_dir = pathlib.Path(__file__).resolve().parent.parent / 'prompt-data-cache'
-caches = sorted(cache_dir.glob('prompts-*.json'), key=lambda p: p.stem)
+def version_key(p):
+    m = re.search(r'(\d+)\.(\d+)\.(\d+)', p.stem)
+    return tuple(int(x) for x in m.groups()) if m else (0, 0, 0)
+
+caches = sorted(cache_dir.glob('prompts-*.json'), key=version_key)
 if caches:
     import json
     latest = json.loads(caches[-1].read_text())
