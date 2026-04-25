@@ -30,9 +30,9 @@ link-versions:
     	ln -sf "$bin" "$BINDIR/claude-native-tcc-$slug"
     	echo "linked claude-native-tcc-$slug -> $bin"
     done
-    # tweakcc-patched npm versions from out/*/npm/patched.js (needs a node wrapper)
+    # tweakcc-patched npm versions from DO_NOT_DELETE_patched_binaries/*/npm/patched.js (stable path, survives just fresh)
     latest_wrapper=""
-    for js in "{{ justfile_directory() }}/out"/*/npm/patched.js; do
+    while IFS= read -r js; do
     	ver=$(basename "$(dirname "$(dirname "$js")")")
     	slug="${ver//./-}"
     	wrapper="$BINDIR/claude-npm-tcc-$slug"
@@ -40,7 +40,7 @@ link-versions:
     	chmod +x "$wrapper"
     	echo "linked claude-npm-tcc-$slug -> $js"
     	latest_wrapper="$wrapper"
-    done
+    done < <(find "{{ justfile_directory() }}/DO_NOT_DELETE_patched_binaries" -path "*/npm/patched.js" | sort -V)
     # set claude -> latest patched npm version
     if [[ -n "$latest_wrapper" ]]; then
     	ln -sf "$latest_wrapper" "$BINDIR/claude"

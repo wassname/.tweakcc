@@ -260,9 +260,18 @@ async function main() {
         await copyFile(patchedJs, resolve(backupDir, 'patched.js')).catch(() => {});
       }
 
-      // Save patched copy
+      // Save patched copy to out/
       const patchedPath = resolve(backupDir, 'patched' + (inst.kind === 'npm' ? '.js' : ''));
       await copyFile(inst.path, patchedPath);
+
+      // Also archive patched to DO_NOT_DELETE (write-once like original)
+      const roPatchedPath = resolve(roDir, 'patched' + (inst.kind === 'npm' ? '.js' : ''));
+      try {
+        await stat(roPatchedPath);
+      } catch {
+        await copyFile(inst.path, roPatchedPath);
+        console.log(`  backup_ro patched -> ${roPatchedPath} (first-time, read-only)`);
+      }
     } catch (e) {
       const stderr = e.stderr?.toString() || e.message;
       console.error(`  apply FAILED: ${stderr.slice(0, 200)}`);
