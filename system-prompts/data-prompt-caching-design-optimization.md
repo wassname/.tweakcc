@@ -3,7 +3,7 @@ name: 'Data: Prompt Caching — Design & Optimization'
 description: >-
   Document on how to design prompt-building code for effective caching,
   including placement patterns and anti-patterns.
-ccVersion: 2.1.111
+ccVersion: 2.1.145
 -->
 # Prompt Caching — Design & Optimization
 
@@ -176,3 +176,37 @@ Fix: place an intermediate breakpoint every ~15 blocks in long turns, or put the
 A cache entry becomes readable only after the first response **begins streaming**. N parallel requests with identical prefixes all pay full price — none can read what the others are still writing.
 
 For fan-out patterns: send 1 request, await the first streamed token (not the full response), then fire the remaining N−1. They'll read the cache the first one just wrote.
+
+## Pre-warming the cache
+
+To eliminate the cache-miss latency on the *first* real request, send a **\`max_tokens: 0\`** request at startup (or on an interval). The API runs prefill — writing the cache at your \`cache_control\` breakpoint — and returns immediately with \`content: []\`, \`stop_reason: "max_tokens"\`, and a populated \`usage\` block (zero output tokens billed; normal cache-write charge on \`cache_creation_input_tokens\`).
+
+**When to pre-warm** — pre-warming trades a cache-write charge *now* for lower TTFT on the *next* real request. It's worth it when all three hold: (a) first-request latency is user-visible (chat/voice/interactive — not background jobs), (b) the shared prefix is large enough that a cold write is noticeably slow, and (c) there's a moment *before* traffic to fire it — app startup, worker boot, post-deploy, start of a scheduled window.
+
+| Skip pre-warming when… | Because |
+|---|---|
+| Traffic is continuous (requests ≤ TTL apart) | The first real request warms the cache and every subsequent one hits it; a separate warm call is a pure extra write |
+| The prefix is small or below the cacheable minimum | The cold-write penalty is negligible |
+| The prefix varies per request/user | Nothing shared to pre-warm |
+| You'd pre-warm many distinct prefixes speculatively | Each is a ~1.25× write; cost can exceed the latency you save |
+
+**Scheduled re-warms:** only needed when traffic has gaps longer than the TTL. If real requests arrive more often than every 5 minutes, they keep the cache warm on their own — don't add an interval re-warm. For bursty traffic with long idle gaps, either re-warm just under the TTL or switch to \`ttl: "1h"\` and re-warm less often.
+
+\`\`\`python
+client.messages.create(
+    model="{{OPUS_ID}}",
+    max_tokens=0,
+    system=[{
+        "type": "text",
+        "text": SYSTEM_PROMPT,
+        "cache_control": {"type": "ephemeral"},
+    }],
+    messages=[{"role": "user", "content": "warmup"}],
+)
+\`\`\`
+
+**Breakpoint placement:** put \`cache_control\` on the **last block shared with the real request** (the system prompt or tool definitions) — **not** on the placeholder user message, and **not** via top-level automatic caching (which would key the cache to the placeholder). The placeholder can be any non-whitespace string; it's read during prefill but never answered.
+
+**Rejected combinations:** \`max_tokens: 0\` is an \`invalid_request_error\` with \`stream: true\`, \`thinking.type: "enabled"\`, \`output_config.format\`, \`tool_choice\` of \`{"type":"tool"}\` or \`{"type":"any"}\`, or inside a Message Batches request.
+
+**TTL still applies** — re-warm at least every 5 minutes for the default cache, or use the 1-hour TTL. This replaces the older \`max_tokens: 1\` workaround (no single-token reply to discard, no output tokens billed, intent is unambiguous).

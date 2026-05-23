@@ -1,9 +1,9 @@
 <!--
 name: 'Data: GitHub App installation PR description'
 description: Template for PR description when installing Claude Code GitHub App integration
-ccVersion: 2.0.14
+ccVersion: 2.1.113
 -->
-## \uD83E\uDD16 Installing Claude Code GitHub App
+## 🤖 Installing Claude Code GitHub App
 
 This PR adds a GitHub Actions workflow that enables Claude Code integration in our repository.
 

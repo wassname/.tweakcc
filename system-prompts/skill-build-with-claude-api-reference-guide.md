@@ -3,7 +3,7 @@ name: 'Skill: Build with Claude API (reference guide)'
 description: >-
   Template for presenting language-specific reference documentation with quick
   task navigation
-ccVersion: 2.1.108
+ccVersion: 2.1.118
 -->
 ## Reference Documentation
 
@@ -19,7 +19,10 @@ The relevant documentation for your detected language is included below in `<doc
 
 **Long-running conversations (may exceed context window):**
 → Refer to `{lang}/claude-api/README.md` — see Compaction section
-<!-- __G2__ -->
+
+**Migrating to a newer model or replacing a retired model:**
+→ Refer to `shared/model-migration.md`
+
 **Prompt caching / optimize caching / "why is my cache hit rate low":**
 → Refer to `shared/prompt-caching.md` + `{lang}/claude-api/README.md` (Prompt Caching section)
 
@@ -34,6 +37,9 @@ The relevant documentation for your detected language is included below in `<doc
 
 **Agent design (tool surface, context management, caching strategy):**
 → Refer to `shared/agent-design.md`
+
+**Anthropic CLI (`ant`) — terminal access, version-controlled agent/environment YAML, scripting:**
+→ Refer to `shared/anthropic-cli.md`
 
 **Managed Agents (server-managed stateful agents):**
 → Refer to `shared/managed-agents-overview.md` and the rest of the `shared/managed-agents-*.md` files. For Python, TypeScript, and cURL, language-specific code examples live in `{lang}/managed-agents/README.md`. Java, Go, Ruby, and PHP also support the API — translate the calls using your SDK\'s patterns from `{lang}/claude-api.md`. C# does not currently have Managed Agents support; use raw HTTP from `curl/managed-agents.md` as a reference.
