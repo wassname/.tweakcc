@@ -186,14 +186,19 @@ async function main() {
     console.log('Discovering installations...');
     installs = await findAllInstallations();
     // Also check for local node_modules npm install (not found by findAllInstallations)
-    const localCliJs = resolve(import.meta.dirname, '..', 'node_modules', '@anthropic-ai', 'claude-code', 'cli.js');
-    try {
-      await stat(localCliJs);
-      const alreadyFound = installs.some(i => i.path === localCliJs);
-      if (!alreadyFound) {
-        installs.push(await installationFromPath(localCliJs));
-      }
-    } catch {}
+    // Older packages have cli.js, newer (2.1.113+) have bin/claude.exe
+    const ccDir = resolve(import.meta.dirname, '..', 'node_modules', '@anthropic-ai', 'claude-code');
+    for (const candidate of ['bin/claude.exe', 'cli.js']) {
+      const localPath = resolve(ccDir, candidate);
+      try {
+        await stat(localPath);
+        const alreadyFound = installs.some(i => i.path === localPath);
+        if (!alreadyFound) {
+          installs.push(await installationFromPath(localPath));
+        }
+        break;
+      } catch {}
+    }
   }
   if (installs.length === 0) {
     console.error('No Claude Code installations found!');

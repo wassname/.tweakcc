@@ -3,8 +3,25 @@ set shell := ["bash", "-cu"]
 default:
     @just --list
 
-# Discover all Claude installations, patch each, audit templates.
+# Patch the local npm binary with tweakcc customizations.
+# Restores clean binary first to avoid double-patching inflation.
+# Cleans up stock prompt files after to keep system-prompts/ minimal.
 apply:
+    #!/bin/bash -eu
+    BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
+    ORIGINAL="DO_NOT_DELETE_patched_binaries/1.2.3/native/original"
+    # restore clean binary to avoid patching an already-patched one
+    if [[ -f "$ORIGINAL" ]]; then
+        cp "$ORIGINAL" "$BINARY"
+        echo "restored clean binary from $ORIGINAL"
+    fi
+    npx tweakcc --apply
+    # remove stock files that tweakcc regenerated (keep only our customizations)
+    python3 scripts/cleanup_stock_prompts.py
+    python3 scripts/audit_templates.py
+
+# Patch all native installations (2.1.70, 2.1.81, etc) via patch_all.mjs.
+apply-all:
     node scripts/patch_all.mjs
     python3 scripts/audit_templates.py
 

@@ -88,7 +88,9 @@ Artifacts in `out/<version>/native/`: `backup`, `backup.js`, `patched`, `patched
 
 **HACK (remove when tweakcc releases a fix)**: `node_modules/tweakcc/dist/` contains a manually patched build from PR #620 (`fix/dont-escape-everything`) fixing over-escaping of quotes in 2.1.80+. When tweakcc releases a new version, `npm install` will overwrite this fix — re-apply from the PR or verify the fix is included. Check [releases](https://github.com/Piebald-AI/tweakcc/releases).
 
-**NOTE: CC 2.1.113+ npm package format change**: Starting 2.1.113, the npm package ships a native binary at `bin/claude.exe` instead of JS at `cli.js` (`bin` field changed). tweakcc 4.0.11 cannot patch this new format. Maximum patchable npm version is 2.1.112. Future upgrades require a new tweakcc release supporting the new format.
+**NOTE: CC 2.1.113+ npm package format change**: Starting 2.1.113, npm packages ship a native binary at `bin/claude.exe` instead of JS at `cli.js`. tweakcc 4.0.13 handles native binary patching. The `just apply` recipe restores the clean binary from `DO_NOT_DELETE_patched_binaries/` before patching to avoid inflation from double-patching.
+
+**CRITICAL: system-prompts/ must only contain files we actively customize.** tweakcc regenerates stock copies during `--apply`, but these stock files use `${VAR.property}` expressions that become literal JS template literals when patched back, causing ReferenceErrors (e.g. `WRITE_TOOL is not defined`). The `cleanup_stock_prompts.py` script deletes all files not listed in its `CUSTOM_FILES` set. Add new entries there when creating customizations.
 
 ## File naming conventions
 

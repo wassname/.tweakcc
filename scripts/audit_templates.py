@@ -43,7 +43,11 @@ for path in sorted(root.glob('*.md')):
             continue
         sm = re.match(r'([A-Z][A-Z0-9_]*)(?:\s*\(|\b)', expr)
         if sm:
-            used.add(sm.group(1))
+            name = sm.group(1)
+            # Skip single-word vars without underscores (shell vars in code examples, e.g. ${VERSION})
+            if '_' not in name:
+                continue
+            used.add(name)
 
     missing = sorted(x for x in used if x not in declared_set)
     if missing:
