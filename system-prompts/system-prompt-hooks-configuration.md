@@ -3,7 +3,7 @@ name: 'System Prompt: Hooks Configuration'
 description: >-
   System prompt for hooks configuration.  Used for above Claude Code config
   skill.
-ccVersion: 2.1.77
+ccVersion: 2.1.30
 -->
 ## Hooks Configuration
 
@@ -41,7 +41,6 @@ Hooks run commands at specific points in Claude Code's lifecycle.
 | Notification | Notification type | Run on notifications |
 | Stop | - | Run when Claude stops (including clear, resume, compact) |
 | PreCompact | "manual"/"auto" | Before compaction |
-| PostCompact | "manual"/"auto" | After compaction (receives summary) |
 | UserPromptSubmit | - | When user submits |
 | SessionStart | - | When session starts |
 
@@ -118,7 +117,7 @@ Hooks can return JSON to control behavior:
       "matcher": "Write|Edit",
       "hooks": [{
         "type": "command",
-        "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; prettier --write \\"$f\\"; } 2>/dev/null || true"
+        "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | xargs prettier --write 2>/dev/null || true"
       }]
     }]
   }

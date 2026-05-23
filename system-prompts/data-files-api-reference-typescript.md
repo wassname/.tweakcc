@@ -3,7 +3,7 @@ name: 'Data: Files API reference — TypeScript'
 description: >-
   TypeScript Files API reference including file upload, listing, deletion, and
   usage in messages
-ccVersion: 2.1.78
+ccVersion: 2.1.63
 -->
 # Files API — TypeScript
 
@@ -49,7 +49,7 @@ console.log(\`Size: \${uploaded.size_bytes} bytes\`);
 \`\`\`typescript
 const response = await client.beta.messages.create({
   model: "{{OPUS_ID}}",
-  max_tokens: 16000,
+  max_tokens: 1024,
   messages: [
     {
       role: "user",

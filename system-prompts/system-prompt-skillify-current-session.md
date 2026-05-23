@@ -1,13 +1,23 @@
 <!--
 name: 'System Prompt: Skillify Current Session'
 description: System prompt for converting the current session in to a skill.
-ccVersion: 2.1.111
+ccVersion: 2.1.41
 -->
 # Skillify {{userDescriptionBlock}}
 
 You are capturing this session's repeatable process as a reusable skill.
 
-Review the conversation above — it is your source material. Pay particular attention to the user's messages (how they steered and corrected the process) and the tools/commands that were actually used.
+## Your Session Context
+
+Here is the session memory summary:
+<session_memory>
+{{sessionMemory}}
+</session_memory>
+
+Here are the user's messages during this session. Pay attention to how they steered the process, to help capture their detailed preferences in the skill:
+<user_messages>
+{{userMessages}}
+</user_messages>
 
 ## Your Task
 
@@ -114,7 +124,7 @@ IMPORTANT: see the next section below for the per-step annotations you can optio
 - Keep simple skills simple -- a 2-step skill doesn't need annotations on every step
 
 **Frontmatter rules:**
-- \`allowed-tools\`: Minimum permissions needed (use patterns like \`Bash(gh *)\` not \`Bash\`)
+- \`allowed-tools\`: Minimum permissions needed (use patterns like \`Bash(gh:*)\` not \`Bash\`)
 - \`context\`: Only set \`context: fork\` for self-contained skills that don't need mid-process user input.
 - \`when_to_use\` is CRITICAL -- tells the model when to auto-invoke. Start with "Use when..." and include trigger phrases. Example: "Use when the user wants to cherry-pick a PR to a release branch. Examples: 'cherry-pick to release', 'CP this PR', 'hotfix'."
 - \`arguments\` and \`argument-hint\`: Only include if the skill takes parameters. Use \`$name\` in the body for substitution.

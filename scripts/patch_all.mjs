@@ -9,6 +9,7 @@
 import { findAllInstallations, readContent, helpers } from 'tweakcc';
 const { clearCaches } = helpers;
 import { readFile, writeFile, mkdir, copyFile, stat, rename, unlink, readdir, chmod } from 'node:fs/promises';
+import { statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { resolve, dirname, basename } from 'node:path';
 
@@ -40,14 +41,22 @@ async function writeConfig(cfg) {
 }
 
 function smoke(installation) {
-  // npm global: binary is in the nvm bin dir (parent of lib/node_modules)
-  // native: the path IS the binary
-  const bin = installation.kind === 'npm'
-    ? resolve(dirname(installation.path), '..', '..', '..', '..', 'bin', 'claude')
-    : installation.path;
   const env = { ...process.env };
   delete env.CLAUDECODE; // allow nested invocation during testing
-  const out = execFileSync(bin, ['-p', 'ping', '-v'], {
+  let bin, args;
+  if (installation.kind === 'native') {
+    bin = installation.path;
+    args = ['-p', 'ping', '-v'];
+  } else {
+    // npm: try global layout first (nvm: .../lib/node_modules/.../cli.js -> .../bin/claude)
+    const globalBin = resolve(dirname(installation.path), '..', '..', '..', '..', 'bin', 'claude');
+    try { const s = statSync(globalBin); bin = globalBin; args = ['-p', 'ping', '-v']; } catch {
+      // local node_modules -- run via node directly
+      bin = process.execPath;
+      args = [installation.path, '-p', 'ping', '-v'];
+    }
+  }
+  const out = execFileSync(bin, args, {
     encoding: 'utf8',
     timeout: 30_000,
     stdio: ['pipe', 'pipe', 'pipe'],
@@ -176,6 +185,15 @@ async function main() {
   } else {
     console.log('Discovering installations...');
     installs = await findAllInstallations();
+    // Also check for local node_modules npm install (not found by findAllInstallations)
+    const localCliJs = resolve(import.meta.dirname, '..', 'node_modules', '@anthropic-ai', 'claude-code', 'cli.js');
+    try {
+      await stat(localCliJs);
+      const alreadyFound = installs.some(i => i.path === localCliJs);
+      if (!alreadyFound) {
+        installs.push(await installationFromPath(localCliJs));
+      }
+    } catch {}
   }
   if (installs.length === 0) {
     console.error('No Claude Code installations found!');

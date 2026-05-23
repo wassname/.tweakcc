@@ -1,11 +1,10 @@
 <!--
 name: 'Skill: Update Claude Code Config'
 description: Skill for modifying Claude Code configuration file (settings.json).
-ccVersion: 2.1.118
+ccVersion: 2.1.9
 variables:
   - SETTINGS_FILE_LOCATION_PROMPT
   - HOOKS_CONFIGURATION_PROMPT
-  - CONSTRUCTING_HOOK_PROMPT
 -->
 # Update Config Skill
 
@@ -21,7 +20,7 @@ If the user wants something to happen automatically in response to an EVENT, the
 - "When I run bash commands, log them" → PreToolUse hook with Bash matcher
 - "Always run tests after code changes" → PostToolUse hook
 
-**Hook events:** PreToolUse, PostToolUse, PreCompact, PostCompact, Stop, Notification, SessionStart
+**Hook events:** PreToolUse, PostToolUse, PreCompact, Stop, Notification, SessionStart
 
 ## CRITICAL: Read Before Write
 
@@ -34,9 +33,9 @@ When the user's request is ambiguous, use AskUserQuestion to clarify:
 - Whether to add to existing arrays or replace them
 - Specific values when multiple options exist
 
-## Decision: /config command vs Direct Edit
+## Decision: Config Tool vs Direct Edit
 
-**Suggest the \`/config\` slash command** for these simple settings:
+**Use the Config tool** for these simple settings:
 - \`theme\`, \`editorMode\`, \`verbose\`, \`model\`
 - \`language\`, \`alwaysThinkingEnabled\`
 - \`permissions.defaultMode\`
@@ -62,7 +61,7 @@ When adding to permission arrays or hook arrays, **merge with existing**, don't 
 
 **WRONG** (replaces existing permissions):
 \`\`\`json
-{ "permissions": { "allow": ["Bash(npm *)"] } }
+{ "permissions": { "allow": ["Bash(npm:*)"] } }
 \`\`\`
 
 **RIGHT** (preserves existing + adds new):
@@ -70,9 +69,9 @@ When adding to permission arrays or hook arrays, **merge with existing**, don't 
 {
   "permissions": {
     "allow": [
-      "Bash(git *)",      // existing
+      "Bash(git:*)",      // existing
       "Edit(.claude)",    // existing
-      "Bash(npm *)"       // new
+      "Bash(npm:*)"       // new
     ]
   }
 }
@@ -81,8 +80,6 @@ When adding to permission arrays or hook arrays, **merge with existing**, don't 
 ${SETTINGS_FILE_LOCATION_PROMPT}
 
 ${HOOKS_CONFIGURATION_PROMPT}
-
-${CONSTRUCTING_HOOK_PROMPT}
 
 ## Example Workflows
 
@@ -101,7 +98,7 @@ User: "Format my code after Claude writes it"
       "matcher": "Write|Edit",
       "hooks": [{
         "type": "command",
-        "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; prettier --write \\"$f\\"; } 2>/dev/null || true"
+        "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | xargs prettier --write 2>/dev/null || true"
       }]
     }]
   }
@@ -113,7 +110,7 @@ User: "Format my code after Claude writes it"
 User: "Allow npm commands without prompting"
 
 1. **Read**: Existing permissions
-2. **Merge**: Add \`Bash(npm *)\` to allow array
+2. **Merge**: Add \`Bash(npm:*)\` to allow array
 3. **Result**: Combined with existing allows
 
 ### Environment Variables

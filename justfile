@@ -56,7 +56,8 @@ fresh version="2.1.63":
 
 smoke:
     #!/bin/bash -eu
+    export CLAUDECODE=
     # should contain tweakcc
     claude -d -v
     # should contain word evidence we put in the description of the web fetch tool in the template
-    claude -p "what is the description of your web fetch tool please, from context" --model haiku --permission-mode=dontAsk -d | grep evidence
+    claude -p "what is the description of your web fetch tool please, just copy paste it" --model haiku | grep evidence

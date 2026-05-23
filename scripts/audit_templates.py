@@ -38,6 +38,9 @@ for path in sorted(root.glob('*.md')):
         # Skip bash array syntax like ${HEADERS[@]} and JS like ${JSON.stringify(...)}
         if re.search(r'[@\[]|\.', expr):
             continue
+        # Skip function-call expressions like ${FUNC()} -- these are runtime-evaluated, not template vars
+        if '(' in expr:
+            continue
         sm = re.match(r'([A-Z][A-Z0-9_]*)(?:\s*\(|\b)', expr)
         if sm:
             used.add(sm.group(1))

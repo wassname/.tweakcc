@@ -3,7 +3,7 @@ name: 'Data: Streaming reference — TypeScript'
 description: >-
   TypeScript streaming reference including basic streaming and handling
   different content types
-ccVersion: 2.1.111
+ccVersion: 2.1.63
 -->
 # Streaming — TypeScript
 
@@ -12,7 +12,7 @@ ccVersion: 2.1.111
 \`\`\`typescript
 const stream = client.messages.stream({
   model: "{{OPUS_ID}}",
-  max_tokens: 64000,
+  max_tokens: 1024,
   messages: [{ role: "user", content: "Write a story" }],
 });
 
@@ -30,12 +30,12 @@ for await (const event of stream) {
 
 ## Handling Different Content Types
 
-> **Opus 4.7 / Opus 4.6:** Use \`thinking: {type: "adaptive"}\`. On older models, use \`thinking: {type: "enabled", budget_tokens: N}\` instead.
+> **Opus 4.6:** Use \`thinking: {type: "adaptive"}\`. On older models, use \`thinking: {type: "enabled", budget_tokens: N}\` instead.
 
 \`\`\`typescript
 const stream = client.messages.stream({
   model: "{{OPUS_ID}}",
-  max_tokens: 64000,
+  max_tokens: 16000,
   thinking: { type: "adaptive" },
   messages: [{ role: "user", content: "Analyze this problem" }],
 });
@@ -90,7 +90,7 @@ const getWeather = betaZodTool({
 
 const runner = client.beta.messages.toolRunner({
   model: "{{OPUS_ID}}",
-  max_tokens: 64000,
+  max_tokens: 4096,
   tools: [getWeather],
   messages: [
     { role: "user", content: "What's the weather in Paris and London?" },
@@ -125,7 +125,7 @@ for await (const messageStream of runner) {
 \`\`\`typescript
 const stream = client.messages.stream({
   model: "{{OPUS_ID}}",
-  max_tokens: 64000,
+  max_tokens: 1024,
   messages: [{ role: "user", content: "Hello" }],
 });
 

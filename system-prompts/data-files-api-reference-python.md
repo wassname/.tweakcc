@@ -3,7 +3,7 @@ name: 'Data: Files API reference — Python'
 description: >-
   Python Files API reference including file upload, listing, deletion, and usage
   in messages
-ccVersion: 2.1.118
+ccVersion: 2.1.63
 -->
 # Files API — Python
 
@@ -23,18 +23,14 @@ The Files API uploads files for use in Messages API requests. Reference files vi
 
 ## Upload a File
 
-The \`file\` argument accepts a \`(filename, content, content_type)\` tuple, a \`pathlib.Path\` (or any \`PathLike\` — read for you, async-safe with \`AsyncAnthropic\`), or an open binary file object.
-
 \`\`\`python
 import anthropic
-from pathlib import Path
 
 client = anthropic.Anthropic()
 
 uploaded = client.beta.files.upload(
     file=("report.pdf", open("report.pdf", "rb"), "application/pdf"),
 )
-# or: client.beta.files.upload(file=Path("report.pdf"))
 print(f"File ID: {uploaded.id}")
 print(f"Size: {uploaded.size_bytes} bytes")
 \`\`\`
@@ -48,7 +44,7 @@ print(f"Size: {uploaded.size_bytes} bytes")
 \`\`\`python
 response = client.beta.messages.create(
     model="{{OPUS_ID}}",
-    max_tokens=16000,
+    max_tokens=1024,
     messages=[{
         "role": "user",
         "content": [
@@ -63,9 +59,7 @@ response = client.beta.messages.create(
     }],
     betas=["files-api-2025-04-14"],
 )
-for block in response.content:
-    if block.type == "text":
-        print(block.text)
+print(response.content[0].text)
 \`\`\`
 
 ### Image
@@ -77,7 +71,7 @@ image_file = client.beta.files.upload(
 
 response = client.beta.messages.create(
     model="{{OPUS_ID}}",
-    max_tokens=16000,
+    max_tokens=1024,
     messages=[{
         "role": "user",
         "content": [
@@ -98,10 +92,9 @@ response = client.beta.messages.create(
 
 ### List Files
 
-Iterate the list result directly — the SDK auto-paginates across all pages. Only use \`.data\` if you want the first page only.
-
 \`\`\`python
-for f in client.beta.files.list():
+files = client.beta.files.list()
+for f in files.data:
     print(f"{f.id}: {f.filename} ({f.size_bytes} bytes)")
 \`\`\`
 
@@ -155,7 +148,7 @@ questions = [
 for question in questions:
     response = client.beta.messages.create(
         model="{{OPUS_ID}}",
-        max_tokens=16000,
+        max_tokens=1024,
         messages=[{
             "role": "user",
             "content": [
@@ -169,8 +162,7 @@ for question in questions:
         betas=["files-api-2025-04-14"],
     )
     print(f"\\nQ: {question}")
-    text = next((b.text for b in response.content if b.type == "text"), "")
-    print(f"A: {text[:200]}")
+    print(f"A: {response.content[0].text[:200]}")
 
 # 3. Clean up when done
 client.beta.files.delete(uploaded.id)
