@@ -3,78 +3,98 @@ set shell := ["bash", "-cu"]
 default:
     @just --list
 
-# Patch the local npm binary with tweakcc customizations.
-# Restores clean binary first to avoid double-patching inflation.
-# Cleans up stock prompt files after to keep system-prompts/ minimal.
+# Phase 1: Install fresh CC and back up clean binary
+install version:
+    #!/bin/bash -eu
+    bun install @anthropic-ai/claude-code@{{ version }}
+    # bun blocks postinstall; run manually to get the native binary
+    node node_modules/@anthropic-ai/claude-code/install.cjs
+    BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
+    BACKUP="DO_NOT_DELETE_patched_binaries/{{ version }}/native/original"
+    mkdir -p "$(dirname "$BACKUP")"
+    if [[ ! -f "$BACKUP" ]]; then
+        cp "$BINARY" "$BACKUP"
+        echo "backed up clean binary -> $BACKUP"
+    else
+        echo "backup already exists at $BACKUP"
+    fi
+    # update config.json version so extract/apply use correct backup path
+    jq '.ccVersion = "{{ version }}"' config.json > config.json.tmp && mv config.json.tmp config.json
+    echo "installed CC {{ version }}"
+
+# Phase 2: Extract stock prompts from clean binary into stock-reference/
+extract:
+    #!/bin/bash -eu
+    BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
+    VERSION=$(jq -r .ccVersion config.json)
+    BACKUP="DO_NOT_DELETE_patched_binaries/$VERSION/native/original"
+    # restore clean binary, remove tweakcc's internal backup
+    cp "$BACKUP" "$BINARY"
+    rm -f native-binary.backup native-binary.pre-reinstall.backup
+    # clear system-prompts so tweakcc generates pure stock
+    rm -f system-prompts/*.md 2>/dev/null || true
+    # apply (generates stock .md files + prompt cache)
+    bunx tweakcc --apply
+    # save stock reference (may be empty if prompts not available for this version)
+    rm -rf stock-reference
+    mkdir -p stock-reference
+    if ls system-prompts/*.md >/dev/null 2>&1; then
+        cp system-prompts/*.md stock-reference/
+    fi
+    # restore clean binary (undo patching)
+    cp "$BACKUP" "$BINARY"
+    rm -f native-binary.backup
+    # clear system-prompts again
+    rm -f system-prompts/*.md 2>/dev/null || true
+    COUNT=$(ls stock-reference/*.md 2>/dev/null | wc -l)
+    echo "extracted $COUNT stock prompts to stock-reference/"
+    if [[ "$COUNT" -eq 0 ]]; then
+        echo "WARN: no prompts extracted (tweakcc may not support this CC version yet)"
+    fi
+
+# Phase 5: Apply customizations from system-prompts/ to clean binary
 apply:
     #!/bin/bash -eu
     BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
-    ORIGINAL="DO_NOT_DELETE_patched_binaries/2.1.147/native/original"
-    # restore clean binary to avoid patching an already-patched one
-    if [[ -f "$ORIGINAL" ]]; then
-        cp "$ORIGINAL" "$BINARY"
-        echo "restored clean binary from $ORIGINAL"
-    fi
-    npx tweakcc --apply
-    # remove stock files that tweakcc regenerated (keep only our customizations)
+    VERSION=$(jq -r .ccVersion config.json)
+    BACKUP="DO_NOT_DELETE_patched_binaries/$VERSION/native/original"
+    # always start from clean
+    cp "$BACKUP" "$BINARY"
+    # remove tweakcc's internal backup so it doesn't restore a stale patched copy
+    rm -f native-binary.backup native-binary.pre-reinstall.backup
+    echo "restored clean binary from $BACKUP"
+    # single apply
+    bunx tweakcc --apply
+    # remove stock files (keep only CUSTOM_FILES)
     python3 scripts/cleanup_stock_prompts.py
+    # validate
     python3 scripts/audit_templates.py
 
-# Patch all native installations (2.1.70, 2.1.81, etc) via patch_all.mjs.
-apply-all:
-    node scripts/patch_all.mjs
-    python3 scripts/audit_templates.py
-
-# Patch a specific Claude binary by path (e.g. snap native binary).
-patch path:
-    node scripts/patch_all.mjs {{ path }}
-
-# Create ~/.local/bin symlinks: claude-native-{ver}, claude-native-tcc-{ver}, claude-npm-tcc-{ver}
-link-versions:
-    #!/bin/bash -eu
-    BINDIR="$HOME/.local/bin"
-    # stock native binaries from ~/.local/share/claude/versions/
-    for bin in "$HOME/.local/share/claude/versions"/*; do
-    	ver=$(basename "$bin")
-    	slug="${ver//./-}"
-    	ln -sf "$bin" "$BINDIR/claude-native-$slug"
-    	echo "linked claude-native-$slug -> $bin"
-    done
-    # tweakcc-patched native binaries from out/*/native/patched
-    for bin in "{{ justfile_directory() }}/out"/*/native/patched; do
-    	ver=$(basename "$(dirname "$(dirname "$bin")")")
-    	slug="${ver//./-}"
-    	ln -sf "$bin" "$BINDIR/claude-native-tcc-$slug"
-    	echo "linked claude-native-tcc-$slug -> $bin"
-    done
-    # tweakcc-patched npm versions from DO_NOT_DELETE_patched_binaries/*/npm/patched.js (stable path, survives just fresh)
-    latest_wrapper=""
-    while IFS= read -r js; do
-    	ver=$(basename "$(dirname "$(dirname "$js")")")
-    	slug="${ver//./-}"
-    	wrapper="$BINDIR/claude-npm-tcc-$slug"
-    	printf '#!/bin/bash\nexec node "%s" "$@"\n' "$js" > "$wrapper"
-    	chmod +x "$wrapper"
-    	echo "linked claude-npm-tcc-$slug -> $js"
-    	latest_wrapper="$wrapper"
-    done < <(find "{{ justfile_directory() }}/DO_NOT_DELETE_patched_binaries" -path "*/npm/patched.js" | sort -V)
-    # set claude -> latest patched npm version
-    if [[ -n "$latest_wrapper" ]]; then
-    	ln -sf "$latest_wrapper" "$BINDIR/claude"
-    	echo "default: claude -> $latest_wrapper"
-    fi
-
-# Reinstall Claude Code from npm, then apply tweaks to all installations.
-fresh version="2.1.63":
-    rm -f cli.js.backup native-binary.backup native-binary.pre-reinstall.backup
-    rm -rf out
-    npm install -g "@anthropic-ai/claude-code@{{ version }}"
-    just apply
-
+# Phase 6: Smoke test
 smoke:
     #!/bin/bash -eu
+    BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
     export CLAUDECODE=
-    # should contain tweakcc
-    claude -d -v
-    # should contain word evidence we put in the description of the web fetch tool in the template
-    claude -p "what is the description of your web fetch tool please, just copy paste it" --model haiku | grep evidence
+    # version check: should show tweakcc exactly once
+    VERSION_OUT=$("$BINARY" -v 2>&1)
+    echo "$VERSION_OUT"
+    TWEAKCC_COUNT=$(echo "$VERSION_OUT" | grep -c "tweakcc" || true)
+    if [[ "$TWEAKCC_COUNT" -ne 1 ]]; then
+        echo "FAIL: expected 1 tweakcc line, got $TWEAKCC_COUNT (binary patched multiple times?)"
+        exit 1
+    fi
+    # canary check: webfetch description should contain our custom word
+    "$BINARY" -p "what is the description of your web fetch tool please, just copy paste it" --model haiku | grep evidence
+
+# Phase 7: Back up patched binary, commit, tag
+ship version:
+    #!/bin/bash -eu
+    BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
+    PATCHED="DO_NOT_DELETE_patched_binaries/{{ version }}/native/patched"
+    mkdir -p "$(dirname "$PATCHED")"
+    if [[ ! -f "$PATCHED" ]]; then
+        cp "$BINARY" "$PATCHED"
+        echo "archived patched binary -> $PATCHED"
+    fi
+    ln -sf "$(realpath "$BINARY")" "$HOME/.local/bin/claude"
+    echo "claude symlink -> $(realpath "$BINARY")"

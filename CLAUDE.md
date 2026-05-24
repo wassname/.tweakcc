@@ -1,102 +1,70 @@
-# tweakcc-minimal
+# tweakcc
 
-Minimal system prompts for Claude Code. Edits live in `system-prompts/*.md`.
+Minimal system prompts for Claude Code. Customizations in `system-prompts/*.md`, stock reference in `stock-reference/`.
 
-## Design principles
+## Compression principles
 
-Sources: [Pi system prompt](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/src/core/system-prompt.ts), [Pi blog post](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/), [Armin on Pi](https://lucumr.pocoo.org/2026/1/31/pi/), [Trail of Bits config](https://github.com/trailofbits/claude-code-config), [arch](https://www.southbridge.ai/blog/claude-code-an-analysis)
+1. **Trust the model** -- cut tutorials, examples, when-to-use lists. The model knows how to code.
+2. **Defer to CLAUDE.md** -- say "follow CLAUDE.md conventions if present", don't prescribe workflow.
+3. **Evidence over summaries** -- subagents return block quotes + links as primary output. Coordinators preserve them. No lossy telephone.
+4. **Cut what doesn't earn its context cost** -- if removing a line hasn't caused a failure you've actually seen, cut it.
+5. **Cheapest effective layer** -- enforce at: OS sandbox > deny rules > hooks > prompt text (last resort).
 
-1. **Trust the model** -- frontier models know how to code; provide context and tools, not tutorials. Pi's entire prompt is ~1k tokens.
-2. **Delegate workflow** -- CLAUDE.md/AGENTS.md own conventions, not the system prompt
-3. **Disposability** -- cut anything that doesn't earn its context-window cost
-4. **Sandbox over guardrails** -- real security = OS-level sandbox (bubblewrap/seatbelt via `/sandbox`) + deny rules + devcontainers, not verbose prompt text. Trail of Bits pairs `--dangerously-skip-permissions` with layered defense: sandbox + deny rules + ephemeral containers.
-5. **Hooks over prompts** -- "NEVER use rm -rf" in a prompt can be forgotten; a PreToolUse hook fires every time.
-6. **Cheapest effective layer** -- enforce at: OS sandbox > deny rules > hooks > prompt text (last resort)
+Review each prompt against: (1) model already knows this? Remove. (2) CLAUDE.md says this? Remove from system prompt. (3) Safety-critical? Keep, compress. (4) Tool-binding? Keep. (5) Proven behavioral shaping? Keep. (6) Context cost vs benefit? Prioritize always-loaded cuts.
 
-## Review methodology: 6 dimensions
+## Context budget (21 custom files, -43%)
 
-| # | Dimension | Question | If yes |
-|---|-----------|----------|--------|
-| 1 | Model-knows-this | Would the model do this without being told? | Remove |
-| 2 | CLAUDE.md overlap | Is the user's CLAUDE.md already saying this? | Remove from system prompt |
-| 3 | Safety-critical | Would removing this cause dangerous behavior? | Keep, compress |
-| 4 | Tool-binding | Necessary for the tool to function? | Keep |
-| 5 | Behavioral shaping | Meaningfully changes default behavior? | Keep if proven |
-| 6 | Context cost | How many chars? Always-loaded? | Prioritize cuts in always-loaded |
+| Category | Stock | Custom | Reduction | Loading |
+|----------|-------|--------|-----------|---------|
+| System Prompts | ~13.7k | ~8.1k | -41% | Always |
+| Tool Descriptions | ~15.1k | ~8.3k | -45% | Always |
+| System Reminders | ~2.5k | ~2.5k | -- | Event-driven |
+| Agent Prompts | ~24.5k | ~24.5k | -- | On-demand |
 
-Heuristic: if removing a line would cause a failure mode you've actually seen, keep it. If it's "just in case", cut it.
-
-## What gets loaded when (CC 2.1.63)
-
-Source: Southbridge Research reconstructed code (inferred, not decompiled). No `loadType` field exists in prompts JSON -- loading category is inferred from ID prefix.
-
-**Always loaded:**
-- `system-prompt-*` -- every turn (~10 are feature-gated by CC settings, e.g. chrome, learning-mode, hooks-config)
-- `tool-description-*` -- always present as part of the tool schema; no event gate exists. Example: `tool-description-bash-git-commit-*` burns ~1KB per turn even when just searching files
-- Monolithic + sub-files both loaded by tweakcc; empty monolithic ones to avoid duplication
-
-**Event-driven (injected per-turn on condition):**
-- `system-reminder-plan-mode-*` -- when plan mode active
-- `system-reminder-team-*` -- when team/swarm mode active
-- `system-reminder-todo-*`, task nudges -- periodic / on task events
-- File events, hook outcomes, token/budget warnings -- per-turn
-
-**On-demand (loaded at spawn/invocation):**
-- `agent-prompt-*` -- loaded when that agent type spawned
-- `data-*`, `skill-*` -- referenced on demand per user/model request
-
-**Within-file conditionals**: `${VAR?trueText:""}` in `pieces[]` are render-time substitutions -- the file is always loaded, only the text fragment varies. NOT file-level load gates.
-
-**Compaction**: triggers at 100k tokens OR 200 messages OR $5 cost. Skipped if <50 messages. Summarizes non-preserved messages via LLM call.
-
-**Context budget:**
-
-| Category | Stock words | tweakcc words | Reduction | Loading |
-|----------|-------------|---------------|-----------|---------|
-| System Prompts | ~4.5k | ~3.7k | -18% | Always |
-| Tool Descriptions | ~6.3k | ~3.8k | -40% | Always |
-| System Reminders | ~1.7k | ~1.7k | -- | Event-driven |
-| Agent Prompts | ~6.9k | ~6.9k | -- | On-demand (spawn) |
-
-Total always-loaded: ~7.5k words (down from ~10.8k stock).
-On-demand (untouched): Data ~154k chars, Skills ~45k chars, Agent Prompts ~69k chars.
-
-**Frontmatter is upstream-controlled**: `tweakcc --apply` restores YAML headers (name, description, ccVersion, variables) from CC. We only control the body content.
+Always-loaded: ~16.4k words (down from ~28.8k stock). See `memory/compression-notes.md` for per-file rationale and remaining targets.
 
 ## How to edit
 
 1. Edit `.md` files in `system-prompts/`
-2. Re-apply: `npx tweakcc --apply`
-3. Files use YAML frontmatter in HTML comments + `${VARIABLE}` template interpolation
+2. `just apply` -- restores clean binary, patches once, cleans up stock files, audits
+3. Add new file stems to `CUSTOM_FILES` in `scripts/cleanup_stock_prompts.py`
 4. Backticks in body must be escaped as `\`` (tweakcc parser requirement)
-5. Delete orphaned prompts (no upstream match). Don't keep empty files -- they'd silently blank a re-added ID.
-6. `python3 scripts/audit_templates.py` checks both template vars and orphaned prompts.
+5. Frontmatter (name, description, ccVersion, variables) is restored by tweakcc from upstream. We only control body content.
+6. `stock-reference/` has unmodified upstream prompts for diffing
 
-## Version workflow
+**CRITICAL: system-prompts/ must only contain files we actively customize.** Stock files with `${VAR.property}` expressions become literal JS when patched back, causing ReferenceErrors. `cleanup_stock_prompts.py` deletes non-custom files.
 
-Each CC version gets a git tag (e.g. `v2.1.68`). When CC updates:
+**CRITICAL: `just apply` deletes `native-binary.backup` before patching.** Without this, tweakcc restores its stale internal backup and stacks patches (3x version lines, 1.2G binary).
 
-1. `just apply` -- patches and runs orphan check
-2. If orphan warnings: migrate customizations to new sub-pieces, delete orphans
-3. Commit, tag: `git tag v<CC_VERSION>`
+**NEVER delete `DO_NOT_DELETE_patched_binaries/`**. Write-once archive, irreplaceable.
 
-Native patching: `tweakcc --apply` handles unpack/patch/repack internally for native binaries. `scripts/patch_all.mjs` adds prompt-cache fallback (copies latest cached templates when upstream hasn't published for the new version yet) and surfaces warnings.
+## What gets loaded when
 
-Artifacts in `out/<version>/native/`: `backup`, `backup.js`, `patched`, `patched.js`. These are gitignored.
+Always: `system-prompt-*`, `tool-description-*` (highest compression value).
+Event-driven: `system-reminder-*` (plan mode, tasks, hooks).
+On-demand: `agent-prompt-*`, `data-*`, `skill-*`.
+Within-file conditionals (`${VAR?trueText:""}`) are render-time, not file-level gates.
 
-**NEVER delete `DO_NOT_DELETE_patched_binaries/`**. Write-once archive of working patched binaries. These are irreplaceable (specific CC version + tweakcc patch combo). The script writes here once per version; if the file exists it skips.
+## Version upgrade runbook
 
-**HACK (remove when tweakcc releases a fix)**: `node_modules/tweakcc/dist/` contains a manually patched build from PR #620 (`fix/dont-escape-everything`) fixing over-escaping of quotes in 2.1.80+. When tweakcc releases a new version, `npm install` will overwrite this fix — re-apply from the PR or verify the fix is included. Check [releases](https://github.com/Piebald-AI/tweakcc/releases).
+Single-target: bun-installed npm binary. Each CC version gets a git tag.
 
-**NOTE: CC 2.1.113+ npm package format change**: Starting 2.1.113, npm packages ship a native binary at `bin/claude.exe` instead of JS at `cli.js`. tweakcc 4.0.13 handles native binary patching. The `just apply` recipe restores the clean binary from `DO_NOT_DELETE_patched_binaries/` before patching to avoid inflation from double-patching.
+### Phase 1: `just install <VERSION>`
+Runs bun install, postinstall, backs up clean binary, updates config.json.
 
-**CRITICAL: system-prompts/ must only contain files we actively customize.** tweakcc regenerates stock copies during `--apply`, but these stock files use `${VAR.property}` expressions that become literal JS template literals when patched back, causing ReferenceErrors (e.g. `WRITE_TOOL is not defined`). The `cleanup_stock_prompts.py` script deletes all files not listed in its `CUSTOM_FILES` set. Add new entries there when creating customizations.
+### Phase 2: `just extract`
+Generates stock .md files to `stock-reference/`, restores clean binary. Commit baseline.
 
-## File naming conventions
+### Phase 3: Review upstream changes (JUDGMENT)
+`git diff HEAD~1 -- stock-reference/` -- look for renamed/removed prompts, changed template vars, new compression targets.
 
-- `system-prompt-*` -- core behavioral, always loaded
-- `system-reminder-*` -- event-driven (plan mode, task nudges, file events, hooks)
-- `tool-description-*` -- loaded with tool schemas
-- `agent-prompt-*` -- loaded when agent type spawned
-- `data-*` -- reference data, on-demand
-- `skill-*` -- skill definitions, on-demand
+### Phase 4: Write customizations (JUDGMENT)
+Read stock in `stock-reference/<id>.md`, apply compression principles, write to `system-prompts/<id>.md`, add to CUSTOM_FILES. Don't override files that only differ by runtime var placeholders. Don't include `${VAR.property}` or `${FUNC()}` expressions in body text.
+
+### Phase 5: `just apply`
+Restores clean binary, patches once, cleans up, audits.
+
+### Phase 6: `just smoke` (JUDGMENT)
+Checks 1x tweakcc in version, canary "evidence" in webfetch description. If WRITE_TOOL crash: stock file leaked through. If canary missing: customization not applied.
+
+### Phase 7: `just ship <VERSION>` then commit + tag

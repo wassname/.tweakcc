@@ -17,6 +17,26 @@ root = pathlib.Path(__file__).resolve().parent.parent / 'system-prompts'
 # Files we actively customize. Add new entries here when creating customizations.
 CUSTOM_FILES = {
     'tool-description-webfetch',
+    'tool-description-powershell',
+    'tool-description-workflow',
+    'tool-description-todowrite',
+    'tool-description-teammatetool',
+    'tool-description-background-monitor-streaming-events',
+    'tool-description-enterplanmode',
+    'tool-description-exitplanmode',
+    'tool-description-enterworktree',
+    'tool-description-exitworktree',
+    'tool-description-agent-usage-notes',
+    'tool-description-agent-simple-usage-notes',
+    'system-prompt-skillify-current-session',
+    'system-prompt-autonomous-loop-check',
+    'system-prompt-autonomous-loop-persistence-guidance-CLAUDE_CODE_LOOP_PERSISTENT',
+    'system-prompt-learning-mode',
+    'system-prompt-hooks-configuration',
+    'system-prompt-executing-actions-with-care',
+    'system-prompt-subagent-delegation-examples',
+    'system-prompt-subagent-prompt-writing-examples',
+    'system-prompt-communication-style',
 }
 
 deleted = 0
