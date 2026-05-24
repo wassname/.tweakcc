@@ -9,7 +9,7 @@ default:
 apply:
     #!/bin/bash -eu
     BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
-    ORIGINAL="DO_NOT_DELETE_patched_binaries/1.2.3/native/original"
+    ORIGINAL="DO_NOT_DELETE_patched_binaries/2.1.147/native/original"
     # restore clean binary to avoid patching an already-patched one
     if [[ -f "$ORIGINAL" ]]; then
         cp "$ORIGINAL" "$BINARY"
