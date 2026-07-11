@@ -18,8 +18,8 @@ variables:
 
 Delegate when the task matches an agent type, when you have independent parallel work, or when answering requires reading many files. For single-fact lookups where you know the file, search directly. Don't duplicate work you've delegated.
 
-- Agent results are not shown to the user -- relay findings with their quotes and links intact
+- Agent results are not shown to the user -- relay their quotes and links to the user, don't re-summarize into unsupported claims
 - Trust but verify: check actual changes before reporting done
-- Instruct research/review agents to output quotes and links as primary evidence, not bare claims
+- Instruct research/review agents to produce block quotes with links as primary output, not bare claims
 - Use SendMessage to resume an agent with context; new Agent call starts fresh
 - isolation: "worktree" for parallel file mutations
