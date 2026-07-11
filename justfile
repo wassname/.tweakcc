@@ -63,12 +63,14 @@ apply:
     # remove tweakcc's internal backup so it doesn't restore a stale patched copy
     rm -f native-binary.backup native-binary.pre-reinstall.backup
     echo "restored clean binary from $BACKUP"
-    # single apply
-    bunx tweakcc --apply
+    # single apply (capture output: tweakcc reports which prompts it could not patch)
+    mkdir -p out
+    bunx tweakcc --apply 2>&1 | tee out/apply.log
     # remove stock files (keep only CUSTOM_FILES)
     python3 scripts/cleanup_stock_prompts.py
-    # validate
+    # validate: template vars declared, AND every customization actually landed
     python3 scripts/audit_templates.py
+    python3 scripts/check_landed.py out/apply.log
 
 # Phase 6: Smoke test
 smoke:

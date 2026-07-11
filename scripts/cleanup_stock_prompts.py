@@ -18,7 +18,10 @@ root = pathlib.Path(__file__).resolve().parent.parent / 'system-prompts'
 CUSTOM_FILES = {
     'tool-description-webfetch',
     'tool-description-powershell',
-    'tool-description-workflow',
+    # 'tool-description-workflow' dropped on CC 2.1.206: tweakcc 4.0.13 can't match
+    # the 2.1.206 workflow prompt (whole-prompt regex diverges mid-span; see MEMORY.md).
+    # 4.3.1 matches it but breaks the binary. Custom body preserved in git history
+    # (git show 921afa9:system-prompts/tool-description-workflow.md); re-add when tooling lands it.
     'tool-description-todowrite',
     'tool-description-background-monitor-streaming-events',
     'tool-description-enterplanmode',

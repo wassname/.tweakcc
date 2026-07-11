@@ -33,11 +33,15 @@ Target = highest `prompts-<V>.json` in tweakcc's GitHub `data/prompts/` (this is
 
 1. `just install <V>` then `just extract`. Extract must print >0 prompts (else tweakcc lacks support for `<V>`).
 2. Commit `stock-reference/` as a per-version baseline so the next upgrade's `git diff HEAD~1 -- stock-reference/` works.
-3. Review + port (JUDGMENT): `git diff HEAD~1 -- stock-reference/`. A `CUSTOM_FILES` stem with no matching `stock-reference/<stem>.md` was removed upstream -> drop it from `cleanup_stock_prompts.py`. Fix any custom body that now states wrong behavior (a changed opt-in keyword, a flipped default). Frontmatter is upstream-controlled; only body content matters.
-4. `just apply` (audits vars + upstream matches), then `just smoke`.
+3. Review + port (JUDGMENT): `git diff HEAD~1 -- stock-reference/`. Three things:
+   a. A `CUSTOM_FILES` stem with no matching `stock-reference/<stem>.md` was removed upstream -> drop it from `cleanup_stock_prompts.py`.
+   b. Fix any custom body that now states wrong behavior (a changed opt-in keyword, a flipped default). Frontmatter is upstream-controlled; only body content matters.
+   c. Scan NEW large always-loaded stock prompts (`tool-description-*`, `system-prompt-*`) for compression targets per the Principles above. Big jumps add many prompts; the goal is to strip, not just preserve. Candidates and status live in `memory/compression-notes.md`.
+4. `just apply` (audits vars + upstream-matches, AND hard-fails via `check_landed.py` if any customization did not patch), then `just smoke`.
 
 Gotchas (learned 2.1.156 -> 2.1.206):
-- tweakcc 4.0.13 can't patch the cosmetic "(tweakcc)" version line into newer CC binaries, so `claude -v` shows 0 tweakcc lines. That is fine. The smoke canary ("evidence" in the webfetch description) is the real proof the prompt patch landed; smoke only fails on >1 version line (stacking).
-- Do NOT blindly bump tweakcc for a big jump. 4.3.1 broke the 2.1.206 binary (ternary SyntaxError at `claude -v`). 4.0.13 is the pinned known-good. Only bump if extract yields 0 prompts, and re-run `smoke` plus `claude -v` to confirm the binary still starts.
+- Landing is NOT guaranteed and NOT the same as "applied". tweakcc matches each stock prompt by a whole-prompt regex; if upstream text drifted anywhere in that span, the match silently misses and the binary keeps stock. `just apply` now fails on this (`check_landed.py` reads tweakcc's own "Could not find" report). The smoke canary only checks ONE prompt, so it is necessary but not sufficient. If a prompt genuinely cannot land on this version (workflow on 2.1.206: 4.0.13 misses it, 4.3.1 breaks the binary), drop it from `CUSTOM_FILES` with a note rather than ship a false claim.
+- tweakcc 4.0.13 can't patch the cosmetic "(tweakcc)" version line into newer CC binaries, so `claude -v` shows 0 tweakcc lines. That is fine. Smoke only fails on >1 version line (stacking).
+- Do NOT blindly bump tweakcc for a big jump. 4.3.1 broke the 2.1.206 binary (ternary SyntaxError at `claude -v`). 4.0.13 is the pinned known-good. Only bump if extract yields 0 prompts, and re-run `apply` + `smoke` + `claude -v` to confirm the binary still starts.
 
 See `just --list` and `memory/compression-notes.md`.
