@@ -3,7 +3,7 @@ name: 'Skill: Claude Code configuration guide'
 description: >-
   Skill instructions for answering Claude Code configuration questions by
   checking the running build, bundled references, and current documentation
-ccVersion: 2.1.154
+ccVersion: 2.1.202
 -->
 # Claude Code Configuration Guide
 
@@ -34,7 +34,14 @@ When your training data disagrees with the live configuration or the bundled ref
 | A custom skill or subagent | The "Custom skills/agents" lists in Current Build below |
 | A keyboard shortcut | \`references/live-sources.md\` → Interactive mode URL |
 | What changed recently | The "Recent releases" section in Current Build below, then \`references/recent-changes.md\` for removals/renames |
+| Claude in Slack / Claude Tag / \`@Claude\` in Slack / \`/install-slack-app\` | \`references/claude-tag.md\`, then the docs page |
 | Anything else about Claude Code | The docs map URL, then the specific page |
+
+## Claude Tag (Claude in Slack)
+
+This skill also covers Claude's Slack surface. Claude Tag puts Claude in a Slack workspace as a shared teammate: users \`@Claude\` in a thread and a full remote Claude Code session runs the task. It replaces the earlier per-user "Claude in Slack" app.
+
+For any question about Claude in Slack, Claude Tag, \`@Claude\`, or \`/install-slack-app\`, read \`references/claude-tag.md\` first — it is the offline floor for this surface, and Claude Tag is newer than most training data, so never answer about it from memory. Then fetch the docs URLs it lists.
 
 ## When you can't reach the network
 
@@ -49,5 +56,6 @@ If WebFetch fails or you have no network:
 - Be concrete. Show the exact command, flag, or settings JSON, not a paraphrase.
 - Show where the setting goes (\`~/.claude/settings.json\` vs \`.claude/settings.json\` vs \`.mcp.json\` vs \`--flag\`).
 - Link to the specific docs page so the user can read more.
+- The \`.md\` URLs in the references and docs map are for fetching. When you give the user a docs link, drop the trailing \`.md\` so they land on the rendered page (fetch \`https://claude.com/docs/claude-tag/overview.md\`, link \`https://claude.com/docs/claude-tag/overview\`).
 - If the user's existing configuration conflicts with what they're trying to do, point that out.
 - Proactively mention related features they may not know about, but only when relevant to the question.

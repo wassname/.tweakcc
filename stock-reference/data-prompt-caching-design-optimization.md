@@ -3,7 +3,7 @@ name: 'Data: Prompt Caching — Design & Optimization'
 description: >-
   Document on how to design prompt-building code for effective caching,
   including placement patterns and anti-patterns.
-ccVersion: 2.1.154
+ccVersion: 2.1.182
 -->
 # Prompt Caching — Design & Optimization
 
@@ -71,7 +71,7 @@ Many requests share a large fixed preamble (few-shot examples, retrieved docs, i
 
 ### Mid-conversation system messages
 
-**Beta, model-gated.** When an operator instruction arrives mid-conversation — a mode switch, updated context, dynamically injected state — send it as \`{"role": "system", "content": "..."}\` appended to \`messages[]\`, rather than editing top-level \`system\`. Editing top-level \`system\` changes the prefix ahead of the entire conversation history, so every cached turn is re-processed uncached; a \`role: "system"\` message sits after the history and leaves the cached prefix intact.
+**{{OPUS_NAME}} only; no beta header.** When an operator instruction arrives mid-conversation — a mode switch, updated context, dynamically injected state — send it as \`{"role": "system", "content": "..."}\` appended to \`messages[]\`, rather than editing top-level \`system\`. Editing top-level \`system\` changes the prefix ahead of the entire conversation history, so every cached turn is re-processed uncached; a \`role: "system"\` message sits after the history and leaves the cached prefix intact.
 
 \`\`\`json
 // Top-level system stays byte-identical; new instruction goes after the cached history
@@ -85,7 +85,7 @@ Many requests share a large fixed preamble (few-shot examples, retrieved docs, i
 
 This is also the prompt-injection-safe replacement for embedding operator instructions as text inside a user turn (the \`<system-reminder>\` pattern): both have the same caching profile, but \`role: "system"\` is the non-spoofable operator channel, whereas text inside user/tool content can be forged by anything that writes to user-visible input.
 
-Requires \`anthropic-beta: mid-conversation-system-2026-04-07\`. Must follow a \`role: "user"\` message (or an assistant message ending in a server tool result); cannot be \`messages[0]\` — use top-level \`system\` for the initial prompt. Content is text-only. Model-gated — unsupported models return a 400 (\`BadRequestError\`: \`role 'system' is not supported on this model\`); catch that error and fall back to putting the instruction in a user-turn \`<system-reminder>\` block.
+Available on {{OPUS_NAME}}; no beta header is required. Must follow a \`role: "user"\` message (or an \`assistant\` message ending in server-tool use), and must be either the last entry in \`messages\` or be followed by an \`assistant\` turn; cannot be \`messages[0]\` — use top-level \`system\` for the initial prompt. Content is text-only. Unsupported models return a 400 (\`BadRequestError\`: \`role 'system' is not supported on this model\`); catch that error and fall back to putting the instruction in a user-turn \`<system-reminder>\` block.
 
 ### Prompts that change from the beginning every time
 
@@ -137,10 +137,10 @@ Fix by moving the dynamic piece after the last breakpoint, making it determinist
 | Model | Minimum |
 |---|---:|
 | Opus 4.8, Opus 4.7, Opus 4.6, Opus 4.5, Haiku 4.5 | 4096 tokens |
-| Sonnet 4.6, Haiku 3.5, Haiku 3 | 2048 tokens |
+| Fable 5, Sonnet 4.6, Haiku 3.5, Haiku 3 | 2048 tokens |
 | Sonnet 4.5, Sonnet 4.1, Sonnet 4, Sonnet 3.7 | 1024 tokens |
 
-A 3K-token prompt caches on Sonnet 4.5 but silently won't on Opus 4.8.
+A 3K-token prompt caches on Sonnet 4.5 and Fable 5 but silently won't on Opus 4.8.
 
 **Economics:** Cache reads cost ~0.1× base input price. Cache writes cost **1.25× for 5-minute TTL, 2× for 1-hour TTL**. Break-even depends on TTL: with 5-minute TTL, two requests break even (1.25× + 0.1× = 1.35× vs 2× uncached); with 1-hour TTL, you need at least three requests (2× + 0.2× = 2.2× vs 3× uncached). The 1-hour TTL keeps entries alive across gaps in bursty traffic, but the doubled write cost means it needs more reads to pay off.
 

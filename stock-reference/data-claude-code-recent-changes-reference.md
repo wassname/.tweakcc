@@ -3,7 +3,7 @@ name: 'Data: Claude Code recent changes reference'
 description: >-
   Reference mapping of recently removed or renamed Claude Code commands, flags,
   and terms to their current replacements
-ccVersion: 2.1.154
+ccVersion: 2.1.200
 -->
 # Recently changed surfaces
 
@@ -35,6 +35,7 @@ If a surface is in your training data but not in this file and not in the live b
 | Slash command (when referring to \`/config\`, \`/login\`, etc.) | Command |
 | Extra usage | Usage credits |
 | Custom commands | Skills (\`.claude/skills/\`). Custom commands as \`.claude/commands/*.md\` still work but skills are the documented surface |
+| Claude in Slack (the earlier Slack app) | Claude Tag — Claude as a teammate in Slack, backed by remote Claude Code sessions; replaces the earlier app. See \`references/claude-tag.md\` |
 
 ## Notes for stale advice
 

@@ -7,13 +7,13 @@ ccVersion: 2.1.105
 variables:
   - TOOL_BASE_DESCRIPTION
   - TOOL_PARAMETERS_DESCRIPTION
-  - DESCRIPTION_FORMAT_NOTE
-  - IS_TRUTHY_FN
-  - PROCESS_OBJECT
+  - ENVIRONMENT_CONFIG
   - IS_SUBAGENT_CONTEXT_FN
   - HAS_SUBAGENT_TYPES
   - SEND_MESSAGE_TOOL_NAME
   - AGENT_TOOL_NAME
+  - CAN_FORK_CONTEXT
+  - IS_REMOTE_ISOLATION_AVAILABLE_FN
   - IS_TEAMMATE_CONTEXT_FN
   - ADDITIONAL_USAGE_NOTES
   - EXTRA_USAGE_NOTES
@@ -26,6 +26,6 @@ variables:
 - Trust but verify: check actual changes before reporting done
 - Instruct research/review agents to produce block quotes with links as primary output, not bare claims
 - Use SendMessage with the agent's ID/name to continue with context; a new Agent call starts fresh
-- Foreground (default) when you need results to proceed; background for independent parallel work
+- Agents run in the background by default (you're notified on completion); pass run_in_background: false when you need results before proceeding
 - For parallel agents, send multiple Agent calls in a single message
 - isolation: "worktree" for agents that mutate files in parallel

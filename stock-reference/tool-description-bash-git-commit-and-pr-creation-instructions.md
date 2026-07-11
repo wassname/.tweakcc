@@ -1,16 +1,27 @@
 <!--
 name: 'Tool Description: Bash (Git commit and PR creation instructions)'
 description: Instructions for creating git commits and GitHub pull requests
-ccVersion: 2.1.152
+ccVersion: 2.1.205
 variables:
-  - BASH_TOOL_NAME
+  - LOADED_COMMANDS_CONTEXT
   - COMMIT_CO_AUTHORED_BY_CLAUDE_CODE
+  - BASH_TOOL_NAME
   - GET_TODO_TOOL_FN
   - TASK_TOOL_NAME
-  - EMPTY_STRING
+  - PR_INSTRUCTIONS_PREFIX
+  - PR_WRITING_GUIDANCE_BLOCK
   - PR_GENERATED_WITH_CLAUDE_CODE
+  - PR_SUMMARY_TEMPLATE_FN
+  - PR_TEST_PLAN_TEMPLATE_FN
+  - PR_COMMON_OPERATIONS_NOTE
 -->
-${""}# Committing changes with git
+${LOADED_COMMANDS_CONTEXT.commit?`# Git
+- Never use git commands with the -i flag (like git rebase -i or git add -i) since they require interactive input which is not supported.
+- Only commit when the user explicitly asks. When staging, prefer naming specific files over "git add -A"/"git add ." — never commit files that likely contain secrets (.env, credentials).${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE?`
+- End git commit messages with:
+${COMMIT_CO_AUTHORED_BY_CLAUDE_CODE}`:""}
+
+`:`# Committing changes with git
 
 Only create commits when requested by the user. If unclear, ask first. When the user asks you to create a new git commit, follow these steps carefully:
 
@@ -59,10 +70,12 @@ git commit -m "$(cat <<'EOF'
    )"
 </example>
 
-# Creating pull requests
+`}${PR_INSTRUCTIONS_PREFIX}${PR_WRITING_GUIDANCE_BLOCK?`${PR_WRITING_GUIDANCE_BLOCK}
+
+`:""}# Creating pull requests
 Use the gh command via the Bash tool for ALL GitHub-related tasks including working with issues, pull requests, checks, and releases. If given a Github URL use the gh command to get the information needed.
 
-${EMPTY_STRING}IMPORTANT: When the user asks you to create a pull request, follow these steps carefully:
+IMPORTANT: When the user asks you to create a pull request, follow these steps carefully:
 
 1. Run the following bash commands in parallel using the ${BASH_TOOL_NAME} tool, in order to understand the current state of the branch since it diverged from the main branch:
    - Run a git status command to see all untracked files (never use -uall flag)
@@ -79,12 +92,12 @@ ${EMPTY_STRING}IMPORTANT: When the user asks you to create a pull request, follo
 <example>
 gh pr create --title "the pr title" --body "$(cat <<'EOF'
 ## Summary
-<1-3 bullet points>
+${PR_GENERATED_WITH_CLAUDE_CODE()}
 
 ## Test plan
-[Bulleted markdown checklist of TODOs for testing the pull request...]${PR_GENERATED_WITH_CLAUDE_CODE?`
+${PR_SUMMARY_TEMPLATE_FN()}${PR_TEST_PLAN_TEMPLATE_FN?`
 
-${PR_GENERATED_WITH_CLAUDE_CODE}`:""}
+${PR_TEST_PLAN_TEMPLATE_FN}`:""}
 EOF
 )"
 </example>
@@ -94,4 +107,6 @@ Important:
 - Return the PR URL when you're done, so the user can see it
 
 # Other common operations
-- View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments
+- View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments${PR_COMMON_OPERATIONS_NOTE?`
+
+${PR_COMMON_OPERATIONS_NOTE}`:""}

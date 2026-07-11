@@ -3,7 +3,7 @@ name: 'Data: Live documentation sources'
 description: >-
   WebFetch URLs for fetching current Claude API and Agent SDK documentation from
   official sources
-ccVersion: 2.1.145
+ccVersion: 2.1.203
 -->
 # Live Documentation Sources
 
@@ -24,6 +24,7 @@ This file contains WebFetch URLs for fetching current information from platform.
 | --------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | Models Overview | \`https://platform.claude.com/docs/en/about-claude/models/overview.md\`        | "Extract current model IDs, context windows, and pricing for all Claude models" |
 | Migration Guide | \`https://platform.claude.com/docs/en/about-claude/models/migration-guide.md\` | "Extract breaking changes, deprecated parameters, and per-model migration steps when moving to a newer Claude model" |
+| Introducing Claude Fable 5 | \`https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5.md\` | "Extract capabilities, API changes, and availability stages for Claude Fable 5 and Claude Mythos 5" |
 | Pricing         | \`https://platform.claude.com/docs/en/pricing.md\`                             | "Extract current pricing per million tokens for input and output"               |
 
 ### Core Features
@@ -112,11 +113,13 @@ Use these when a managed-agents binding, behavior, or wire-level detail isn't co
 
 ### Anthropic CLI
 
-The \`ant\` CLI provides terminal access to the Claude API. Every API resource is exposed as a subcommand. It is one convenient way to create agents, environments, sessions, and other resources from version-controlled YAML, and to inspect responses interactively.
+The \`ant\` CLI provides terminal access to the Claude API. Every API resource is exposed as a subcommand. It is the recommended way to create agents and environments from version-controlled YAML (\`ant beta:agents create < agent.yaml\` — see \`shared/anthropic-cli.md\`), and also exposes sessions and every other API resource for scripting and interactive inspection.
 
 | Topic         | URL                                                     | Extraction Prompt                                                                                  |
 | ------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Anthropic CLI | \`https://platform.claude.com/docs/en/api/sdks/cli.md\`   | "Extract CLI install, authentication, command structure, and the beta:agents/environments/sessions commands" |
+| Authentication overview | \`https://platform.claude.com/docs/en/manage-claude/authentication.md\` | "Extract the credential options (API keys, interactive OAuth login, Workload Identity Federation) and when to use each" |
+| WIF reference | \`https://platform.claude.com/docs/en/manage-claude/wif-reference.md\`  | "Extract credential precedence order, the profile configuration file schema, and the configuration directory layout" |
 
 ---
 
@@ -133,6 +136,8 @@ WebFetch these when a binding (class, method, namespace, field) isn't covered in
 | Ruby       | \`https://github.com/anthropics/anthropic-sdk-ruby\`       | "Extract beta managed-agents methods and parameter shapes (\`client.beta.agents\`, \`client.beta.sessions\`)"               |
 | C#         | \`https://github.com/anthropics/anthropic-sdk-csharp\`     | "Extract beta managed-agents classes and method signatures (NuGet package, \`BetaManagedAgents*\` types)"                 |
 | PHP        | \`https://github.com/anthropics/anthropic-sdk-php\`        | "Extract beta managed-agents classes and method signatures (\`$client->beta->agents\`, \`BetaManagedAgents*\` params)"      |
+
+Each SDK repo also ships runnable programs under \`examples/\` — including the refusal-fallback / \`fallbacks\` examples (client-side middleware registration, fallback state, server-side \`fallbacks\` param). Fetch those for exact per-language syntax instead of translating another language's example.
 
 ---
 

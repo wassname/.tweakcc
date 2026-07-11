@@ -20,7 +20,6 @@ CUSTOM_FILES = {
     'tool-description-powershell',
     'tool-description-workflow',
     'tool-description-todowrite',
-    'tool-description-teammatetool',
     'tool-description-background-monitor-streaming-events',
     'tool-description-enterplanmode',
     'tool-description-exitplanmode',

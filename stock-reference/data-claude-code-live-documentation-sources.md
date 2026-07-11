@@ -3,13 +3,13 @@ name: 'Data: Claude Code live documentation sources'
 description: >-
   WebFetch URLs for fetching current Claude Code documentation from official
   sources
-ccVersion: 2.1.154
+ccVersion: 2.1.202
 -->
 # Live Documentation Sources
 
 WebFetch URLs for fetching current Claude Code documentation. Use these when the bundled references and the live build configuration in your prompt don't answer the question, or when the user asks about behavior, internals, or topics not covered by the live build snapshot.
 
-Mintlify serves both \`.md\` and \`.mdx\` for every page; prefer \`.md\` for clean fetches.
+Mintlify serves both \`.md\` and \`.mdx\` for every page; prefer \`.md\` for clean fetches. The \`.md\` form is for fetching only: when linking a page for the user, drop the trailing \`.md\` so they get the rendered page.
 
 ## Start here
 
@@ -63,6 +63,18 @@ Mintlify serves both \`.md\` and \`.mdx\` for every page; prefer \`.md\` for cle
 | Security | \`https://code.claude.com/docs/en/security.md\` | "Extract the security model and trust boundaries" |
 | Network configuration | \`https://code.claude.com/docs/en/network-config.md\` | "Extract proxy, firewall, and offline configuration" |
 | Costs and tracking | \`https://code.claude.com/docs/en/costs.md\` | "Extract how costs are calculated and how to track them" |
+
+## Claude in Slack (Claude Tag)
+
+Read \`references/claude-tag.md\` first — it is the offline floor for this surface. Then fetch:
+
+| Topic | URL | Extraction prompt |
+|---|---|---|
+| Claude Tag (Claude as a teammate in Slack, org-managed) | \`https://claude.com/docs/claude-tag/overview.md\` | "Extract what Claude Tag is, plan availability, and how an org owner enables and configures it" |
+| All Claude Tag pages (index for the claude.com docs domain) | \`https://claude.com/docs/llms.txt\` | "Find the Claude Tag page that covers <topic> and return its URL" |
+| Org-owner setup walkthrough (pair Slack, connect tools, spend limit, launch) | \`https://claude.com/docs/claude-tag/admins/setup-overview.md\` | "Extract the setup steps and prerequisites for enabling Claude Tag" |
+| End-user getting started | \`https://claude.com/docs/claude-tag/users/getting-started.md\` | "Extract how a Slack user starts working with Claude Tag" |
+| Migrating from the earlier "Claude in Slack" app | \`https://claude.com/docs/claude-tag/admins/migrate-from-earlier.md\` | "Extract what changes for workspaces moving from the earlier app to Claude Tag" |
 
 ## Agent SDK
 
