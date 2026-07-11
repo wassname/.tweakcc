@@ -75,15 +75,17 @@ smoke:
     #!/bin/bash -eu
     BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
     export CLAUDECODE=
-    # version check: should show tweakcc exactly once
+    # anti-stacking check: the "(tweakcc)" version line must never appear >1x (=stacked patches).
+    # 0 is fine: tweakcc 4.0.13 can't write the cosmetic version-indicator into newer CC binaries.
+    # The canary below is the real proof the system-prompt patch landed; the version line is not.
     VERSION_OUT=$("$BINARY" -v 2>&1)
     echo "$VERSION_OUT"
     TWEAKCC_COUNT=$(echo "$VERSION_OUT" | grep -c "tweakcc" || true)
-    if [[ "$TWEAKCC_COUNT" -ne 1 ]]; then
-        echo "FAIL: expected 1 tweakcc line, got $TWEAKCC_COUNT (binary patched multiple times?)"
+    if [[ "$TWEAKCC_COUNT" -gt 1 ]]; then
+        echo "FAIL: $TWEAKCC_COUNT tweakcc version lines (binary patched multiple times?)"
         exit 1
     fi
-    # canary check: webfetch description should contain our custom word
+    # canary check: webfetch description must contain our custom "evidence" line (real UAT)
     "$BINARY" -p "what is the description of your web fetch tool please, just copy paste it" --model haiku | grep evidence
 
 # Phase 7: Back up patched binary, commit, tag
