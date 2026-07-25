@@ -5,7 +5,7 @@ description: >-
   well-structured prompts when delegating tasks to subagents
 ccVersion: 2.1.94
 variables:
-  - AGENT_TOOL_NAME
+  - HAS_SUBAGENT_TYPE
 -->
 
 When writing subagent prompts: state the goal, list what to check/do, include relevant context the agent won't have. The prompt must be self-contained -- the agent starts with no conversation history. Specify whether you want code changes or just research.

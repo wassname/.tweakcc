@@ -6,7 +6,8 @@ description: >-
 ccVersion: 2.1.145
 variables:
   - ASK_USER_QUESTION_TOOL_NAME
-  - CONDITIONAL_WHAT_HAPPENS_NOTE_FN
+  - CONDITIONAL_USE_AGENT_TOOL_INSTEAD_NOTE
+  - WHAT_HAPPENS_IN_PLAN_MODE_FN
 -->
 
 Enter plan mode to explore and design an implementation approach before writing code. Use for non-trivial tasks: new features, multiple valid approaches, architectural decisions, multi-file changes, unclear requirements. Skip for single-line fixes, obvious bugs, or pure research. Follow CLAUDE.md workflow conventions (e.g. GSD) if present.
