@@ -1,6 +1,6 @@
 <!--
 name: 'Skill: /stuck slash command'
-description: Diagnozse frozen or slow Claude Code sessions
+description: Diagnoses frozen or slow Claude Code sessions
 ccVersion: 2.1.77
 -->
 # /stuck — diagnose frozen/slow Claude Code sessions

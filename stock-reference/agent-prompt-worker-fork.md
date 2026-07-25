@@ -1,8 +1,9 @@
 <!--
 name: 'Agent Prompt: Worker fork'
 description: >-
-  System prompt for a forked worker sub-agent that executes a single directive
-  from the parent agent and reports back concisely
+  Directive injected into a forked child agent, telling it to treat the
+  inherited transcript as reference, execute one directive directly, and report
+  once
 ccVersion: 2.1.169
 variables:
   - SYSTEM_TAG_NAME

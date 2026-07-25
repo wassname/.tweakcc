@@ -3,7 +3,7 @@ name: 'Data: Data visualization anti-patterns'
 description: >-
   Reference list of chart and dashboard anti-patterns to check against before
   shipping a data visualization
-ccVersion: 2.1.198
+ccVersion: 2.1.210
 -->
 # Anti-patterns — what goes wrong
 
@@ -30,7 +30,7 @@ Why: indistinguishable from an existing slot under CVD; breaks the order check.
 ✅ Fold the tail into "Other," facet into small multiples, or use composite encoding.
 
 **❌ Eyeballing colorblind-safety.** "These look different enough."
-✅ Run \`scripts/validate_palette.js\`. Adjacent ΔE ≥ 12, or 8–12 WITH secondary encoding.
+✅ Run \`scripts/validate_palette.js\`. Adjacent ΔE ≥ 8 (OKLab ×100), or 6–8 WITH secondary encoding.
 
 **❌ A value-ramp on nominal categories.** Coloring each bar darker-where-bigger
 when the categories have no natural order (products, teams, endpoints).

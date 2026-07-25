@@ -1,9 +1,10 @@
 <!--
-name: 'Data: Managed Agents Scheduled Deployments'
+name: 'Data: Managed Agents scheduled deployments'
 description: >-
-  Managed Agents scheduled deployment API guidance, including cron schedules,
-  deployment runs, pausing, resuming, and operational limits.
-ccVersion: 2.1.197
+  Reference documentation for Managed Agents scheduled deployments, including
+  cron schedule creation, deployment runs, lifecycle operations, failure
+  behavior, and manual runs
+ccVersion: 2.1.218
 -->
 # Managed Agents — Scheduled Deployments
 
@@ -16,27 +17,27 @@ Requires the `managed-agents-2026-04-01` beta header (the SDK sets it automatica
 A deployment bundles everything a session needs (agent, environment, optional files / GitHub / memory stores / vaults) plus a `schedule` and the `initial_events` that kick off each run:
 
 - `agent` and `environment_id` are required — same shapes as `sessions.create` (see `shared/managed-agents-core.md`).
-- `initial_events` must contain the starting `user.message`.
+- `initial_events` must contain at least one starting event — a `user.message` **or** a `user.define_outcome`. (A deployment's `initial_events` also accepts `system.message`, which a session's does not.)
 - `schedule` takes a cron `expression` and an IANA `timezone`. Minute-level granularity is the maximum.
 
 ```bash
 curl -fsSL https://api.anthropic.com/v1/deployments \\
-  -H "x-api-key: $ANTHROPIC_API_KEY" \\
-  -H "anthropic-version: 2023-06-01" \\
-  -H "anthropic-beta: managed-agents-2026-04-01" \\
-  -H "content-type: application/json" \\
+  -H \"x-api-key: $ANTHROPIC_API_KEY\" \\
+  -H \"anthropic-version: 2023-06-01\" \\
+  -H \"anthropic-beta: managed-agents-2026-04-01\" \\
+  -H \"content-type: application/json\" \\
   -d @- <<EOF
 {
-  "name": "Weekly compliance scan",
-  "agent": "$AGENT_ID",
-  "environment_id": "$ENVIRONMENT_ID",
-  "initial_events": [
-    {"type": "user.message", "content": [{"type": "text", "text": "Run the weekly compliance scan."}]}
+  \"name\": \"Weekly compliance scan\",
+  \"agent\": \"$AGENT_ID\",
+  \"environment_id\": \"$ENVIRONMENT_ID\",
+  \"initial_events\": [
+    {\"type\": \"user.message\", \"content\": [{\"type\": \"text\", \"text\": \"Run the weekly compliance scan.\"}]}
   ],
-  "schedule": {
-    "type": "cron",
-    "expression": "0 20 * * 5",
-    "timezone": "America/New_York"
+  \"schedule\": {
+    \"type\": \"cron\",
+    \"expression\": \"0 20 * * 5\",
+    \"timezone\": \"America/New_York\"
   }
 }
 EOF
@@ -44,19 +45,19 @@ EOF
 
 ```python
 deployment = client.beta.deployments.create(
-    name="Weekly compliance scan",
+    name=\"Weekly compliance scan\",
     agent=agent.id,
     environment_id=environment.id,
     initial_events=[
         {
-            "type": "user.message",
-            "content": [{"type": "text", "text": "Run the weekly compliance scan."}],
+            \"type\": \"user.message\",
+            \"content\": [{\"type\": \"text\", \"text\": \"Run the weekly compliance scan.\"}],
         },
     ],
     schedule={
-        "type": "cron",
-        "expression": "0 20 * * 5",
-        "timezone": "America/New_York",
+        \"type\": \"cron\",
+        \"expression\": \"0 20 * * 5\",
+        \"timezone\": \"America/New_York\",
     },
 )
 ```
@@ -65,28 +66,28 @@ The response is a deployment object (`depl_` ID prefix). Check `schedule.upcomin
 
 ```json
 {
-  "id": "depl_01xyz",
-  "status": "active",
-  "paused_reason": null,
-  "schedule": {
-    "type": "cron",
-    "expression": "0 20 * * 5",
-    "timezone": "America/New_York",
-    "last_run_at": null,
-    "upcoming_runs_at": ["2026-05-09T00:00:00Z", "2026-05-16T00:00:00Z", "2026-05-23T00:00:00Z"]
+  \"id\": \"depl_01xyz\",
+  \"status\": \"active\",
+  \"paused_reason\": null,
+  \"schedule\": {
+    \"type\": \"cron\",
+    \"expression\": \"0 20 * * 5\",
+    \"timezone\": \"America/New_York\",
+    \"last_run_at\": null,
+    \"upcoming_runs_at\": [\"2026-05-09T00:00:00Z\", \"2026-05-16T00:00:00Z\", \"2026-05-23T00:00:00Z\"]
   }
 }
 ```
 
-Deployments may apply up to **10 seconds of jitter** to distribute load. Maximum **1000 scheduled deployments per organization** (contact Anthropic support for more).
+`upcoming_runs_at` reflects the exact configured schedule, but **execution is jittered to distribute load: up to 15% of the interval between runs, floored at 5 seconds and capped at 9 minutes.** An hourly deployment can therefore fire up to 9 minutes late; don't build a downstream deadline that assumes the listed timestamp. Maximum **1000 scheduled deployments per organization** (contact Anthropic support for more).
 
 ### Cron and timezone semantics
 
 - **Expression:** standard POSIX cron (`minute hour day-of-month month day-of-week`).
-- **Timezone:** IANA identifier (e.g. `"America/Los_Angeles"`).
-- **DST:** literal wall-clock matching — `"0 20 * * *"` in `America/New_York` fires at 8:00 PM local regardless of EST/EDT.
+- **Timezone:** IANA identifier (e.g. `\"America/Los_Angeles\"`).
+- **DST:** literal wall-clock matching — `\"0 20 * * *\"` in `America/New_York` fires at 8:00 PM local regardless of EST/EDT.
 
-> ⚠️ **DST edge:** wall-clock times that don\'t exist on a spring-forward day (e.g. 2AM) are **skipped**; times that occur twice on a fall-back day **fire twice**. Schedule outside the 1–3AM local window, or use UTC, when missed or duplicate executions are unacceptable.
+> ⚠️ **DST edge:** wall-clock times that don't exist on a spring-forward day (e.g. 2AM) are **skipped**; times that occur twice on a fall-back day **fire twice**. Schedule outside the 1–3AM local window, or use UTC, when missed or duplicate executions are unacceptable.
 
 ## Deployment runs
 
@@ -117,14 +118,14 @@ A failed run looks like:
 
 ```json
 {
-  "type": "deployment_run",
-  "id": "drun_01abc124",
-  "deployment_id": "depl_01xyz",
-  "trigger_context": { "type": "schedule", "scheduled_at": "2026-05-09T00:00:00Z" },
-  "session_id": null,
-  "error": { "type": "environment_archived", "message": "environment `env_01abc` is archived" },
-  "agent": { "type": "agent", "id": "agent_01ghi789", "version": 3 },
-  "created_at": "2026-05-09T00:00:01Z"
+  \"type\": \"deployment_run\",
+  \"id\": \"drun_01abc124\",
+  \"deployment_id\": \"depl_01xyz\",
+  \"trigger_context\": { \"type\": \"schedule\", \"scheduled_at\": \"2026-05-09T00:00:00Z\" },
+  \"session_id\": null,
+  \"error\": { \"type\": \"environment_archived\", \"message\": \"environment `env_01abc` is archived\" },
+  \"agent\": { \"type\": \"agent\", \"id\": \"agent_01ghi789\", \"version\": 3 },
+  \"created_at\": \"2026-05-09T00:00:01Z\"
 }
 ```
 
@@ -136,7 +137,7 @@ The outcome of each **scheduled** run (started/succeeded/failed) and each deploy
 
 | Operation | SDK | Effect |
 |---|---|---|
-| Pause | `client.beta.deployments.pause(id)` | Suppresses scheduled triggers go-forward. Sessions already running continue. **Manual runs are still permitted while paused.** Sets `paused_reason: {"type": "manual"}`. |
+| Pause | `client.beta.deployments.pause(id)` | Suppresses scheduled triggers go-forward. Sessions already running continue. **Manual runs are still permitted while paused.** Sets `paused_reason: {\"type\": \"manual\"}`. |
 | Unpause | `client.beta.deployments.unpause(id)` | Resumes from the next scheduled occurrence. **Missed triggers are not backfilled.** Clears `paused_reason`. |
 | Archive | `client.beta.deployments.archive(id)` | **Terminal** — the schedule stops and the deployment can no longer be modified. Use pause for anything reversible. |
 
@@ -146,8 +147,8 @@ Raw HTTP: `POST /v1/deployments/{deployment_id}/pause` (likewise `/unpause`, `/a
 
 - **Rate-limited:** recorded immediately as a `session_rate_limited` run, **no retry** — the schedule simply tries again at the next occurrence. (Rate limits on API calls *inside* a session are handled by the session itself.)
 - **Other failed runs** (e.g. `environment_archived`, `vault_not_found`, `service_unavailable`): the run records the `error.type` — monitor runs and fix the referenced resource, or pause the deployment.
-- **Agent archived or deleted:** the deployment is automatically **archived** (terminal) and no further sessions are created.
+- **Agent archived:** the deployment is automatically **archived** (terminal) in the same operation. **Agent deleted:** the next scheduled trigger detects the missing agent and archives the deployment then. Either way no deployment run is recorded, and no further sessions are created.
 
 ## Manual runs
 
-`POST /v1/deployments/{deployment_id}/run` (SDK: `client.beta.deployments.run(id)`) creates a session immediately and writes a run with `trigger_context.type: "manual"`. Use it to **test a deployment before committing to the schedule** — and remember it works even while the deployment is paused.
+`POST /v1/deployments/{deployment_id}/run` (SDK: `client.beta.deployments.run(id)`) creates a session immediately and writes a run with `trigger_context.type: \"manual\"`. Use it to **test a deployment before committing to the schedule** — and remember it works even while the deployment is paused.
