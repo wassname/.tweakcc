@@ -37,7 +37,26 @@ Target = highest `prompts-<V>.json` in tweakcc's GitHub `data/prompts/` (this is
    a. A `CUSTOM_FILES` stem with no matching `stock-reference/<stem>.md` was removed upstream -> drop it from `cleanup_stock_prompts.py`.
    b. Fix any custom body that now states wrong behavior (a changed opt-in keyword, a flipped default). Frontmatter is upstream-controlled; only body content matters.
    c. Scan NEW large always-loaded stock prompts (`tool-description-*`, `system-prompt-*`) for compression targets per the Principles above. Big jumps add many prompts; the goal is to strip, not just preserve. Candidates and status live in `memory/compression-notes.md`.
-4. `just apply` (audits vars + upstream-matches, AND hard-fails via `check_landed.py` if any customization did not patch), then `just smoke`.
+4. `just apply` (audits vars + upstream-matches, hard-fails via `check_landed.py` if any customization did not patch, then hard-fails via `verify_in_binary.py` if any custom text is missing from the binary bytes), then `just smoke`.
+
+## VERY IMPORTANT -- DO NOT SKIP: report the per-prompt proof
+
+Agents routinely skip this and report "all landed" from a single canary or from tweakcc's own log. That is not proof: tweakcc reports "applied" for prompts it silently failed to match, and `just smoke` only exercises ONE prompt live. The user wants the table, not a claim.
+
+After `just apply`, paste the `out/verify.log` table into your reply. Never summarise it as "all good" without the rows. Required format (one row per customization):
+
+```
+prompt                                    probes  ours  stock
+tool-description-webfetch                      8     4      3
+...
+OK: all 20/20 customizations found in binary bytes
+```
+
+- `ours` = occurrences of a distinctive phrase from our body. **0 = the patch did not land**, no matter what tweakcc said.
+- `stock` = occurrences of a stock phrase we cut. >0 is expected (the binary holds duplicate copies of some strings) and is informational, not a failure.
+- `probes` = how many fragments were greppable. A body that is one short line of backticked params yields few probes; if `probes` is 0 the row proves nothing and must be checked by hand.
+
+Also state which prompts were verified LIVE (`just smoke` canary) versus byte-only, and report the always-loaded word count (custom vs stock) so the compression claim is checkable.
 
 Gotchas (learned 2.1.156 -> 2.1.206):
 - Landing is NOT guaranteed and NOT the same as "applied". tweakcc matches each stock prompt by a whole-prompt regex; if upstream text drifted anywhere in that span, the match silently misses and the binary keeps stock. `just apply` now fails on this (`check_landed.py` reads tweakcc's own "Could not find" report). The smoke canary only checks ONE prompt, so it is necessary but not sufficient. If a prompt genuinely cannot land on this version (workflow on 2.1.206: 4.0.13 misses it, 4.3.1 breaks the binary), drop it from `CUSTOM_FILES` with a note rather than ship a false claim.

@@ -73,6 +73,9 @@ apply:
     # validate: template vars declared, AND every customization actually landed
     python3 scripts/audit_templates.py
     python3 scripts/check_landed.py out/apply.log
+    # VERY IMPORTANT -- DO NOT SKIP. check_landed only believes tweakcc's own report;
+    # this greps the binary bytes for every custom body. The user wants this proof. -- Claude
+    python3 scripts/verify_in_binary.py | tee out/verify.log
 
 # Phase 6: Smoke test
 smoke:
