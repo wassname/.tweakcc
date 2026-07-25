@@ -36,8 +36,16 @@ Target = highest `prompts-<V>.json` in tweakcc's GitHub `data/prompts/` (this is
 3. Review + port (JUDGMENT): `git diff HEAD~1 -- stock-reference/`. Three things:
    a. A `CUSTOM_FILES` stem with no matching `stock-reference/<stem>.md` was removed upstream -> drop it from `cleanup_stock_prompts.py`.
    b. Fix any custom body that now states wrong behavior (a changed opt-in keyword, a flipped default). Frontmatter is upstream-controlled; only body content matters.
-   c. Scan NEW large always-loaded stock prompts (`tool-description-*`, `system-prompt-*`) for compression targets per the Principles above. Big jumps add many prompts; the goal is to strip, not just preserve. Candidates and status live in `memory/compression-notes.md`.
+   c. Compress NEW large stock prompts (`tool-description-*`, `system-prompt-*`) per the Principles above. Big jumps add many prompts; the goal is to strip, not just preserve. "I reviewed them" is not an output: rank every uncustomized stem by word count and show the top 10 as a table with a decision per row (compress / skip + why). Anything >600 words needs a stated reason to skip. Status lives in `memory/compression-notes.md`.
 4. `just apply` (audits vars + upstream-matches, hard-fails via `check_landed.py` if any customization did not patch, then hard-fails via `verify_in_binary.py` if any custom text is missing from the binary bytes), then `just smoke`.
+5. Print the proof block below. The run is not finished until you do.
+
+Ranking command for 3c (only these two prefixes: `skill-*` and `data-*` are loaded on demand, so their size is not context you pay for every turn):
+```sh
+for f in stock-reference/tool-description-*.md stock-reference/system-prompt-*.md; do
+  s=$(basename "$f" .md); [ -f "system-prompts/$s.md" ] || echo "$(wc -w < "$f") $s"
+done | sort -rn | head -12
+```
 
 ## VERY IMPORTANT -- DO NOT SKIP: end every run with the proof block
 
@@ -65,6 +73,8 @@ OK: all 27/27 customizations found in binary bytes
 **4. What is NOT verified** -- name the prompts that are byte-verified only (not exercised live), any `probes 0` rows, anything you could not land and why, and any behavior you deliberately changed (e.g. deferring to CLAUDE.md where stock said otherwise) so the user can veto it.
 
 Do not paraphrase these into prose. Tables and quotes, or it did not happen.
+
+Lazy tells, all of which mean the run is unfinished: "all customizations landed" with no table; "verified" without saying byte-verified vs live; a savings number that is round or estimated rather than computed; "reviewed the new prompts" with no ranked table; "should work" / "looks good" anywhere. `out/verify.log` only exists after a real `just apply`, so pasting it is the cheapest honest move.
 
 Gotchas (learned 2.1.156 -> 2.1.206):
 - Landing is NOT guaranteed and NOT the same as "applied". tweakcc matches each stock prompt by a whole-prompt regex; if upstream text drifted anywhere in that span, the match silently misses and the binary keeps stock. `just apply` now fails on this (`check_landed.py` reads tweakcc's own "Could not find" report). The smoke canary only checks ONE prompt, so it is necessary but not sufficient. If a prompt genuinely cannot land on this version (workflow on 2.1.206: 4.0.13 misses it, 4.3.1 breaks the binary), drop it from `CUSTOM_FILES` with a note rather than ship a false claim.
