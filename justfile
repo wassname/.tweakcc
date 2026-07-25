@@ -29,12 +29,13 @@ extract:
     VERSION=$(jq -r .ccVersion config.json)
     BACKUP="DO_NOT_DELETE_patched_binaries/$VERSION/native/original"
     # restore clean binary, remove tweakcc's internal backup
-    cp "$BACKUP" "$BINARY"
+    # rm-first (unlink) avoids ETXTBSY when run from this same binary -- Claude
+    rm -f "$BINARY"; cp "$BACKUP" "$BINARY"
     rm -f native-binary.backup native-binary.pre-reinstall.backup
     # clear system-prompts so tweakcc generates pure stock
     rm -f system-prompts/*.md 2>/dev/null || true
-    # apply (generates stock .md files + prompt cache)
-    bunx tweakcc --apply
+    # apply (generates stock .md files + prompt cache); -y: 4.3.x needs non-interactive confirm -- Claude
+    bunx tweakcc --apply -y
     # save stock reference (may be empty if prompts not available for this version)
     rm -rf stock-reference
     mkdir -p stock-reference
@@ -42,7 +43,7 @@ extract:
         cp system-prompts/*.md stock-reference/
     fi
     # restore clean binary (undo patching)
-    cp "$BACKUP" "$BINARY"
+    rm -f "$BINARY"; cp "$BACKUP" "$BINARY"
     rm -f native-binary.backup
     # clear system-prompts again
     rm -f system-prompts/*.md 2>/dev/null || true
@@ -59,13 +60,14 @@ apply:
     VERSION=$(jq -r .ccVersion config.json)
     BACKUP="DO_NOT_DELETE_patched_binaries/$VERSION/native/original"
     # always start from clean
-    cp "$BACKUP" "$BINARY"
+    # rm-first (unlink) avoids ETXTBSY when run from this same binary -- Claude
+    rm -f "$BINARY"; cp "$BACKUP" "$BINARY"
     # remove tweakcc's internal backup so it doesn't restore a stale patched copy
     rm -f native-binary.backup native-binary.pre-reinstall.backup
     echo "restored clean binary from $BACKUP"
     # single apply (capture output: tweakcc reports which prompts it could not patch)
     mkdir -p out
-    bunx tweakcc --apply 2>&1 | tee out/apply.log
+    bunx tweakcc --apply -y 2>&1 | tee out/apply.log
     # remove stock files (keep only CUSTOM_FILES)
     python3 scripts/cleanup_stock_prompts.py
     # validate: template vars declared, AND every customization actually landed

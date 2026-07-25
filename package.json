@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "@anthropic-ai/claude-code": "2.1.206",
-    "tweakcc": "4.0.13"
+    "@anthropic-ai/claude-code": "2.1.219",
+    "tweakcc": "4.3.2"
   }
 }
