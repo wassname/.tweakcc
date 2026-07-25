@@ -18,6 +18,13 @@ root = pathlib.Path(__file__).resolve().parent.parent / 'system-prompts'
 CUSTOM_FILES = {
     'tool-description-webfetch',
     'tool-description-powershell',
+    'tool-description-bash-git-commit-and-pr-creation-instructions',
+    'tool-description-endconversation',
+    'tool-description-schedulewakeup-delay-and-reason-guidance',
+    'tool-description-artifact-publishing-and-update-guidance',
+    'system-prompt-coordinator-mode-orchestration',
+    'system-prompt-persistent-memory-usage-and-writing-guidance',
+    'system-prompt-claude-in-chrome-browser-automation',
     # re-added on CC 2.1.219: tweakcc 4.3.2 matches the workflow prompt AND keeps the
     # binary bootable (4.3.1 broke it on 2.1.206). Body compressed ~2861w -> ~230w. -- Claude
     'tool-description-workflow',
