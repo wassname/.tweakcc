@@ -39,24 +39,32 @@ Target = highest `prompts-<V>.json` in tweakcc's GitHub `data/prompts/` (this is
    c. Scan NEW large always-loaded stock prompts (`tool-description-*`, `system-prompt-*`) for compression targets per the Principles above. Big jumps add many prompts; the goal is to strip, not just preserve. Candidates and status live in `memory/compression-notes.md`.
 4. `just apply` (audits vars + upstream-matches, hard-fails via `check_landed.py` if any customization did not patch, then hard-fails via `verify_in_binary.py` if any custom text is missing from the binary bytes), then `just smoke`.
 
-## VERY IMPORTANT -- DO NOT SKIP: report the per-prompt proof
+## VERY IMPORTANT -- DO NOT SKIP: end every run with the proof block
 
-Agents routinely skip this and report "all landed" from a single canary or from tweakcc's own log. That is not proof: tweakcc reports "applied" for prompts it silently failed to match, and `just smoke` only exercises ONE prompt live. The user wants the table, not a claim.
+Agents routinely skip this and report "all landed" or "much shorter now" from a single canary, from tweakcc's own log, or from nothing at all. None of that is proof: tweakcc says "applied" for prompts it silently failed to match, and `just smoke` exercises ONE prompt live. Claims are cheap; the artifacts below are hard to fake because they are copied out of files the user can open.
 
-After `just apply`, paste the `out/verify.log` table into your reply. Never summarise it as "all good" without the rows. Required format (one row per customization):
+The last thing in your reply must be these four items, in this order. A reply missing any of them is an incomplete run, no matter how much work happened.
+
+**1. Landing table** -- paste `out/verify.log` verbatim, all rows, no elision.
 
 ```
 prompt                                    probes  ours  stock
 tool-description-webfetch                      8     4      3
 ...
-OK: all 20/20 customizations found in binary bytes
+OK: all 27/27 customizations found in binary bytes
 ```
 
-- `ours` = occurrences of a distinctive phrase from our body. **0 = the patch did not land**, no matter what tweakcc said.
-- `stock` = occurrences of a stock phrase we cut. >0 is expected (the binary holds duplicate copies of some strings) and is informational, not a failure.
-- `probes` = how many fragments were greppable. A body that is one short line of backticked params yields few probes; if `probes` is 0 the row proves nothing and must be checked by hand.
+- `ours` = hits for a distinctive phrase from our body. **0 = did not land**, whatever tweakcc reported.
+- `stock` = hits for a stock phrase we cut. >0 is expected (the binary holds duplicate copies) and is informational.
+- `probes` = greppable fragments found. **0 probes proves nothing** and must be checked by hand.
 
-Also state which prompts were verified LIVE (`just smoke` canary) versus byte-only, and report the always-loaded word count (custom vs stock) so the compression claim is checkable.
+**2. Savings table** -- per prompt touched, `stock -> custom` words and the delta, plus the total across all `CUSTOM_FILES`. Compute it, do not estimate it.
+
+**3. Quotes for every behavioral change** -- for each body you edited or added, one verbatim quote from `stock-reference/<stem>.md` and the line you replaced it with. This is what catches a compression that silently dropped a constraint. If you changed nothing, say so.
+
+**4. What is NOT verified** -- name the prompts that are byte-verified only (not exercised live), any `probes 0` rows, anything you could not land and why, and any behavior you deliberately changed (e.g. deferring to CLAUDE.md where stock said otherwise) so the user can veto it.
+
+Do not paraphrase these into prose. Tables and quotes, or it did not happen.
 
 Gotchas (learned 2.1.156 -> 2.1.206):
 - Landing is NOT guaranteed and NOT the same as "applied". tweakcc matches each stock prompt by a whole-prompt regex; if upstream text drifted anywhere in that span, the match silently misses and the binary keeps stock. `just apply` now fails on this (`check_landed.py` reads tweakcc's own "Could not find" report). The smoke canary only checks ONE prompt, so it is necessary but not sufficient. If a prompt genuinely cannot land on this version (workflow on 2.1.206: 4.0.13 misses it, 4.3.1 breaks the binary), drop it from `CUSTOM_FILES` with a note rather than ship a false claim.
