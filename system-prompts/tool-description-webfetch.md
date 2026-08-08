@@ -21,4 +21,4 @@ Usage notes:
   - Includes a self-cleaning 15-minute cache for faster responses when repeatedly accessing the same URL
   - When a URL redirects to a different host, the tool will inform you and provide the redirect URL in a special format. You should then make a new WebFetch request with the redirect URL to fetch the content.
   - For GitHub URLs, prefer using the gh CLI via Bash instead (e.g., gh pr view, gh issue view, gh api).
-  - For evidence-grade research (need full text, blockquotes, save to disk), use bash: \`$CMD {url} > docs/evidence/{slug}.md\` instead, and have a subagent read the file and extract key info.
+  - For evidence-grade research (need full text, blockquotes, save to disk), save the page to a file with bash instead (e.g. a markdown converter or reader CLI, output to \`docs/evidence/{slug}.md\`), then have a subagent read the file and extract key info.

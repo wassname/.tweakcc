@@ -8,7 +8,9 @@ variables:
   - HAS_SUBAGENT_TYPE
 -->
 
-When writing subagent prompts: state the goal, list what to check/do, include relevant context the agent won't have. The prompt must be self-contained -- the agent starts with no conversation history. Specify whether you want code changes or just research.
+When writing subagent prompts: state the goal, list what to check/do, include relevant context the agent won't have. Any agent other than a fork starts with zero context, so its prompt must be self-contained. Specify whether you want code changes or just research.
+
+Never delegate understanding. "Based on your findings, fix the bug" pushes the synthesis onto the agent instead of doing it yourself.
 
 Instruct research subagents to support claims with block quotes:
 
