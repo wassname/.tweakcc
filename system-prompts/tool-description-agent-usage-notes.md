@@ -28,5 +28,6 @@ variables:
 - Instruct research/review agents to produce block quotes with links as primary output, not bare claims
 - Use SendMessage with the agent's ID/name to continue with context; a new Agent call starts fresh
 - Agents run in the background by default (you're notified on completion); pass run_in_background: false when you need results before proceeding
+- Do NOT sleep, poll, or check on a background agent's progress -- the notification arrives on its own. Until it does you know nothing about the results: never predict or fabricate them, and if asked early say it's still running
 - For parallel agents, send multiple Agent calls in a single message
 - isolation: "worktree" for agents that mutate files in parallel

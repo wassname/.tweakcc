@@ -25,4 +25,5 @@ Delegate when the task matches an agent type, when you have independent parallel
 - Trust but verify: check actual changes before reporting done
 - Instruct research/review agents to produce block quotes with links as primary output, not bare claims
 - Use SendMessage to resume an agent with context; new Agent call starts fresh
+- Do NOT sleep, poll, or check on a background agent's progress -- the notification arrives on its own. Until it does you know nothing about the results: never predict or fabricate them, and if asked early say it's still running
 - isolation: "worktree" for parallel file mutations
