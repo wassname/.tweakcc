@@ -9,8 +9,9 @@ Minimal system prompts for Claude Code. Edits in `system-prompts/`, stock baseli
 3. **Evidence-anchored** -- subagents produce block quotes + links as primary output; coordinators relay them intact, not re-summarized.
 4. **Proven value only** -- if removing a line hasn't caused a failure you've seen, cut it.
 5. **Cheapest layer** -- OS sandbox > deny rules > hooks > prompt text (last resort).
+6. **Never flatten a conditional.** If stock wraps text in `${VAR ? A : B}`, keep the branch, keep the interpolation, or drop both sides. Keeping one branch and stating it as fact is the worst outcome available: the result is not a shorter prompt, it is a confidently false one, and it costs words to boot.
 
-Review: (1) model knows this? Remove. (2) CLAUDE.md says this? Remove. (3) Safety-critical / tool-binding? Keep, compress. (4) Context cost justified? Cut always-loaded first.
+Review: (1) model knows this? Remove. (2) CLAUDE.md says this? Remove. (3) Safety-critical / tool-binding? Keep, compress. (4) Context cost justified? Cut always-loaded first. (5) Does stock make this conditional? Then we may not state it flat.
 
 ## Editing
 
@@ -36,6 +37,7 @@ Target = highest `prompts-<V>.json` in tweakcc's GitHub `data/prompts/` (this is
 3. Review + port (JUDGMENT): `git diff HEAD~1 -- stock-reference/`. Three things:
    a. A `CUSTOM_FILES` stem with no matching `stock-reference/<stem>.md` was removed upstream -> drop it from `cleanup_stock_prompts.py`.
    b. Fix any custom body that now states wrong behavior (a changed opt-in keyword, a flipped default). Frontmatter is upstream-controlled; only body content matters.
+   b2. Audit every ported body against fresh stock for two bugs `check_landed.py` cannot see, because it checks landing and not content. FLATTENED CONDITIONAL: stock has `${VAR ? A : B}` and our body states one branch as fact. DROPPED CONSTRAINT: a prohibition, numeric limit, or safety carve-out in stock with no equivalent in ours. Fan this out (one subagent per few stems) and require a verbatim stock quote per finding; a finding without one is not a finding. This class survived three upgrades undetected and produced a false "you cannot wait more than 5 minutes" belief, see `RESEARCH_JOURNAL.md` 2026-08-08 (a).
    c. Compress NEW large stock prompts (`tool-description-*`, `system-prompt-*`) per the Principles above. Big jumps add many prompts; the goal is to strip, not just preserve. "I reviewed them" is not an output: rank every uncustomized stem by word count and show the top 10 as a table with a decision per row (compress / skip + why). Anything >600 words needs a stated reason to skip. Status lives in `memory/compression-notes.md`.
 4. `just apply` (audits vars + upstream-matches, hard-fails via `check_landed.py` if any customization did not patch, then hard-fails via `verify_in_binary.py` if any custom text is missing from the binary bytes), then `just smoke`.
 5. Print the proof block below. The run is not finished until you do.
