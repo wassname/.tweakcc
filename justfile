@@ -109,17 +109,17 @@ ship version:
     echo "claude symlink -> $(realpath "$BINARY")"
     just release {{ version }}
 
-# Upload original + patched binaries as GitHub release assets (private repo)
+# Upload the clean original binary as a GitHub release asset (private repo)
+# patched is regenerable via 'just apply', so we don't archive it
 release version:
     #!/bin/bash -eu
     ORIGINAL="DO_NOT_DELETE_patched_binaries/{{ version }}/native/original"
-    PATCHED="DO_NOT_DELETE_patched_binaries/{{ version }}/native/patched"
     TAG="v{{ version }}"
-    gh release create "$TAG" "$ORIGINAL" "$PATCHED" \
+    gh release create "$TAG" "$ORIGINAL" \
         --title "Claude Code {{ version }}" \
-        --notes "clean original + tweakcc-patched native binaries" \
-        || gh release upload "$TAG" "$ORIGINAL" "$PATCHED" --clobber
-    echo "released $TAG -> $ORIGINAL $PATCHED"
+        --notes "clean original binary (patched is regenerable via 'just apply')" \
+        || gh release upload "$TAG" "$ORIGINAL" --clobber
+    echo "released $TAG -> $ORIGINAL"
 
 # Download a version's binaries from GitHub releases (fresh box)
 fetch-binary version:
