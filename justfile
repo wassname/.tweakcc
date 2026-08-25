@@ -95,7 +95,7 @@ smoke:
     # canary check: webfetch description must contain our custom "evidence" line (real UAT)
     "$BINARY" -p "what is the description of your web fetch tool please, just copy paste it" --model haiku | grep evidence
 
-# Phase 7: Back up patched binary, commit, tag
+# Phase 7: Back up patched binary, publish binaries to GitHub releases
 ship version:
     #!/bin/bash -eu
     BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
@@ -107,3 +107,24 @@ ship version:
     fi
     ln -sf "$(realpath "$BINARY")" "$HOME/.local/bin/claude"
     echo "claude symlink -> $(realpath "$BINARY")"
+    just release {{ version }}
+
+# Upload original + patched binaries as GitHub release assets (private repo)
+release version:
+    #!/bin/bash -eu
+    ORIGINAL="DO_NOT_DELETE_patched_binaries/{{ version }}/native/original"
+    PATCHED="DO_NOT_DELETE_patched_binaries/{{ version }}/native/patched"
+    TAG="v{{ version }}"
+    gh release create "$TAG" "$ORIGINAL" "$PATCHED" \
+        --title "Claude Code {{ version }}" \
+        --notes "clean original + tweakcc-patched native binaries" \
+        || gh release upload "$TAG" "$ORIGINAL" "$PATCHED" --clobber
+    echo "released $TAG -> $ORIGINAL $PATCHED"
+
+# Download a version's binaries from GitHub releases (fresh box)
+fetch-binary version:
+    #!/bin/bash -eu
+    DEST="DO_NOT_DELETE_patched_binaries/{{ version }}/native"
+    mkdir -p "$DEST"
+    gh release download "v{{ version }}" --dir "$DEST" --clobber
+    ls -la "$DEST"
