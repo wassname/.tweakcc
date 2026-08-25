@@ -1,6 +1,6 @@
 # Compression status
 
-27 customizations on CC 2.1.219: **22,100 stock words -> 3,969 custom (-18,131, ~24k tokens)**.
+26 customizations on CC 2.1.231: **21,452 stock words -> 4,355 custom (-17,097, ~23k tokens)**.
 Regenerate the numbers, don't trust this line:
 
 ```sh
@@ -23,7 +23,28 @@ echo "stock $s -> custom $c (saved $((s-c)))"
 
 Biggest single win overall stays `tool-description-workflow` (2861 -> 277).
 
-## Remaining candidates (uncustomized, 2.1.219)
+## Compressed on 2.1.231
+
+No new compressions. The 26 surviving customs are byte-identical to 2.1.219 (only frontmatter var syncs on 4 prompts). The one removed custom (`persistent-memory-usage-and-writing-guidance`, 679w) was dropped because it is gone upstream in 2.1.231 — no equivalent prompt to patch. Savings delta vs 2.1.219 is therefore dominated by removing that one custom:
+
+| prompt | stock | custom | status |
+|---|---:|---:|---|
+| system-prompt-persistent-memory-usage-and-writing-guidance | 679 | 224 | removed upstream — deleted |
+
+## Remaining candidates (uncustomized, 2.1.231)
+
+Top heavy uncustomized on 2.1.231 (per-turn relevant):
+
+| words | prompt | call |
+|---:|---|---|
+| 2359 | system-prompt-self-hosted-runner-doctor | skipped: only loads in self-hosted runner |
+| 630 | system-prompt-partial-compaction-instructions | worth doing; fires on every compaction |
+| 1106 | system-prompt-auto-mode-setup-proposal-generator | skipped: only loads during auto-mode setup |
+| 605 | tool-description-designsync | skipped: tool unused here |
+
+Everything else under ~500w; not worth the landing risk. Large `agent-prompt-*` prompts (security-monitor 10k, 6k) are slash-command-only, not per-turn.
+
+## Remaining candidates (uncustomized, 2.1.219) — archived
 
 | words | prompt | call |
 |---:|---|---|
