@@ -14,7 +14,7 @@ ccVersion: 2.1.203
 ## Installation
 
 ```bash
-composer require \"anthropic-ai/sdk\" \"guzzlehttp/guzzle:^7\"
+composer require "anthropic-ai/sdk" "guzzlehttp/guzzle:^7"
 ```
 
 ## Client Initialization
@@ -38,8 +38,8 @@ $environment = $client->beta->environments->create(
     name: 'my-dev-env',
     config: ['type' => 'cloud', 'networking' => ['type' => 'unrestricted']],
 );
-echo \"Environment ID: {$environment->id}\
-\"; // env_...
+echo "Environment ID: {$environment->id}\
+"; // env_...
 ```
 
 ---
@@ -71,10 +71,10 @@ $session = $client->beta->sessions->create(
     environmentID: $environment->id,
     title: 'Quickstart session',
 );
-echo \"Session ID: {$session->id}\
-\";
-echo \"Trace: https://platform.claude.com/workspaces/default/sessions/{$session->id}\
-\"; // swap 'default' for your workspace ID if the API key is not in the Default workspace
+echo "Session ID: {$session->id}\
+";
+echo "Trace: https://platform.claude.com/workspaces/default/sessions/{$session->id}\
+"; // swap 'default' for your workspace ID if the API key is not in the Default workspace
 ```
 
 ### Updating an Agent
@@ -87,19 +87,19 @@ $updatedAgent = $client->beta->agents->update(
     version: $agent->version,
     system: 'You are a helpful coding agent. Always write tests.',
 );
-echo \"New version: {$updatedAgent->version}\
-\";
+echo "New version: {$updatedAgent->version}\
+";
 
 // List all versions
 foreach ($client->beta->agents->versions->list($agent->id)->pagingEachItem() as $version) {
-    echo \"Version {$version->version}: {$version->updatedAt->format(DateTimeInterface::ATOM)}\
-\";
+    echo "Version {$version->version}: {$version->updatedAt->format(DateTimeInterface::ATOM)}\
+";
 }
 
 // Archive the agent
 $archived = $client->beta->agents->archive($agent->id);
-echo \"Archived at: {$archived->archivedAt->format(DateTimeInterface::ATOM)}\
-\";
+echo "Archived at: {$archived->archivedAt->format(DateTimeInterface::ATOM)}\
+";
 ```
 
 ---
@@ -150,11 +150,11 @@ foreach ($stream as $event) {
             $event->content,
             static fn($block) => $block->type === 'text' ? print($block->text) : null,
         ),
-        'agent.tool_use' => print(\"\
+        'agent.tool_use' => print("\
 [Using tool: {$event->name}]\
-\"),
-        'session.error' => printf(\"\
-[Error: %s]\", $event->error?->message ?? 'unknown'),
+"),
+        'session.error' => printf("\
+[Error: %s]", $event->error?->message ?? 'unknown'),
         default => null,
     };
     if ($event->type === 'session.status_idle' || $event->type === 'session.error') {
@@ -212,8 +212,8 @@ $stream->close();
 
 ```php
 foreach ($client->beta->sessions->events->list($session->id)->pagingEachItem() as $event) {
-    echo \"{$event->type}: {$event->id}\
-\";
+    echo "{$event->type}: {$event->id}\
+";
 }
 ```
 
@@ -240,8 +240,8 @@ curl_setopt_array($ch, [
     CURLOPT_POSTFIELDS => ['file' => new CURLFile($csvPath, 'text/csv', 'data.csv')],
 ]);
 $file = json_decode(curl_exec($ch));
-echo \"File ID: {$file->id}\
-\";
+echo "File ID: {$file->id}\
+";
 
 // Mount in a session
 $session = $client->beta->sessions->create(
@@ -266,14 +266,14 @@ $resource = $client->beta->sessions->resources->add(
     type: 'file',
     fileID: $file->id,
 );
-echo \"{$resource->id}\
-\"; // \"sesrsc_01ABC...\"
+echo "{$resource->id}\
+"; // "sesrsc_01ABC..."
 
 // List resources on the session
 $listed = $client->beta->sessions->resources->list($session->id);
 foreach ($listed->data as $entry) {
-    echo \"{$entry->id} {$entry->type}\
-\";
+    echo "{$entry->id} {$entry->type}\
+";
 }
 
 // Detach a resource
@@ -368,13 +368,13 @@ $vault = $client->beta->vaults->create(
     displayName: 'Alice',
     metadata: ['external_user_id' => 'usr_abc123'],
 );
-echo $vault->id . \"\
-\"; // \"vlt_01ABC...\"
+echo $vault->id . "\
+"; // "vlt_01ABC..."
 
 // Add an OAuth credential
 $credential = $client->beta->vaults->credentials->create(
     vaultID: $vault->id,
-    displayName: \"Alice's Slack\",
+    displayName: "Alice's Slack",
     auth: [
         'type' => 'mcp_oauth',
         'mcp_server_url' => 'https://mcp.slack.com/mcp',

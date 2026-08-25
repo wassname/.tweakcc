@@ -3,7 +3,7 @@ name: 'Data: Managed Agents endpoint reference'
 description: >-
   Comprehensive reference for Managed Agents API endpoints, SDK methods,
   request/response schemas, error handling, and rate limits
-ccVersion: 2.1.219
+ccVersion: 2.1.224
 -->
 # Managed Agents — Endpoint Reference
 
@@ -35,7 +35,7 @@ All resources are under the `beta` namespace. Python and TypeScript share identi
 | Session Events | `sessions.events.list` / `send` / `stream` | `Sessions.Events.List` / `Send` / `StreamEvents` |
 | Session Threads | `sessions.threads.list` / `retrieve` / `archive`; `sessions.threads.events.list` / `stream` | `Sessions.Threads.List` / `Get` / `Archive`; `Sessions.Threads.Events.List` / `StreamEvents` |
 | Session Resources | `sessions.resources.add` / `retrieve` / `update` / `list` / `delete` | `Sessions.Resources.Add` / `Get` / `Update` / `List` / `Delete` |
-| Deployments | `deployments.create` / `pause` / `unpause` / `archive` / `run` | Not yet documented — WebFetch the SDK repo (`shared/live-sources.md`) |
+| Deployments | `deployments.create` / `update` / `pause` / `unpause` / `archive` / `run` | Not yet documented — WebFetch the SDK repo (`shared/live-sources.md`) |
 | Deployment Runs | `deployment_runs.list` / `retrieve` (TS: `deploymentRuns.*`) | Not yet documented — WebFetch the SDK repo (`shared/live-sources.md`) |
 | Vaults | `vaults.create` / `retrieve` / `update` / `list` / `delete` / `archive` | `Vaults.New` / `Get` / `Update` / `List` / `Delete` / `Archive` |
 | Credentials | `vaults.credentials.create` / `retrieve` / `update` / `list` / `delete` / `archive` / `mcp_oauth_validate` | `Vaults.Credentials.New` / `Get` / `Update` / `List` / `Delete` / `Archive` / `McpOauthValidate` |
@@ -49,9 +49,9 @@ All resources are under the `beta` namespace. Python and TypeScript share identi
 - Go's event stream is `StreamEvents` (not `Stream`).
 - The self-hosted worker is **not** under `client.beta.*` — it's `EnvironmentWorker` from `anthropic.lib.environments` / `@anthropic-ai/sdk/helpers/beta/environments`; only `environments.work.poller/stats/stop` are client methods.
 
-**Agent shorthand:** `agent` on session create accepts three forms — a bare string (`agent=\"agent_abc123\"`, latest version), a pinned reference `{type: \"agent\", id, version}`, or `{type: \"agent_with_overrides\", id, version?, model?, system?, tools?, mcp_servers?, skills?}` to override those fields for this session only (see `shared/managed-agents-core.md` → Override agent configuration for a session).
+**Agent shorthand:** `agent` on session create accepts three forms — a bare string (`agent="agent_abc123"`, latest version), a pinned reference `{type: "agent", id, version}`, or `{type: "agent_with_overrides", id, version?, model?, system?, tools?, mcp_servers?, skills?}` to override those fields for this session only (see `shared/managed-agents-core.md` → Override agent configuration for a session).
 
-**Model shorthand:** `model` on agent create accepts either a bare string (`model=\"{{OPUS_ID}}\"` — uses `standard` speed) or the full config object, which takes `speed` and `effort` alongside `id`: `{id: \"{{OPUS_ID}}\", speed: \"fast\"}`, `{id: \"{{OPUS_ID}}\", effort: \"high\"}`. `effort` accepts a level string (`low`/`medium`/`high`/`xhigh`/`max`) or `{type: \"<level>\"}`, and is **agent-configuration only** — an `effort` inside a per-session `model` override is ignored. See `shared/managed-agents-core.md` → Effort on the agent model. Note: `speed: \"fast\"` is supported on {{OPUS_NAME}} and Opus 4.8 — on the Claude API only, which includes Managed Agents but not Amazon Bedrock, Google Cloud, or Microsoft Foundry. Opus 4.7 fast mode has been removed; `speed: \"fast\"` on Opus 4.7 returns an error.
+**Model shorthand:** `model` on agent create accepts either a bare string (`model="{{OPUS_ID}}"` — uses `standard` speed) or the full config object, which takes `speed`, `effort`, and `inference_geo` alongside `id`: `{id: "{{OPUS_ID}}", speed: "fast"}`, `{id: "{{OPUS_ID}}", effort: "high"}`, `{id: "{{OPUS_ID}}", inference_geo: "us"}`. `effort` accepts a level string (`low`/`medium`/`high`/`xhigh`/`max`) or `{type: "<level>"}`, and is **agent-configuration only** — an `effort` inside a per-session `model` override is ignored. `inference_geo` (`"us"` | `"global"`) pins the geography serving the agent's model requests, and unlike `effort` **is** applied in a per-session `model` override. See `shared/managed-agents-core.md` → Effort on the agent model / Pinning inference geography. Note: `speed: "fast"` is supported on {{OPUS_NAME}} and Opus 4.8 — on the Claude API only, which includes Managed Agents but not Amazon Bedrock, Google Cloud, or Microsoft Foundry. Opus 4.7 fast mode has been removed; `speed: "fast"` on Opus 4.7 returns an error.
 
 ---
 
@@ -75,7 +75,7 @@ All resources are under the `beta` namespace. Python and TypeScript share identi
 | `GET` | `/v1/sessions` | ListSessions | List sessions (paginated) |
 | `POST` | `/v1/sessions` | CreateSession | Create a new session |
 | `GET` | `/v1/sessions/{session_id}` | GetSession | Get session details |
-| `POST` | `/v1/sessions/{session_id}` | UpdateSession | Update session `metadata`/`title`, or `agent.tools`/`agent.mcp_servers`/`vault_ids` (session-local override; session must be `idle`). See `shared/managed-agents-core.md` → Updating the agent configuration mid-session. |
+| `POST` | `/v1/sessions/{session_id}` | UpdateSession | Update session `metadata`/`title`, `agent.tools`/`agent.mcp_servers` (session-local override; session must be `idle`), or `budget` — change the cap (higher or lower; the new value must exceed the consumed list cost) or remove it with `null`; removal is one-way, and a budget can never be added post-create. `vault_ids` is create-only (rejected on update). See `shared/managed-agents-core.md` → Updating the agent configuration mid-session / Session budgets. |
 | `DELETE` | `/v1/sessions/{session_id}` | DeleteSession | Delete a session |
 | `POST` | `/v1/sessions/{session_id}/archive` | ArchiveSession | Archive a session |
 
@@ -122,7 +122,7 @@ Per-subagent event streams in multiagent sessions. See `shared/managed-agents-mu
 | `GET`    | `/v1/environments/{environment_id}/work/stats`         | WorkQueueStats       | Self-hosted work-queue depth/pending/workers. `x-api-key` auth. See `shared/managed-agents-self-hosted-sandboxes.md`. |
 | `POST`   | `/v1/environments/{environment_id}/work/{work_id}/stop` | StopWork            | Self-hosted: stop a claimed work item. `x-api-key` auth. |
 
-For `type: \"self_hosted\"`, `config` is the bare `{\"type\": \"self_hosted\"}` — `networking` and `packages` do not apply.
+For `type: "self_hosted"`, `config` is the bare `{"type": "self_hosted"}` — `networking` and `packages` do not apply.
 
 ## Deployments
 
@@ -131,10 +131,11 @@ Scheduled deployments (`depl_` IDs) run an agent on a recurring cron schedule �
 | Method   | Path                                             | Operation        | Description                              |
 | -------- | ------------------------------------------------ | ---------------- | ---------------------------------------- |
 | `POST`   | `/v1/deployments`                                | CreateDeployment | Create a scheduled deployment            |
+| `POST`   | `/v1/deployments/{deployment_id}`                | UpdateDeployment | Update deployment configuration (see `shared/managed-agents-scheduled-deployments.md`) |
 | `POST`   | `/v1/deployments/{deployment_id}/pause`          | PauseDeployment  | Suppress scheduled triggers (reversible; manual runs still allowed) |
 | `POST`   | `/v1/deployments/{deployment_id}/unpause`        | UnpauseDeployment | Resume from the next occurrence (no backfill) |
 | `POST`   | `/v1/deployments/{deployment_id}/archive`        | ArchiveDeployment | **Terminal** — schedule stops, deployment becomes immutable |
-| `POST`   | `/v1/deployments/{deployment_id}/run`            | RunDeployment    | Trigger a manual run immediately (`trigger_context.type: \"manual\"`); works while paused |
+| `POST`   | `/v1/deployments/{deployment_id}/run`            | RunDeployment    | Trigger a manual run immediately (`trigger_context.type: "manual"`); works while paused |
 
 ## Deployment Runs
 
@@ -174,7 +175,7 @@ Credentials are individual secrets stored inside a vault.
 
 ## Memory Stores
 
-Workspace-scoped persistent memory that survives across sessions. Attach to a session via a `{\"type\": \"memory_store\", \"memory_store_id\": ...}` entry in `resources[]` (session-create time only). See `shared/managed-agents-memory.md` for the conceptual guide, the FUSE-mount agent interface, preconditions, and versioning.
+Workspace-scoped persistent memory that survives across sessions. Attach to a session via a `{"type": "memory_store", "memory_store_id": ...}` entry in `resources[]` (session-create time only). See `shared/managed-agents-memory.md` for the conceptual guide, the FUSE-mount agent interface, preconditions, and versioning.
 
 | Method   | Path                                             | Operation          | Description                              |
 | -------- | ------------------------------------------------ | ------------------ | ---------------------------------------- |
@@ -187,13 +188,13 @@ Workspace-scoped persistent memory that survives across sessions. Attach to a se
 
 ## Memories
 
-Individual text documents inside a store (≤ 100KB each). `create` creates at a `path` and returns `409` (`memory_path_conflict_error`, with `conflicting_memory_id`) if the path is occupied; `update` mutates by `mem_...` ID (rename and/or content). Only `update` accepts a `precondition` (`{\"type\": \"content_sha256\", \"content_sha256\": ...}`) — on mismatch returns `409` (`memory_precondition_failed_error`). List endpoints accept `view: \"basic\"|\"full\"` (controls whether `content` is populated; `retrieve` defaults to `full`).
+Individual text documents inside a store (≤ 100KB each). `create` creates at a `path` and returns `409` (`memory_path_conflict_error`, with `conflicting_memory_id`) if the path is occupied; `update` mutates by `mem_...` ID (rename and/or content). Only `update` accepts a `precondition` (`{"type": "content_sha256", "content_sha256": ...}`) — on mismatch returns `409` (`memory_precondition_failed_error`). List endpoints accept `view: "basic"|"full"` (controls whether `content` is populated; `retrieve` defaults to `full`).
 
 | Method   | Path                                                              | Operation      | Description                              |
 | -------- | ----------------------------------------------------------------- | -------------- | ---------------------------------------- |
 | `GET`    | `/v1/memory_stores/{memory_store_id}/memories`                    | ListMemories   | Returns `Memory \\| MemoryPrefix`; filter by `path_prefix`, `depth` |
 | `POST`   | `/v1/memory_stores/{memory_store_id}/memories`                    | CreateMemory   | Create at `path` (SDK: `memories.create`); `409 memory_path_conflict_error` if occupied |
-| `GET`    | `/v1/memory_stores/{memory_store_id}/memories/{memory_id}`        | GetMemory      | Read one memory (defaults to `view=\"full\"`) |
+| `GET`    | `/v1/memory_stores/{memory_store_id}/memories/{memory_id}`        | GetMemory      | Read one memory (defaults to `view="full"`) |
 | `PATCH`  | `/v1/memory_stores/{memory_store_id}/memories/{memory_id}`        | UpdateMemory   | Change `content`, `path`, or both by ID; optional `precondition` |
 | `DELETE` | `/v1/memory_stores/{memory_store_id}/memories/{memory_id}`        | DeleteMemory   | Delete (optional `expected_content_sha256`) |
 
@@ -240,86 +241,92 @@ Immutable per-mutation snapshots (`memver_...`) — the audit and rollback surfa
 
 ```json
 {
-  \"name\": \"string (required, 1-256 chars)\",
-  \"model\": \"{{OPUS_ID}} (required — bare string, or {id, speed?, effort?} object)\",
-  \"description\": \"string (optional, up to 2048 chars)\",
-  \"system\": \"string (optional, up to 100,000 chars)\",
-  \"tools\": [
-    { \"type\": \"agent_toolset_20260401\" }
+  "name": "string (required, 1-256 chars)",
+  "model": "{{OPUS_ID}} (required — bare string, or {id, speed?, effort?, inference_geo?} object)",
+  "description": "string (optional, up to 2048 chars)",
+  "system": "string (optional, up to 100,000 chars)",
+  "tools": [
+    { "type": "agent_toolset_20260401" }
   ],
-  \"skills\": [
-    { \"type\": \"anthropic\", \"skill_id\": \"xlsx\" },
-    { \"type\": \"custom\", \"skill_id\": \"skill_abc123\", \"version\": \"1\" }
+  "skills": [
+    { "type": "anthropic", "skill_id": "xlsx" },
+    { "type": "custom", "skill_id": "skill_abc123", "version": "1" }
   ],
-  \"mcp_servers\": [
+  "mcp_servers": [
     {
-      \"type\": \"url\",
-      \"name\": \"github\",
-      \"url\": \"https://api.githubcopilot.com/mcp/\"
+      "type": "url",
+      "name": "github",
+      "url": "https://api.githubcopilot.com/mcp/"
     }
   ],
-  \"multiagent\": {
-    \"type\": \"coordinator\",
-    \"agents\": [
-      \"agent_abc123\",
-      { \"type\": \"agent\", \"id\": \"agent_def456\", \"version\": 4 },
-      { \"type\": \"self\" }
+  "multiagent": {
+    "type": "coordinator",
+    "agents": [
+      "agent_abc123",
+      { "type": "agent", "id": "agent_def456", "version": 4 },
+      { "type": "self" }
     ]
   },
-  \"metadata\": {
-    \"key\": \"value (max 16 pairs, keys ≤64 chars, values ≤512 chars)\"
+  "metadata": {
+    "key": "value (max 16 pairs, keys ≤64 chars, values ≤512 chars)"
   }
 }
 ```
 
-> Limits: `tools` max 128, `skills` max 20, `mcp_servers` max 20 (unique names). `multiagent.agents` 1–20 entries (string ID | `{type:\"agent\",id,version?}` | `{type:\"self\"}`) — see `shared/managed-agents-multiagent.md`.
+> Limits: `tools` max 128, `skills` max 20, `mcp_servers` max 20 (unique names). `multiagent.agents` 1–20 entries (string ID | `{type:"agent",id,version?}` | `{type:"self"}` | `{type:"advisor",model}`, at most one advisor) — see `shared/managed-agents-multiagent.md`.
 
 ### CreateSession Request Body
 
 ```json
 {
-  \"agent\": \"agent_abc123 (required — string shorthand for latest version, or {type: \\\"agent\\\", id, version} object)\",
-  \"environment_id\": \"env_abc123 (required)\",
-  \"title\": \"string (optional)\",
-  \"resources\": [
+  "agent": "agent_abc123 (required — string shorthand for latest version, or {type: \\"agent\\", id, version} object)",
+  "environment_id": "env_abc123 (required)",
+  "title": "string (optional)",
+  "resources": [
     {
-      \"type\": \"github_repository\",
-      \"url\": \"https://github.com/owner/repo (required)\",
-      \"authorization_token\": \"ghp_... (required)\",
-      \"mount_path\": \"/workspace/repo (optional — defaults to /workspace/<repo-name>)\",
-      \"checkout\": { \"type\": \"branch\", \"name\": \"main\" }
+      "type": "github_repository",
+      "url": "https://github.com/owner/repo (required)",
+      "authorization_token": "ghp_... (required)",
+      "mount_path": "/workspace/repo (optional — defaults to /workspace/<repo-name>)",
+      "checkout": { "type": "branch", "name": "main" }
     }
   ],
-  \"initial_events\": [
-    { \"type\": \"user.message\", \"content\": [{ \"type\": \"text\", \"text\": \"Review the auth module.\" }] }
+  "initial_events": [
+    { "type": "user.message", "content": [{ "type": "text", "text": "Review the auth module." }] }
   ],
-  \"vault_ids\": [\"vlt_abc123 (optional — vault credentials: MCP auth + environment variables)\"],
-  \"metadata\": {
-    \"key\": \"value\"
+  "vault_ids": ["vlt_abc123 (optional — vault credentials: MCP auth + environment variables)"],
+  "budget": {
+    "type": "limit",
+    "max_list_cost": { "amount": "2500", "currency": "USD" }
+  },
+  "metadata": {
+    "key": "value"
   }
 }
 ```
 
-> The `agent` field accepts a string ID, `{type: \"agent\", id, version}`, or `{type: \"agent_with_overrides\", id, version?, ...}` for session-local overrides of `model`/`system`/`tools`/`mcp_servers`/`skills`. Outside the overrides form, those fields live on the agent, not here. An `effort` inside a `model` override is ignored — set it on the agent.
+> The `agent` field accepts a string ID, `{type: "agent", id, version}`, or `{type: "agent_with_overrides", id, version?, ...}` for session-local overrides of `model`/`system`/`tools`/`mcp_servers`/`skills`. Outside the overrides form, those fields live on the agent, not here. An `effort` inside a `model` override is ignored — set it on the agent. An `inference_geo` inside a `model` override **is** applied (omitting it clears the agent's pin for this session).
+>
+> **`budget`** (optional, create-only) is a hard dollar cap on the session's list-priced spend; `amount` is an integer string in minor units (cents — `"2500"` = $25.00), `USD` only. It can be changed or removed later via session update, never added. See `shared/managed-agents-core.md` → Session budgets.
 >
 > **`initial_events`** (optional, max 50) sends events at creation and starts the agent loop in the same call. Only `user.message` and `user.define_outcome` are accepted — no `system.message`, and none of the tool-result kinds. Validation is all-or-nothing. See `shared/managed-agents-core.md` → Seeding a session with `initial_events`.
 >
-> **`checkout`** accepts `{type: \"branch\", name: \"...\"}` or `{type: \"commit\", sha: \"...\"}`. Omit for the repo's default branch.
+> **`checkout`** accepts `{type: "branch", name: "..."}` or `{type: "commit", sha: "..."}`. Omit for the repo's default branch.
 
 ### CreateEnvironment Request Body
 
 ```json
 {
-  \"name\": \"string (required)\",
-  \"description\": \"string (optional)\",
-  \"config\": {
-    \"type\": \"cloud | self_hosted\",
-    \"networking\": {
-      \"type\": \"unrestricted | limited (union — see SDK types)\"
+  "name": "string (required)",
+  "description": "string (optional)",
+  "config": {
+    "type": "cloud | self_hosted",
+    "networking": {
+      "type": "unrestricted | limited (union — see SDK types)"
     },
-    \"packages\": { }
+    "packages": { }
   },
-  \"metadata\": { \"key\": \"value\" }
+  "metadata": { "key": "value" }
 }
 ```
 
@@ -327,33 +334,33 @@ Immutable per-mutation snapshots (`memver_...`) — the audit and rollback surfa
 
 ```json
 {
-  \"name\": \"Weekly compliance scan\",
-  \"agent\": \"agent_abc123 (required — same shapes as CreateSession)\",
-  \"environment_id\": \"env_abc123 (required)\",
-  \"initial_events\": [
-    { \"type\": \"user.message\", \"content\": [{ \"type\": \"text\", \"text\": \"Run the weekly compliance scan.\" }] }
+  "name": "Weekly compliance scan",
+  "agent": "agent_abc123 (required — same shapes as CreateSession)",
+  "environment_id": "env_abc123 (required)",
+  "initial_events": [
+    { "type": "user.message", "content": [{ "type": "text", "text": "Run the weekly compliance scan." }] }
   ],
-  \"schedule\": {
-    \"type\": \"cron\",
-    \"expression\": \"0 20 * * 5\",
-    \"timezone\": \"America/New_York\"
+  "schedule": {
+    "type": "cron",
+    "expression": "0 20 * * 5",
+    "timezone": "America/New_York"
   }
 }
 ```
 
-> Optional session config (`resources`, `vault_ids`, etc.) is supported the same way as on CreateSession. Response includes `status`, `paused_reason`, and `schedule.upcoming_runs_at` (next fire times). See `shared/managed-agents-scheduled-deployments.md`.
+> Optional session config (`resources`, `vault_ids`, etc.) is supported the same way as on CreateSession, including `budget` — copied onto each fired session; unlike a session's, it can be added where none exists and re-added after clearing (see `shared/managed-agents-scheduled-deployments.md` § Deployment budgets). Response includes `status`, `paused_reason`, and `schedule.upcoming_runs_at` (next fire times). See `shared/managed-agents-scheduled-deployments.md`.
 
 ### SendEvents Request Body
 
 ```json
 {
-  \"events\": [
+  "events": [
     {
-      \"type\": \"user.message\",
-      \"content\": [
+      "type": "user.message",
+      "content": [
         {
-          \"type\": \"text\",
-          \"text\": \"Hello\"
+          "type": "text",
+          "text": "Hello"
         }
       ]
     }
@@ -361,29 +368,29 @@ Immutable per-mutation snapshots (`memver_...`) — the audit and rollback surfa
 }
 ```
 
-> `system.message` events (append system-level context for this turn and later ones) use the same envelope with `type: \"system.message\"` — supported on {{OPUS_NAME}}, {{PREV_OPUS_NAME}}, {{SONNET_NAME}}, {{FABLE_NAME}}, and {{MYTHOS_NAME}}, checked against the agent's *primary* model only; see `shared/managed-agents-events.md` § Adding system context mid-session.
+> `system.message` events (append system-level context for this turn and later ones) use the same envelope with `type: "system.message"` — supported on {{OPUS_NAME}}, {{PREV_OPUS_NAME}}, {{SONNET_NAME}}, {{FABLE_NAME}}, and {{MYTHOS_NAME}}, checked against the agent's *primary* model only; see `shared/managed-agents-events.md` § Adding system context mid-session.
 
 ### Define Outcome Event
 
 ```json
 {
-  \"type\": \"user.define_outcome\",
-  \"description\": \"Build a DCF model for Costco in .xlsx\",
-  \"rubric\": { \"type\": \"file\", \"file_id\": \"file_01...\" },
-  \"max_iterations\": 5
+  "type": "user.define_outcome",
+  "description": "Build a DCF model for Costco in .xlsx",
+  "rubric": { "type": "file", "file_id": "file_01..." },
+  "max_iterations": 5
 }
 ```
 
-> `rubric` is required: `{type: \"text\", content}` or `{type: \"file\", file_id}`. `max_iterations` default 3, max 20. Echoed back with `outcome_id` + `processed_at`. See `shared/managed-agents-outcomes.md`.
+> `rubric` is required: `{type: "text", content}` or `{type: "file", file_id}`. `max_iterations` default 3, max 20. Echoed back with `outcome_id` + `processed_at`. See `shared/managed-agents-outcomes.md`.
 
 ### Tool Result Event
 
 ```json
 {
-  \"type\": \"user.custom_tool_result\",
-  \"custom_tool_use_id\": \"sevt_abc123\",
-  \"content\": [{ \"type\": \"text\", \"text\": \"Result data\" }],
-  \"is_error\": false
+  "type": "user.custom_tool_result",
+  "custom_tool_use_id": "sevt_abc123",
+  "content": [{ "type": "text", "text": "Result data" }],
+  "is_error": false
 }
 ```
 
@@ -395,12 +402,12 @@ Managed Agents endpoints use the standard Anthropic API error format. Errors are
 
 ```json
 {
-  \"type\": \"error\",
-  \"error\": {
-    \"type\": \"invalid_request_error\",
-    \"message\": \"Description of what went wrong\"
+  "type": "error",
+  "error": {
+    "type": "invalid_request_error",
+    "message": "Description of what went wrong"
   },
-  \"request_id\": \"req_011CRv1W3XQ8XpFikNYG7RnE\"
+  "request_id": "req_011CRv1W3XQ8XpFikNYG7RnE"
 }
 ```
 
@@ -418,7 +425,7 @@ Include the `request_id` when reporting issues to Anthropic — it lets us trace
 | 500 | `api_error` | An internal server error occurred |
 | 529 | `overloaded_error` | The service is temporarily overloaded — retry with backoff |
 
-Note that `409 Conflict` carries `error.type: \"invalid_request_error\"` (there is no separate `conflict_error` type); inspect both the HTTP status and the `message` to distinguish conflicts from other invalid requests.
+Note that `409 Conflict` carries `error.type: "invalid_request_error"` (there is no separate `conflict_error` type); inspect both the HTTP status and the `message` to distinguish conflicts from other invalid requests.
 
 ---
 
