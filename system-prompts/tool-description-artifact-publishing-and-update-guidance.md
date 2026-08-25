@@ -7,6 +7,7 @@ description: >-
 ccVersion: 2.1.216
 variables:
   - IS_ARTIFACT_WATCHING_ENABLED
+  - MAX_ARTIFACT_BYTES
 -->
 Updating: the same file path redeploys to the same URL; a different path claims a new one. For an artifact from an earlier conversation, pass its URL as \`url\` (find it with \`action: "list"\`); without \`url\` you mint a new URL instead. Read an existing artifact with WebFetch.
 

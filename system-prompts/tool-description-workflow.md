@@ -12,6 +12,7 @@ variables:
   - WORKFLOW_AGENT_ISOLATION_OPTION
   - WORKFLOW_AGENT_ISOLATION_NOTE
   - WORKFLOW_GROUP_PREFIX
+  - MAX_WORKFLOW_ITEMS_PER_CALL
 -->
 Execute a workflow script that orchestrates multiple subagents deterministically. Runs in the background: returns a task ID immediately, a \<task-notification\> arrives on completion. Use /workflows to watch progress.
 

@@ -3,9 +3,8 @@ name: 'Tool Description: Bash (Git commit and PR creation instructions)'
 description: Instructions for creating git commits and GitHub pull requests
 ccVersion: 2.1.205
 variables:
-  - LOADED_COMMANDS_CONTEXT
-  - COMMIT_CO_AUTHORED_BY_CLAUDE_CODE
   - BASH_TOOL_NAME
+  - COMMIT_CO_AUTHORED_BY_CLAUDE_CODE
   - GET_TODO_TOOL_FN
   - TASK_TOOL_NAME
   - PR_INSTRUCTIONS_PREFIX
