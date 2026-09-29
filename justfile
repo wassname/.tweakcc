@@ -29,7 +29,7 @@ tweakcc-2-1-283:
     git -C .local/tweakcc-main cat-file -e 871ed33e^{commit}
     git -C .local/tweakcc-main cat-file -e deb483910d76a095098de377eb42f13891cf6706^{commit}
     git -C .local/tweakcc-main checkout -B local-2.1.283-prompts 871ed33e
-    git -C .local/tweakcc-main merge --no-edit deb483910d76a095098de377eb42f13891cf6706
+    git -C .local/tweakcc-main -c user.name="codex[astra]" -c user.email="288921227+claudypoo@users.noreply.github.com" merge --no-edit deb483910d76a095098de377eb42f13891cf6706
     cd .local/tweakcc-main
     bun install
     bun run build
