@@ -18,10 +18,11 @@ Usage notes:
   - The URL must be a fully-formed valid URL. Do NOT generate or guess URLs unless confident they are correct.
   - HTTP URLs will be automatically upgraded to HTTPS
   - localhost and hostnames without a dot are unsupported; use curl for local servers
-  - The prompt should describe what information you want to extract from the page
+  - Preserve the user's requested output form in the prompt. A request for a quotation, raw excerpt, or download is not a request for a summary.
   - This tool is read-only and does not modify any files
-  - Results may be summarized if the content is very large
+  - For quotations, request the whole relevant passage verbatim with at least one sentence before and after the key sentence, unchanged spelling and punctuation, the key fragment bolded, and the final URL.
+  - To download or save a page or file, use curl, wget, or a domain tool and write it to the requested path; WebFetch itself is read-only.
   - Includes a self-cleaning cache (entries expire after ${WEBFETCH_CACHE_TTL_FN()})
   - When a URL redirects to a different host, the tool will inform you and provide the redirect URL in a special format. You should then make a new WebFetch request with the redirect URL to fetch the content.
   - For GitHub URLs, prefer using the gh CLI via Bash instead (e.g., gh pr view, gh issue view, gh api).
-  - For evidence-grade research (need full text, blockquotes, save to disk), save the page to a file with bash instead (e.g. a markdown converter or reader CLI, output to \`docs/evidence/{slug}.md\`), then have a subagent read the file and extract key info.
+  - For evidence-grade research, save the source to disk, then extract and relay exact contextual passages rather than re-summarizing them.

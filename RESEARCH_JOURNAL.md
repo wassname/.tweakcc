@@ -129,3 +129,33 @@ Interpretation: my read is that prompt application is verified with high confide
 The takeaway is to require module-aware repacking and byte checks for every split-native Claude Code upgrade.
 
 -- codex[astra]
+
+## 2026-09-29 -- Prompt cleanup had dropped user intent
+
+This entry records the historical audit of prompt files removed during the clean architecture migration.
+
+The direct-quotation behavior existed before cleanup:
+
+> Provide a detailed response based only on the content above. Include full code examples and documentation excerpts as needed. For factual claims, blockquote the relevant passage (3-5 sentences of surrounding context), bold the key fragment and include the source URL. For code or docs, include full examples.
+
+Source: `system-prompts/agent-prompt-webfetch-summarizer.md` at commit `b127fc6`.
+
+The cleanup later removed the prompt:
+
+> 017a0f5 Upgrade to CC 2.1.147: clean prompt architecture, fix WRITE_TOOL crash
+>
+> system-prompts/agent-prompt-webfetch-summarizer.md | 26 deletions
+
+Source: `git show --stat 017a0f5 -- system-prompts/agent-prompt-webfetch-summarizer.md`.
+
+The current binary verifier reports:
+
+> OK: all 24/24 customizations found in binary bytes
+
+Source: `out/verify.log`, produced by the final `just apply`. The live test also returned the current customized WebFetch evidence line; source: `out/smoke.log`.
+
+Interpretation: my read is that the direct-quotation regression is *almost certain*. The old behavior is explicit in git history, the cleanup deleted its only isolated-agent prompt, and the replacement architecture originally lacked an equivalent. The current patch restores it in the web-reading agent, its caller guidance, and both WebFetch descriptions. The audit also restored decision-path compaction and removed local topic-based refusal language. Server-side provider classifiers remain outside this binary.
+
+The durable lesson is to compare every cleanup candidate with same-version stock and its full history before deleting it.
+
+-- codex[astra]

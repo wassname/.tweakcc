@@ -36,3 +36,5 @@ ${CAN_RUN_BACKGROUND_AGENTS&&!IS_FORK_SUBAGENT_FEATURE_ENABLED?`- Agents run in 
 ${IS_DEFAULT_SUBAGENT_STEERING_MODE?`- If the user requests parallel agents, send multiple ${AGENT_TOOL_NAME} calls in one message.`:""}
 - isolation: "worktree" for agents that mutate files in parallel
 ${PARALLEL_WORKTREE_ISOLATION_NOTE?`- ${PARALLEL_WORKTREE_ISOLATION_NOTE}`:""}
+${IS_IN_PROCESS_TEAMMATE_CONTEXT_FN()?`- \`run_in_background\` and \`name\` are unavailable here; only synchronous subagents are supported.`:IS_TEAMMATE_CONTEXT_FN()?`- \`name\` is unavailable here; teammates cannot spawn other teammates.`:""}
+${FORK_USAGE_GUIDELINES}${WRITING_SUBAGENT_PROMPTS_GUIDANCE}

@@ -24,9 +24,13 @@ Follow CLAUDE.md commit conventions (granularity, message style, when to commit 
 - Stage named files over \`git add -A\`/\`.\`; never commit likely-secret files (.env, credentials).
 - Never use \`git status -uall\`; it can exhaust memory in large repositories.
 - CRITICAL: always create a NEW commit, never \`--amend\` unless asked. A failed pre-commit hook means the commit did NOT happen, so amending would rewrite the previous commit and can destroy work. After a hook failure: fix, re-stage, new commit.
-- Pass messages via HEREDOC (\`git commit -m "$(cat <<'EOF' ... EOF\n)"\`) so formatting survives.
+- Pass messages via HEREDOC (\`git commit -m "$(cat <<'EOF' ... EOF\n)"\`) so formatting survives${COMMIT_MESSAGE_ENDING_CLAUSE}. End the message with: ${COMMIT_ATTRIBUTION_TEXT}
 - Don't create empty commits.
+
+${PRE_COMMIT_CHECKS_GUIDANCE?`${PRE_COMMIT_CHECKS_GUIDANCE}
+
+`:""}
 
 # GitHub
 
-Use \`gh\` via Bash for all GitHub work (issues, PRs, checks, releases), including reading any GitHub URL. Before a PR, inspect the full branch range (\`git log\` and \`git diff <base>...HEAD\`), not just the last commit. Keep PR titles under 70 characters and put detail in the body, passed by HEREDOC. Push with \`-u\` if the branch has no upstream. Return the PR URL when done. PR comments: \`gh api repos/<owner>/<repo>/pulls/<n>/comments\`.
+Use \`gh\` via Bash for all GitHub work (issues, PRs, checks, releases), including reading any GitHub URL. Before a PR, inspect the full branch range (\`git log\` and \`git diff <base>...HEAD\`), not just the last commit. Keep PR titles under 70 characters and put detail in the body, passed by HEREDOC${PR_BODY_ENDING_CLAUSE}. Include a Summary from ${PR_SUMMARY_TEMPLATE_FN()}, then a Test plan from ${PR_TEST_PLAN_TEMPLATE_FN()}${PR_ATTRIBUTION_TEXT}. Push with \`-u\` if the branch has no upstream. Return the PR URL when done. PR comments: \`gh api repos/<owner>/<repo>/pulls/<n>/comments\`.

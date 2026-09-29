@@ -1,6 +1,6 @@
 # Compression status
 
-15 customizations on CC 2.1.283: **12,201 stock words -> 2,899 custom (-9,302 words)**.
+24 customizations on CC 2.1.283: **14,220 stock words -> 4,332 custom (-9,888 words)**.
 Regenerate the numbers, don't trust this line:
 
 ```sh
@@ -17,7 +17,7 @@ Started from 800 fresh stock prompts. Eleven 2.1.231 customizations were removed
 - Artifact publishing, Workflow, and Background Monitor changed contracts; current stock replaces the stale custom bodies.
 - Enter/Exit Plan Mode, Enter/Exit Worktree, Learning Mode, Hooks, and Skillify now use stock because the old compressed bodies omitted tool constraints.
 
-The 15 retained prompts have fresh upstream headers. WebFetch, coordinator mode, agent usage, autonomous loops, subagent prompt writing, action safety, TodoWrite, EndConversation, ScheduleWakeup, and git guidance were ported where behavior changed.
+The 24 retained prompts have fresh upstream headers. The second audit restored contextual WebFetch quotations and downloads, user-aligned treatment of dual-use topics, contextual WebSearch evidence, decision-path compaction, and the historical removal of the WebSearch region claim. See `memory/user-intent.md` and `slop/audits/20260929_cleanup-user-intent.md`.
 
 Largest uncustomized always-loaded prefixes (`tool-description-*` and `system-prompt-*`):
 

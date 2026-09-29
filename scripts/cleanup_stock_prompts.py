@@ -16,7 +16,13 @@ root = pathlib.Path(__file__).resolve().parent.parent / 'system-prompts'
 
 # Files we actively customize. Add new entries here when creating customizations.
 CUSTOM_FILES = {
+    'agent-prompt-prompt-suggestion-generator-v2',
+    'agent-prompt-web-fetch-agent-usage-guidance',
+    'agent-prompt-web-reading-specialist',
     'tool-description-webfetch',
+    'tool-description-webfetch-concise',
+    'tool-description-websearch',
+    'tool-description-websearch-concise',
     'tool-description-powershell',
     'tool-description-bash-git-commit-and-pr-creation-instructions',
     'tool-description-endconversation',
@@ -31,6 +37,9 @@ CUSTOM_FILES = {
     'system-prompt-subagent-delegation-examples',
     'system-prompt-writing-subagent-prompts',
     'system-prompt-communication-style',
+    'system-prompt-censoring-assistance-with-malicious-activities',
+    'system-prompt-context-compaction-summary',
+    'system-prompt-delivering-work-at-full-scope',
 }
 
 deleted = 0
