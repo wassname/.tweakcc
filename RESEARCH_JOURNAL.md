@@ -105,3 +105,27 @@ Three things changed on 2026-07-25 at once: the model went from opus-4-8 to opus
 Fixed all three bodies and re-applied; `out/verify.log` shows 27 of 27 landed and byte-verified, and the smoke canary passes live. A background agent is auditing the remaining 24 customized bodies for the same hardcoded-branch pattern.
 
 The lesson worth carrying forward is that a compression which drops a conditional is not a smaller prompt, it is a false one, and only a diff against the stock branch structure catches it.
+
+## 2026-09-29 -- Split native modules need a module-aware prompt patcher
+
+This entry records why the first Claude Code upgrade attempt gave a false positive and what made the final build auditable.
+
+The byte verifier reported:
+
+> OK: all 15/15 customizations found in binary bytes
+
+Source: `out/verify.log`, produced by `just apply` against Claude Code 2.1.283 with tweakcc prompt snapshot commit `871ed33e` merged with PR #1011 head `deb4839`.
+
+The live smoke test reported:
+
+> 2.1.283 (Claude Code)
+>
+> For evidence-grade research (need full text, blockquotes, save to disk), save the page to a file with bash instead
+
+Source: `out/smoke.log`, produced by `just smoke`; the second line is unique to the customized WebFetch prompt.
+
+Interpretation: my read is that prompt application is verified with high confidence. The byte check covers every retained custom prompt, and the live canary shows that Claude serves one of those patched descriptions at runtime. The other tweakcc user-interface patches still report no match, so this evidence does not support claims about them.
+
+The takeaway is to require module-aware repacking and byte checks for every split-native Claude Code upgrade.
+
+-- codex[astra]

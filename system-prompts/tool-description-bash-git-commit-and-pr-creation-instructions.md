@@ -20,7 +20,7 @@ variables:
 Follow CLAUDE.md commit conventions (granularity, message style, when to commit and push). Absent guidance there, commit only when asked and don't push unqueried.
 
 - Interactive flags are unsupported: never \`-i\` (\`git rebase -i\`, \`git add -i\`), never \`--no-edit\` with \`git rebase\`.
-- Never update git config. Never skip hooks (\`--no-verify\`, \`--no-gpg-sign\`). Never run destructive commands (\`push --force\`, \`reset --hard\`, \`checkout .\`, \`restore .\`, \`clean -f\`, \`branch -D\`) unless explicitly asked; warn on force-push to main/master.
+- Never update git config. Never skip hooks (\`--no-verify\`, \`--no-gpg-sign\`). Never run destructive commands (\`push --force\`, \`reset --hard\`, \`checkout .\`, \`restore .\`, \`clean -f\`, \`branch -D\`) unless explicitly asked. Never force-push main/master; warn if asked.
 - Stage named files over \`git add -A\`/\`.\`; never commit likely-secret files (.env, credentials).
 - Never use \`git status -uall\`; it can exhaust memory in large repositories.
 - CRITICAL: always create a NEW commit, never \`--amend\` unless asked. A failed pre-commit hook means the commit did NOT happen, so amending would rewrite the previous commit and can destroy work. After a hook failure: fix, re-stage, new commit.

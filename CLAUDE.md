@@ -29,6 +29,8 @@ Review: (1) model knows this? Remove. (2) CLAUDE.md says this? Remove. (3) Safet
 
 ## Upgrade: pick target -> `just install <V>` -> `extract` -> review -> customs -> `apply` -> `smoke` -> `ship <V>`
 
+For 2.1.283, run `just tweakcc-2-1-283` first. It builds the pinned prompt snapshot plus tweakcc PR #1011, which is required for the split native module layout in Claude Code 2.1.242+.
+
 Target = highest `prompts-<V>.json` in tweakcc's GitHub `data/prompts/` (this is "latest supported"), NOT npm-latest CC. Check:
 `curl -s https://api.github.com/repos/Piebald-AI/tweakcc/contents/data/prompts | jq -r '.[].name' | sort -V | tail`
 

@@ -1,7 +1,7 @@
 set shell := ["bash", "-cu"]
 
-# Override with an unreleased build when npm's tweakcc cannot patch current Claude Code. -- codex[astra]
-tweakcc := env_var_or_default("TWEAKCC", "bunx tweakcc")
+# CC 2.1.242+ needs tweakcc PR #1011's multi-module prompt patch. -- codex[astra]
+tweakcc := env_var_or_default("TWEAKCC", ".local/tweakcc-main/dist/index.mjs")
 
 default:
     @just --list
@@ -18,6 +18,21 @@ tweakcc-main revision:
     bun install
     bun run build
     echo "TWEAKCC=$PWD/dist/index.mjs"
+
+tweakcc-2-1-283:
+    #!/bin/bash -eu
+    mkdir -p .local
+    if [[ ! -d .local/tweakcc-main/.git ]]; then
+        git clone https://github.com/Piebald-AI/tweakcc.git .local/tweakcc-main
+    fi
+    git -C .local/tweakcc-main fetch origin main refs/pull/1011/head
+    git -C .local/tweakcc-main cat-file -e 871ed33e^{commit}
+    git -C .local/tweakcc-main cat-file -e deb483910d76a095098de377eb42f13891cf6706^{commit}
+    git -C .local/tweakcc-main checkout -B local-2.1.283-prompts 871ed33e
+    git -C .local/tweakcc-main merge --no-edit deb483910d76a095098de377eb42f13891cf6706
+    cd .local/tweakcc-main
+    bun install
+    bun run build
 
 # Phase 1: Install fresh CC and back up clean binary
 install version:
@@ -41,6 +56,10 @@ install version:
 # Phase 2: Extract stock prompts from clean binary into stock-reference/
 extract:
     #!/bin/bash -eu
+    if ! git diff --quiet -- system-prompts || [[ -n "$(git ls-files --others --exclude-standard system-prompts)" ]]; then
+        echo "FAIL: commit or restore system-prompts before extracting stock prompts"
+        exit 1
+    fi
     BINARY="node_modules/@anthropic-ai/claude-code/bin/claude.exe"
     VERSION=$(jq -r .ccVersion config.json)
     BACKUP="DO_NOT_DELETE_patched_binaries/$VERSION/native/original"
@@ -63,6 +82,7 @@ extract:
     rm -f native-binary.backup
     # clear system-prompts again
     rm -f system-prompts/*.md 2>/dev/null || true
+    git restore --worktree system-prompts
     COUNT=$(ls stock-reference/*.md 2>/dev/null | wc -l)
     echo "extracted $COUNT stock prompts to stock-reference/"
     if [[ "$COUNT" -eq 0 ]]; then

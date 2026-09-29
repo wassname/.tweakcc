@@ -1,6 +1,6 @@
 # Compression status
 
-15 customizations on CC 2.1.283: **12,201 stock words -> 2,898 custom (-9,303 words)**.
+15 customizations on CC 2.1.283: **12,201 stock words -> 2,899 custom (-9,302 words)**.
 Regenerate the numbers, don't trust this line:
 
 ```sh
