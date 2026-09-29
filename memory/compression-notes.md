@@ -1,6 +1,6 @@
 # Compression status
 
-26 customizations on CC 2.1.231: **21,452 stock words -> 4,355 custom (-17,097, ~23k tokens)**.
+15 customizations on CC 2.1.283: **12,201 stock words -> 2,898 custom (-9,303 words)**.
 Regenerate the numbers, don't trust this line:
 
 ```sh
@@ -8,6 +8,33 @@ c=0; s=0; for f in system-prompts/*.md; do st=$(basename "$f" .md)
   c=$((c+$(wc -w < "$f"))); s=$((s+$(wc -w < "stock-reference/$st.md"))); done
 echo "stock $s -> custom $c (saved $((s-c)))"
 ```
+
+## Ported on 2.1.283
+
+Started from 800 fresh stock prompts. Eleven 2.1.231 customizations were removed:
+
+- `agent-simple-usage-notes` was removed upstream.
+- Artifact publishing, Workflow, and Background Monitor changed contracts; current stock replaces the stale custom bodies.
+- Enter/Exit Plan Mode, Enter/Exit Worktree, Learning Mode, Hooks, and Skillify now use stock because the old compressed bodies omitted tool constraints.
+
+The 15 retained prompts have fresh upstream headers. WebFetch, coordinator mode, agent usage, autonomous loops, subagent prompt writing, action safety, TodoWrite, EndConversation, ScheduleWakeup, and git guidance were ported where behavior changed.
+
+Largest uncustomized always-loaded prefixes (`tool-description-*` and `system-prompt-*`):
+
+| words | prompt | decision |
+|---:|---|---|
+| 2490 | system-prompt-self-hosted-runner-doctor | skip: only the self-hosted runner doctor loads it |
+| 1178 | system-prompt-skillify-current-session | skip: on-demand skill creation; exact schema and save confirmation matter |
+| 1108 | system-prompt-auto-mode-setup-proposal-generator | skip: only auto-mode setup loads it |
+| 904 | system-prompt-self-hosted-runner-setup | skip: only self-hosted runner setup loads it |
+| 882 | tool-description-artifact-publishing-and-update-guidance | skip: fresh viewer contract replaces a now-wrong custom body |
+| 804 | tool-description-background-monitor-streaming-events | skip: fresh expiry and timeout conditionals replace a now-wrong custom body |
+| 763 | tool-description-artifact-type-discovery-guidance | skip: Artifact-only and safety-sensitive |
+| 751 | system-prompt-project-timeline-user-message-provenance | skip: Project timeline only; provenance constraints matter |
+| 742 | tool-description-artifact-page-implementation-requirements-app-wording | skip: Artifact app only; implementation contract matters |
+| 738 | system-prompt-artifact-comment-thread-framing | skip: Artifact comments only; thread authority rules matter |
+| 695 | tool-description-appifactrepl | skip: tool-specific runtime contract |
+| 668 | system-prompt-learning-mode | skip: mode-specific; old custom omitted task and response constraints |
 
 ## Compressed on 2.1.219 (new this version)
 

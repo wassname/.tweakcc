@@ -15,11 +15,12 @@ Create and manage a structured task list for the current session. Helps track pr
 
 ## Task states
 - pending: not started
-- in_progress: currently working (limit to ONE at a time)
+- in_progress: currently working; exactly ONE task must have this state
 - completed: finished successfully. Only mark completed when FULLY done -- not if tests fail, implementation is partial, or errors unresolved.
 
 ## Management
 - Mark in_progress BEFORE starting work, completed IMMEDIATELY after finishing
+- Complete the current task before starting another. If blocked, keep it in_progress and add the task needed to unblock it.
 - Break complex tasks into specific, actionable items
 - Remove tasks no longer relevant
 - Provide both content ("Fix auth bug") and activeForm ("Fixing auth bug")

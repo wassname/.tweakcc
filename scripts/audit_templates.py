@@ -60,6 +60,25 @@ if issues:
 
 print('OK: all used template vars are declared')
 
+stock = root.parent / 'stock-reference'
+stale_headers = []
+for path in sorted(root.glob('*.md')):
+    stock_path = stock / path.name
+    if not stock_path.exists():
+        continue
+    custom_header = path.read_text(encoding='utf-8').split('-->', 1)[0]
+    stock_header = stock_path.read_text(encoding='utf-8').split('-->', 1)[0]
+    if custom_header != stock_header:
+        stale_headers.append(path.name)
+
+if stale_headers:
+    print('FAIL: custom prompt headers differ from fresh stock:')
+    for name in stale_headers:
+        print(f'  {name}')
+    sys.exit(1)
+
+print('OK: all custom prompt headers match fresh stock')
+
 # Orphan check: local prompt files with no matching upstream ID
 cache_dir = pathlib.Path(__file__).resolve().parent.parent / 'prompt-data-cache'
 def version_key(p):

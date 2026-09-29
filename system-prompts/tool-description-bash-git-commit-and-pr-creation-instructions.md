@@ -1,18 +1,19 @@
 <!--
 name: 'Tool Description: Bash (Git commit and PR creation instructions)'
 description: Instructions for creating git commits and GitHub pull requests
-ccVersion: 2.1.205
+ccVersion: 2.1.265
 variables:
   - BASH_TOOL_NAME
-  - COMMIT_CO_AUTHORED_BY_CLAUDE_CODE
-  - GET_TODO_TOOL_FN
-  - TASK_TOOL_NAME
-  - PR_INSTRUCTIONS_PREFIX
-  - PR_WRITING_GUIDANCE_BLOCK
-  - PR_GENERATED_WITH_CLAUDE_CODE
+  - COMMIT_MESSAGE_ENDING_CLAUSE
+  - TASK_CREATE_OR_TODOWRITE_TOOL_NAME
+  - AGENT_TOOL_NAME
+  - COMMIT_ATTRIBUTION_TEXT
+  - PRE_COMMIT_CHECKS_GUIDANCE
+  - PR_BODY_ENDING_CLAUSE
   - PR_SUMMARY_TEMPLATE_FN
   - PR_TEST_PLAN_TEMPLATE_FN
-  - PR_COMMON_OPERATIONS_NOTE
+  - PR_ATTRIBUTION_TEXT
+  - NULL_VALUE
 -->
 # Git
 
@@ -21,6 +22,7 @@ Follow CLAUDE.md commit conventions (granularity, message style, when to commit 
 - Interactive flags are unsupported: never \`-i\` (\`git rebase -i\`, \`git add -i\`), never \`--no-edit\` with \`git rebase\`.
 - Never update git config. Never skip hooks (\`--no-verify\`, \`--no-gpg-sign\`). Never run destructive commands (\`push --force\`, \`reset --hard\`, \`checkout .\`, \`restore .\`, \`clean -f\`, \`branch -D\`) unless explicitly asked; warn on force-push to main/master.
 - Stage named files over \`git add -A\`/\`.\`; never commit likely-secret files (.env, credentials).
+- Never use \`git status -uall\`; it can exhaust memory in large repositories.
 - CRITICAL: always create a NEW commit, never \`--amend\` unless asked. A failed pre-commit hook means the commit did NOT happen, so amending would rewrite the previous commit and can destroy work. After a hook failure: fix, re-stage, new commit.
 - Pass messages via HEREDOC (\`git commit -m "$(cat <<'EOF' ... EOF\n)"\`) so formatting survives.
 - Don't create empty commits.
