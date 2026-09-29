@@ -3,11 +3,11 @@ name: 'Skill: Run library SDK example'
 description: >-
   Example file for the Run app skill showing how to document building, testing,
   and smoke-checking a library or SDK at its public package boundary
-ccVersion: 2.1.145
+ccVersion: 2.1.246
 -->
 # Example: Library / SDK
 
-Libraries don't have a "run" step in the process sense — there's no
+Libraries don't have a "run" step in the process sense - there's no
 server to start, no CLI to invoke. For libraries, the run skill is about:
 
 1. **Building** the library from source
@@ -25,26 +25,26 @@ confirms "yes, the library is usable":
 
 > ## Verify
 >
-> \`\`\`bash
+> ```bash
 > python -c '
 > from mylib import Client
 > c = Client()
 > print(c.ping())
 > '
-> # → pong
-> \`\`\`
+> # -> pong
+> ```
 
 Or for a compiled language:
 
-> \`\`\`bash
+> ```bash
 > cat > /tmp/smoke.go <<GO
 > package main
 > import "example.com/mylib"
 > func main() { println(mylib.Version()) }
 > GO
 > go run /tmp/smoke.go
-> # → v1.2.3
-> \`\`\`
+> # -> v1.2.3
+> ```
 
 ## Example snippet
 
@@ -53,43 +53,43 @@ Or for a compiled language:
 > description: Build, install, and test mylib from source. Use when asked to verify mylib works, run its tests, or build a distribution.
 > ---
 >
-> \`mylib\` is a Python library — "running" it means building from source
+> `mylib` is a Python library - "running" it means building from source
 > and executing the test suite.
 >
 > ## Setup
 >
-> \`\`\`bash
+> ```bash
 > pip install -e '.[dev]'
-> \`\`\`
+> ```
 >
 > ## Verify
 >
-> \`\`\`bash
+> ```bash
 > python -c 'import mylib; print(mylib.__version__)'
-> # → 2.1.0
-> \`\`\`
+> # -> 2.1.0
+> ```
 >
 > ## Test
 >
-> \`\`\`bash
+> ```bash
 > pytest
-> \`\`\`
+> ```
 >
-> Subset of tests: \`pytest tests/unit/\`. With coverage: \`pytest --cov=mylib\`.
+> Subset of tests: `pytest tests/unit/`. With coverage: `pytest --cov=mylib`.
 >
 > ## Build (distribution)
 >
-> \`\`\`bash
+> ```bash
 > pip install build
 > python -m build
-> # → dist/mylib-2.1.0-py3-none-any.whl
-> \`\`\`
+> # -> dist/mylib-2.1.0-py3-none-any.whl
+> ```
 
 ## Things to consider documenting
 
-- **Development mode vs installed mode.** \`pip install -e .\` vs
-  \`pip install .\` — if behavior differs, say which to use for what.
-- **Optional dependencies.** \`[dev]\`, \`[test]\`, \`[docs]\` extras and when
+- **Development mode vs installed mode.** `pip install -e .` vs
+  `pip install .` - if behavior differs, say which to use for what.
+- **Optional dependencies.** `[dev]`, `[test]`, `[docs]` extras and when
   each is needed.
 - **Generated code.** If there's a codegen step (protobuf, OpenAPI clients),
-  document it — it's almost always missing from READMEs.
+  document it - it's almost always missing from READMEs.

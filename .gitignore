@@ -27,3 +27,4 @@ native-binary.pre-reinstall.backup
 package-lock.json
 test.txt
 .env
+.local/

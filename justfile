@@ -1,7 +1,23 @@
 set shell := ["bash", "-cu"]
 
+# Override with an unreleased build when npm's tweakcc cannot patch current Claude Code. -- codex[astra]
+tweakcc := env_var_or_default("TWEAKCC", "bunx tweakcc")
+
 default:
     @just --list
+
+tweakcc-main revision:
+    #!/bin/bash -eu
+    mkdir -p .local
+    if [[ ! -d .local/tweakcc-main/.git ]]; then
+        git clone https://github.com/Piebald-AI/tweakcc.git .local/tweakcc-main
+    fi
+    git -C .local/tweakcc-main fetch --depth 1 origin "{{ revision }}"
+    git -C .local/tweakcc-main checkout --detach FETCH_HEAD
+    cd .local/tweakcc-main
+    bun install
+    bun run build
+    echo "TWEAKCC=$PWD/dist/index.mjs"
 
 # Phase 1: Install fresh CC and back up clean binary
 install version:
@@ -35,7 +51,7 @@ extract:
     # clear system-prompts so tweakcc generates pure stock
     rm -f system-prompts/*.md 2>/dev/null || true
     # apply (generates stock .md files + prompt cache); -y: 4.3.x needs non-interactive confirm -- Claude
-    bunx tweakcc --apply -y
+    {{ tweakcc }} --apply -y
     # save stock reference (may be empty if prompts not available for this version)
     rm -rf stock-reference
     mkdir -p stock-reference
@@ -67,7 +83,7 @@ apply:
     echo "restored clean binary from $BACKUP"
     # single apply (capture output: tweakcc reports which prompts it could not patch)
     mkdir -p out
-    bunx tweakcc --apply -y 2>&1 | tee out/apply.log
+    {{ tweakcc }} --apply -y 2>&1 | tee out/apply.log
     # remove stock files (keep only CUSTOM_FILES)
     python3 scripts/cleanup_stock_prompts.py
     # validate: template vars declared, AND every customization actually landed

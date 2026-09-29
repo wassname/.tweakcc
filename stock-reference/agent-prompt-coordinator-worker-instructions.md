@@ -4,7 +4,7 @@ description: >-
   Instructions for worker agents executing coordinator-assigned tasks, covering
   scope control, concurrent branch changes, resumption, failure handling, and
   coordinator-facing output
-ccVersion: 2.1.217
+ccVersion: 2.1.271
 variables:
   - MAX_SUBAGENT_SPAWN_DEPTH_FN
   - AGENT_TOOL_NAME

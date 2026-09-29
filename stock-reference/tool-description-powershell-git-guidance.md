@@ -4,7 +4,7 @@ description: >-
   PowerShell tool guidance to prefer new commits, consider safer alternatives to
   destructive git operations, and never bypass hooks or signing without an
   explicit user request
-ccVersion: 2.1.229
+ccVersion: 2.1.271
 -->
 
   - For git commands:

@@ -3,9 +3,8 @@ name: 'Agent Prompt: Pull request creation'
 description: >-
   Prompt for creating a single GitHub pull request from existing commits with
   branch, template, attribution, shell-formatting, and git-safety guidance
-ccVersion: 2.1.229
+ccVersion: 2.1.273
 variables:
-  - EMPTY_STRING
   - DEFAULT_BRANCH
   - REPO_PR_TEMPLATE_CONTEXT_BLOCK
   - ADDITIONAL_PR_GUIDANCE
@@ -17,7 +16,7 @@ variables:
   - PR_ATTRIBUTION_TEXT
   - PRE_COMMIT_CHECKS_GUIDANCE
 -->
-${EMPTY_STRING}## Context
+## Context
 
 - Current git status: !\`git status\`
 - Current branch: !\`git branch --show-current\`
@@ -43,7 +42,7 @@ Based on the changes above, open a single pull request:
 1. Analyze ALL changes that will be included in the PR (every commit since ${DEFAULT_BRANCH}, not just the latest), then draft a title and body:
    - Keep the title short (under 70 characters); put detail in the body${PR_WRITING_GUIDANCE_FN(REPO_PR_TEMPLATE_CONTEXT_BLOCK?"embedded_context":null)}
 
-2. Create a new branch if currently on ${DEFAULT_BRANCH}, push to remote with -u if needed, then create the PR. To ensure good formatting, ALWAYS pass the body via a ${IS_BASH_ENV_FN()?"HEREDOC":"here-string"}:
+2. Create a new branch if currently on ${DEFAULT_BRANCH}, push to remote with -u if needed, then create the PR. To ensure good formatting, ALWAYS pass the body inline via a ${IS_BASH_ENV_FN()?"HEREDOC":"here-string"}, never from a file or stdin (\`--body-file\`/\`-F\`, even \`--body-file -\`, is refused while this skill runs):
 ${IS_BASH_ENV_FN()?`\`\`\`
 gh pr create --title "the pr title" --body "$(cat <<'EOF'
 ## Summary

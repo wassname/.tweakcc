@@ -3,10 +3,12 @@ name: 'System Prompt: Memory instructions'
 description: >-
   Instructions for using persistent file-based memory, including memory file
   format, scope, indexing, and stale-memory handling
-ccVersion: 2.1.227
+ccVersion: 2.1.247
 variables:
   - MEMORY_LOCATION_CONTEXT
   - MEMORY_LINKING_INSTRUCTIONS
+  - SHOULD_SKIP_MEMORY_INDEX
+  - MEMORY_FILE_SIZE_INSTRUCTIONS
   - MEMORY_TYPE_DESCRIPTIONS
   - TEAM_MEMORY_SCOPE_NOTE
   - MEMORY_INDEX_POINTER_INSTRUCTIONS
@@ -32,7 +34,7 @@ metadata:
 \`\`\`
 
 ${MEMORY_LINKING_INSTRUCTIONS.join(`
-`)}
+`)}${SHOULD_SKIP_MEMORY_INDEX?` ${MEMORY_FILE_SIZE_INSTRUCTIONS}`:""}
 
 ${MEMORY_TYPE_DESCRIPTIONS}${TEAM_MEMORY_SCOPE_NOTE}${MEMORY_INDEX_POINTER_INSTRUCTIONS}
 

@@ -3,17 +3,17 @@ name: 'Data: Streaming reference — PHP'
 description: >-
   PHP streaming reference including streaming events and handling content block
   deltas (requires SDK v0.5.0+)
-ccVersion: 2.1.182
+ccVersion: 2.1.246
 -->
-# Streaming — PHP
+# Streaming - PHP
 
 ## Streaming
 
-> **Requires SDK v0.5.0+.** v0.4.0 and earlier used a single \`$params\` array; calling with named parameters throws \`Unknown named parameter $model\`. Upgrade: \`composer require "anthropic-ai/sdk:^0.7"\`
+> **Requires SDK v0.5.0+.** v0.4.0 and earlier used a single `$params` array; calling with named parameters throws `Unknown named parameter $model`. Upgrade: `composer require "anthropic-ai/sdk:^0.7"`
 
-\`\`\`php
-use Anthropic\\Messages\\RawContentBlockDeltaEvent;
-use Anthropic\\Messages\\TextDelta;
+```php
+use Anthropic\Messages\RawContentBlockDeltaEvent;
+use Anthropic\Messages\TextDelta;
 
 $stream = $client->messages->createStream(
     model: '{{OPUS_ID}}',
@@ -28,7 +28,7 @@ foreach ($stream as $event) {
         echo $event->delta->text;
     }
 }
-\`\`\`
+```
 
 ---
 

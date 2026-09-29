@@ -1,7 +1,7 @@
 <!--
 name: 'System Prompt: Worker instructions'
 description: Instructions for workers to follow when implementing a change
-ccVersion: 2.1.147
+ccVersion: 2.1.271
 variables:
   - SKILL_TOOL_NAME
 -->

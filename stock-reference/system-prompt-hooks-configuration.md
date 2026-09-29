@@ -1,8 +1,8 @@
 <!--
 name: 'System Prompt: Hooks Configuration'
 description: >-
-  System prompt for hooks configuration.  Used for above Claude Code config
-  skill.
+  Documents hook structure, events, types, input/output fields, and examples for
+  the Claude Code configuration skill
 ccVersion: 2.1.77
 -->
 ## Hooks Configuration
